@@ -14,7 +14,7 @@ LINT_IGNORE_CONFLICT="service\/.*\.go:.+(type name will be used as)"
 
 help:
 	@echo "Please use \`make <target>\` where <target> is one of"
-	@echo "  all               to check, build and test this SDK"
+	@echo "  all               to check, build, test and release this SDK"
 	@echo "  check             to vet and lint the SDK"
 	@echo "  test              to run service test"
 	@echo "  build             to build the SDK"
