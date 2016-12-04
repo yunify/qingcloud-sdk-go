@@ -33,8 +33,8 @@ iOutput, _ := pek3aInstance.DescribeInstances(
 	},
 )
 
-// Print HTTP status code.
-fmt.Println(iOutput.StatusCode)
+// Print the return code.
+fmt.Println(iOutput.RetCode)
 
 // Print the first instance ID.
 fmt.Println(iOutput.InstanceSet[0].InstanceID)
@@ -49,12 +49,12 @@ iOutput, _ := pek3aInstance.RunInstances(
 		CPU:          1,
 		Memory:       1024,
 		LoginMode:    "keypair",
-		LoginKeypair: "kp-xxxxxxxx",
+		LoginKeyPair: "kp-xxxxxxxx",
 	},
 )
 
-// Print HTTP status code.
-fmt.Println(iOutput.StatusCode)
+// Print the return code.
+fmt.Println(iOutput.RetCode)
 
 // Print the job ID.
 fmt.Println(iOutput.JobID)
@@ -73,8 +73,8 @@ volOutput, _ := pek3aVolume.DescribeVolumes(&qingcloud.DescribeVolumesInput{
 	Volumes: []string{"vol-xxxxxxxx"},
 })
 
-// Print HTTP status code.
-fmt.Println(volOutput.StatusCode)
+// Print the return code.
+fmt.Println(volOutput.RetCode)
 
 // Print the first volume name.
 fmt.Println(volOutput.VolumeSet[0].VolumeName)
@@ -90,8 +90,8 @@ volOutput, _ := pek3aVolume.CreateVolumes(
 	},
 )
 
-// Print HTTP status code.
-fmt.Println(volOutput.StatusCode)
+// Print the return code.
+fmt.Println(volOutput.RetCode)
 
 // Print the job ID.
 fmt.Println(volOutput.JobID)
