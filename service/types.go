@@ -641,8 +641,7 @@ type Extra struct {
 	NoLimit    int               `json:"no_limit" name:"no_limit"`
 	NoRestrict int               `json:"no_restrict" name:"no_restrict"`
 	OSDiskSize int               `json:"os_disk_size" name:"os_disk_size"`
-	Slots      map[string]string `json:"slots" name:"slots"`
-	Usb        int               `json:"usb" name:"usb"`
+	USB        int               `json:"usb" name:"usb"`
 }
 
 func (v *Extra) Validate() error {
