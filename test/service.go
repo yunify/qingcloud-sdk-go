@@ -59,8 +59,8 @@ func QingCloudServiceFeatureContext(s *godog.Suite) {
 
 // --------------------------------------------------------------------------
 
-var instanceService *qingcloud.InstanceService
-var jobService *qingcloud.JobService
+var instanceService *service.InstanceService
+var jobService *service.JobService
 
 func initializeQingCloudService() error {
 	return nil
@@ -99,7 +99,7 @@ func theJobServiceIsInitialized() error {
 
 // --------------------------------------------------------------------------
 
-var describeZonesOutput *qingcloud.DescribeZonesOutput
+var describeZonesOutput *service.DescribeZonesOutput
 
 func describeZones() error {
 	describeZonesOutput, err = qingcloudService.DescribeZones(nil)
@@ -125,8 +125,8 @@ func describeZonesShouldHaveTheZoneIamUsing() error {
 
 // --------------------------------------------------------------------------
 
-var runInstanceInput *qingcloud.RunInstancesInput
-var runInstanceOutput *qingcloud.RunInstancesOutput
+var runInstanceInput *service.RunInstancesInput
+var runInstanceOutput *service.RunInstancesOutput
 
 func instanceConfiguration(configuration *gherkin.DataTable) error {
 	count, err := strconv.Atoi(configuration.Rows[1].Cells[2].Value)
@@ -134,7 +134,7 @@ func instanceConfiguration(configuration *gherkin.DataTable) error {
 		return err
 	}
 
-	runInstanceInput = &qingcloud.RunInstancesInput{
+	runInstanceInput = &service.RunInstancesInput{
 		ImageID:      configuration.Rows[1].Cells[0].Value,
 		InstanceType: configuration.Rows[1].Cells[1].Value,
 		Count:        count,
@@ -160,7 +160,7 @@ func runInstancesWillBeFinished() error {
 	retries := 0
 	for retries < tc.MaxRetries {
 		describeJobOutput, err := jobService.DescribeJobs(
-			&qingcloud.DescribeJobsInput{
+			&service.DescribeJobsInput{
 				Jobs: []string{runInstanceOutput.JobID},
 			},
 		)
@@ -178,13 +178,13 @@ func runInstancesWillBeFinished() error {
 
 // --------------------------------------------------------------------------
 
-var terminateInstanceOutput *qingcloud.TerminateInstancesOutput
+var terminateInstanceOutput *service.TerminateInstancesOutput
 
 func terminateInstances() error {
 	retries := 0
 	for retries < tc.MaxRetries {
 		terminateInstanceOutput, err = instanceService.TerminateInstances(
-			&qingcloud.TerminateInstancesInput{
+			&service.TerminateInstancesInput{
 				Instances: runInstanceOutput.Instances,
 			},
 		)
@@ -218,7 +218,7 @@ func terminateInstancesWillBeFinished() error {
 	retries := 0
 	for retries < tc.MaxRetries {
 		describeJobOutput, err := jobService.DescribeJobs(
-			&qingcloud.DescribeJobsInput{
+			&service.DescribeJobsInput{
 				Jobs: []string{terminateInstanceOutput.JobID},
 			},
 		)
@@ -236,7 +236,7 @@ func terminateInstancesWillBeFinished() error {
 
 // --------------------------------------------------------------------------
 
-var describeJobOutput *qingcloud.DescribeJobsOutput
+var describeJobOutput *service.DescribeJobsOutput
 
 func describeJobs() error {
 	describeJobOutput, err = jobService.DescribeJobs(nil)

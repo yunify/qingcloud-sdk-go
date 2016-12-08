@@ -52,7 +52,7 @@ func setUp() {
 var err error
 var tc *testConfig
 var c *config.Config
-var qingcloudService *qingcloud.QingCloudService
+var qingcloudService *service.QingCloudService
 
 type testConfig struct {
 	Zone string `json:"zone" yaml:"zone"`
@@ -84,7 +84,7 @@ func loadConfig() {
 
 func initQingStorService() {
 	if qingcloudService == nil {
-		qingcloudService, err = qingcloud.Init(c)
+		qingcloudService, err = service.Init(c)
 		checkErrorForExit(err)
 	}
 }

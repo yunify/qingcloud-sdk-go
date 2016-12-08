@@ -15,7 +15,7 @@
 // +-------------------------------------------------------------------------
 
 // Package qingcloud provides QingCloud Service API (API Version 2013-08-30)
-package qingcloud
+package service
 
 import (
 	"github.com/yunify/qingcloud-sdk-go/config"

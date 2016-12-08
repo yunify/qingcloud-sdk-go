@@ -14,7 +14,7 @@
 // | limitations under the License.
 // +-------------------------------------------------------------------------
 
-package qingcloud
+package service
 
 import (
 	"fmt"

@@ -17,7 +17,7 @@
 {{$service := .Data.Service}}
 {{$subService := index .Data.SubServices .CurrentSubServiceID}}
 
-package {{$service.Name | snakeCase}}
+package service
 
 import (
 	"fmt"

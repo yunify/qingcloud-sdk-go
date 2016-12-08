@@ -15,7 +15,7 @@ import (
 Initialize the QingCloud service with a configuration
 
 ``` go
-qcService, _ := qingcloud.Init(configuration)
+qcService, _ := service.Init(configuration)
 ```
 
 Initialize the instance service in a zone
@@ -28,7 +28,7 @@ DescribeInstances
 
 ``` go
 iOutput, _ := pek3aInstance.DescribeInstances(
-	&qingcloud.DescribeInstancesInput{
+	&service.DescribeInstancesInput{
 		Instances: []string{"i-xxxxxxxx"},
 	},
 )
@@ -44,7 +44,7 @@ RunInstances
 
 ``` go
 iOutput, _ := pek3aInstance.RunInstances(
-	&qingcloud.RunInstancesInput{
+	&service.RunInstancesInput{
 		ImageID:      "centos7x64d",
 		CPU:          1,
 		Memory:       1024,
@@ -69,7 +69,7 @@ pek3aVolume, _ := qcService.Volume("pek3a")
 DescribeVolumes
 
 ``` go
-volOutput, _ := pek3aVolume.DescribeVolumes(&qingcloud.DescribeVolumesInput{
+volOutput, _ := pek3aVolume.DescribeVolumes(&service.DescribeVolumesInput{
 	Volumes: []string{"vol-xxxxxxxx"},
 })
 
@@ -84,7 +84,7 @@ CreateVolumes
 
 ``` go
 volOutput, _ := pek3aVolume.CreateVolumes(
-	&qingcloud.CreateVolumesInput{
+	&service.CreateVolumesInput{
 		Size:  10,
 		Count: 2,
 	},
