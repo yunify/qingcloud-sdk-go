@@ -193,7 +193,8 @@ release-binary-go-1.7:
 	done
 	cross=(linux_amd64 darwin_amd64 windows_amd64); \
 	for os_arch in $${cross[@]}; do \
-		pushd "${GOPATH}/pkg/$${os_arch}/github.com/yunify/qingcloud-sdk-go"; \
+		MAIN_GOPATH=$$(echo "${GOPATH}" | awk '{split($$1,p,":"); print(p[1])}'); \
+		pushd "$${MAIN_GOPATH}/pkg/$${os_arch}/github.com/yunify/qingcloud-sdk-go"; \
 		zip -r "/tmp/${PREFIX}-binary-v${VERSION}-$${os_arch}-go-1.7.zip" .; \
 		popd; \
 		cp "/tmp/${PREFIX}-binary-v${VERSION}-$${os_arch}-go-1.7.zip" "release/"; \
