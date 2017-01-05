@@ -139,8 +139,8 @@ func (s *SecurityGroupService) ApplySecurityGroup(i *ApplySecurityGroupInput) (*
 }
 
 type ApplySecurityGroupInput struct {
-	Instances     string `json:"instances" name:"instances" location:"params"`
-	SecurityGroup string `json:"security_group" name:"security_group" location:"params"` // Required
+	Instances     []string `json:"instances" name:"instances" location:"params"`
+	SecurityGroup string   `json:"security_group" name:"security_group" location:"params"` // Required
 }
 
 func (v *ApplySecurityGroupInput) Validate() error {
