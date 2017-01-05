@@ -193,8 +193,8 @@ func (b *Builder) parseRequestParams() error {
 							item := valueArray.Index(i).Elem()
 
 							for j := 0; j < item.NumField(); j++ {
-								tagName := item.Type().Field(j).Tag.Get("name")
-								tagKey := tagName + "." + strconv.Itoa(i+1) + "." + tagName
+								fieldTagName := item.Type().Field(j).Tag.Get("name")
+								tagKey := tagName + "." + strconv.Itoa(i+1) + "." + fieldTagName
 
 								switch fieldValue := item.Field(j).Interface().(type) {
 								case int:
