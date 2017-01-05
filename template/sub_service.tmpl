@@ -26,7 +26,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -44,11 +44,11 @@ type {{$subService.ID | camelCase}}ServiceProperties struct {
 }
 
 func (s *{{$service.Name | camelCase}}Service) {{$subService.ID | camelCase}}(
-	{{- template "SubServiceInitParams" $subService.Properties -}}
+	{{- template "SubServiceInitParams" passThrough $subService.Properties true -}}
 	) (*{{$subService.ID | camelCase}}Service, error) {
 	properties := &{{$subService.ID | camelCase}}ServiceProperties{
 		{{range $_, $property := $subService.Properties.Properties -}}
-			{{$property.ID | upperFirst}}: {{$property.ID}},
+			{{$property.ID | upperFirst}}: &{{$property.ID}},
 		{{end}}
 	}
 

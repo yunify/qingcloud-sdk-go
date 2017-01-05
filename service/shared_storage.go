@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type SharedStorageService struct {
 
 type SharedStorageServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) SharedStorage(zone string) (*SharedStorageService, error) {
 	properties := &SharedStorageServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &SharedStorageService{Config: s.Config, Properties: properties}, nil
@@ -74,21 +74,21 @@ func (s *SharedStorageService) AttachToS2SharedTarget(i *AttachToS2SharedTargetI
 }
 
 type AttachToS2SharedTargetInput struct {
-	SharedTarget string   `json:"shared_target" name:"shared_target" location:"params"` // Required
-	Volumes      []string `json:"volumes" name:"volumes" location:"params"`             // Required
+	SharedTarget *string   `json:"shared_target" name:"shared_target" location:"params"` // Required
+	Volumes      []*string `json:"volumes" name:"volumes" location:"params"`             // Required
 }
 
 func (v *AttachToS2SharedTargetInput) Validate() error {
 
-	if fmt.Sprint(v.SharedTarget) == "" {
-		return errs.ParameterRequiredError{
+	if v.SharedTarget == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SharedTarget",
 			ParentName:    "AttachToS2SharedTargetInput",
 		}
 	}
 
 	if len(v.Volumes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Volumes",
 			ParentName:    "AttachToS2SharedTargetInput",
 		}
@@ -98,9 +98,9 @@ func (v *AttachToS2SharedTargetInput) Validate() error {
 }
 
 type AttachToS2SharedTargetOutput struct {
-	Message      string          `json:"message" name:"message"`
-	Action       string          `json:"action" name:"action" location:"elements"`
-	RetCode      int             `json:"ret_code" name:"ret_code" location:"elements"`
+	Message      *string         `json:"message" name:"message"`
+	Action       *string         `json:"action" name:"action" location:"elements"`
+	RetCode      *int            `json:"ret_code" name:"ret_code" location:"elements"`
 	SharedTarget *S2SharedTarget `json:"shared_target" name:"shared_target" location:"elements"`
 }
 
@@ -131,22 +131,22 @@ func (s *SharedStorageService) ChangeS2ServerVxNet(i *ChangeS2ServerVxNetInput) 
 }
 
 type ChangeS2ServerVxNetInput struct {
-	PrivateIP string `json:"private_ip" name:"private_ip" location:"params"`
-	S2Server  string `json:"s2_server" name:"s2_server" location:"params"` // Required
-	VxNet     string `json:"vxnet" name:"vxnet" location:"params"`         // Required
+	PrivateIP *string `json:"private_ip" name:"private_ip" location:"params"`
+	S2Server  *string `json:"s2_server" name:"s2_server" location:"params"` // Required
+	VxNet     *string `json:"vxnet" name:"vxnet" location:"params"`         // Required
 }
 
 func (v *ChangeS2ServerVxNetInput) Validate() error {
 
-	if fmt.Sprint(v.S2Server) == "" {
-		return errs.ParameterRequiredError{
+	if v.S2Server == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "S2Server",
 			ParentName:    "ChangeS2ServerVxNetInput",
 		}
 	}
 
-	if fmt.Sprint(v.VxNet) == "" {
-		return errs.ParameterRequiredError{
+	if v.VxNet == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "VxNet",
 			ParentName:    "ChangeS2ServerVxNetInput",
 		}
@@ -156,10 +156,10 @@ func (v *ChangeS2ServerVxNetInput) Validate() error {
 }
 
 type ChangeS2ServerVxNetOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/create_s2_server.html
@@ -189,24 +189,20 @@ func (s *SharedStorageService) CreateS2Server(i *CreateS2ServerInput) (*CreateS2
 }
 
 type CreateS2ServerInput struct {
-	Description string `json:"description" name:"description" location:"params"`
-	PrivateIP   string `json:"private_ip" name:"private_ip" location:"params"`
+	Description *string `json:"description" name:"description" location:"params"`
+	PrivateIP   *string `json:"private_ip" name:"private_ip" location:"params"`
 	// S2Class's available values: 0, 1
-	S2Class      int    `json:"s2_class" name:"s2_class" location:"params"`
-	S2ServerName string `json:"s2_server_name" name:"s2_server_name" location:"params"`
-	ServiceType  string `json:"service_type" name:"service_type" location:"params"`
-	VxNet        string `json:"vxnet" name:"vxnet" location:"params"`
+	S2Class      *int    `json:"s2_class" name:"s2_class" location:"params"`
+	S2ServerName *string `json:"s2_server_name" name:"s2_server_name" location:"params"`
+	ServiceType  *string `json:"service_type" name:"service_type" location:"params"`
+	VxNet        *string `json:"vxnet" name:"vxnet" location:"params"`
 }
 
 func (v *CreateS2ServerInput) Validate() error {
 
-	s2ClassParameterValue := fmt.Sprint(v.S2Class)
-	if s2ClassParameterValue == "0" {
-		s2ClassParameterValue = ""
-	}
-	if s2ClassParameterValue != "" {
+	if v.S2Class != nil {
 		s2ClassValidValues := []string{"0", "1"}
-		s2ClassParameterValue := fmt.Sprint(v.S2Class)
+		s2ClassParameterValue := fmt.Sprint(*v.S2Class)
 
 		s2ClassIsValid := false
 		for _, value := range s2ClassValidValues {
@@ -216,7 +212,7 @@ func (v *CreateS2ServerInput) Validate() error {
 		}
 
 		if !s2ClassIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "S2Class",
 				ParameterValue: s2ClassParameterValue,
 				AllowedValues:  s2ClassValidValues,
@@ -228,11 +224,11 @@ func (v *CreateS2ServerInput) Validate() error {
 }
 
 type CreateS2ServerOutput struct {
-	Message  string `json:"message" name:"message"`
-	Action   string `json:"action" name:"action" location:"elements"`
-	JobID    string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode  int    `json:"ret_code" name:"ret_code" location:"elements"`
-	S2Server string `json:"s2_server" name:"s2_server" location:"elements"`
+	Message  *string `json:"message" name:"message"`
+	Action   *string `json:"action" name:"action" location:"elements"`
+	JobID    *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode  *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	S2Server *string `json:"s2_server" name:"s2_server" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/create_s2_shared_target.html
@@ -262,47 +258,43 @@ func (s *SharedStorageService) CreateS2SharedTarget(i *CreateS2SharedTargetInput
 }
 
 type CreateS2SharedTargetInput struct {
-	Description    string   `json:"description" name:"description" location:"params"`
-	ExportName     string   `json:"export_name" name:"export_name" location:"params"` // Required
-	ExportNameNfs  string   `json:"export_name_nfs" name:"export_name_nfs" location:"params"`
-	InitiatorNames []string `json:"initiator_names" name:"initiator_names" location:"params"`
-	S2Group        string   `json:"s2_group" name:"s2_group" location:"params"`
-	S2ServerID     string   `json:"s2_server_id" name:"s2_server_id" location:"params"` // Required
+	Description    *string   `json:"description" name:"description" location:"params"`
+	ExportName     *string   `json:"export_name" name:"export_name" location:"params"` // Required
+	ExportNameNfs  *string   `json:"export_name_nfs" name:"export_name_nfs" location:"params"`
+	InitiatorNames []*string `json:"initiator_names" name:"initiator_names" location:"params"`
+	S2Group        *string   `json:"s2_group" name:"s2_group" location:"params"`
+	S2ServerID     *string   `json:"s2_server_id" name:"s2_server_id" location:"params"` // Required
 	// TargetType's available values: ISCSI, NFS
-	TargetType string   `json:"target_type" name:"target_type" location:"params"` // Required
-	Volumes    []string `json:"volumes" name:"volumes" location:"params"`
+	TargetType *string   `json:"target_type" name:"target_type" location:"params"` // Required
+	Volumes    []*string `json:"volumes" name:"volumes" location:"params"`
 }
 
 func (v *CreateS2SharedTargetInput) Validate() error {
 
-	if fmt.Sprint(v.ExportName) == "" {
-		return errs.ParameterRequiredError{
+	if v.ExportName == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "ExportName",
 			ParentName:    "CreateS2SharedTargetInput",
 		}
 	}
 
-	if fmt.Sprint(v.S2ServerID) == "" {
-		return errs.ParameterRequiredError{
+	if v.S2ServerID == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "S2ServerID",
 			ParentName:    "CreateS2SharedTargetInput",
 		}
 	}
 
-	if fmt.Sprint(v.TargetType) == "" {
-		return errs.ParameterRequiredError{
+	if v.TargetType == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "TargetType",
 			ParentName:    "CreateS2SharedTargetInput",
 		}
 	}
 
-	targetTypeParameterValue := fmt.Sprint(v.TargetType)
-	if targetTypeParameterValue == "0" {
-		targetTypeParameterValue = ""
-	}
-	if targetTypeParameterValue != "" {
+	if v.TargetType != nil {
 		targetTypeValidValues := []string{"ISCSI", "NFS"}
-		targetTypeParameterValue := fmt.Sprint(v.TargetType)
+		targetTypeParameterValue := fmt.Sprint(*v.TargetType)
 
 		targetTypeIsValid := false
 		for _, value := range targetTypeValidValues {
@@ -312,7 +304,7 @@ func (v *CreateS2SharedTargetInput) Validate() error {
 		}
 
 		if !targetTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "TargetType",
 				ParameterValue: targetTypeParameterValue,
 				AllowedValues:  targetTypeValidValues,
@@ -324,10 +316,10 @@ func (v *CreateS2SharedTargetInput) Validate() error {
 }
 
 type CreateS2SharedTargetOutput struct {
-	Message        string `json:"message" name:"message"`
-	Action         string `json:"action" name:"action" location:"elements"`
-	RetCode        int    `json:"ret_code" name:"ret_code" location:"elements"`
-	S2SharedTarget string `json:"s2_shared_target" name:"s2_shared_target" location:"elements"`
+	Message        *string `json:"message" name:"message"`
+	Action         *string `json:"action" name:"action" location:"elements"`
+	RetCode        *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	S2SharedTarget *string `json:"s2_shared_target" name:"s2_shared_target" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/delete_s2_servers.html
@@ -357,13 +349,13 @@ func (s *SharedStorageService) DeleteS2Servers(i *DeleteS2ServersInput) (*Delete
 }
 
 type DeleteS2ServersInput struct {
-	S2Servers []string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
+	S2Servers []*string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
 }
 
 func (v *DeleteS2ServersInput) Validate() error {
 
 	if len(v.S2Servers) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "S2Servers",
 			ParentName:    "DeleteS2ServersInput",
 		}
@@ -373,11 +365,11 @@ func (v *DeleteS2ServersInput) Validate() error {
 }
 
 type DeleteS2ServersOutput struct {
-	Message   string   `json:"message" name:"message"`
-	Action    string   `json:"action" name:"action" location:"elements"`
-	JobID     string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode   int      `json:"ret_code" name:"ret_code" location:"elements"`
-	S2Servers []string `json:"s2_servers" name:"s2_servers" location:"elements"`
+	Message   *string   `json:"message" name:"message"`
+	Action    *string   `json:"action" name:"action" location:"elements"`
+	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode   *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	S2Servers []*string `json:"s2_servers" name:"s2_servers" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/delete_s2_shared_targets.html
@@ -407,13 +399,13 @@ func (s *SharedStorageService) DeleteS2SharedTargets(i *DeleteS2SharedTargetsInp
 }
 
 type DeleteS2SharedTargetsInput struct {
-	SharedTargets []string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
+	SharedTargets []*string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
 }
 
 func (v *DeleteS2SharedTargetsInput) Validate() error {
 
 	if len(v.SharedTargets) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SharedTargets",
 			ParentName:    "DeleteS2SharedTargetsInput",
 		}
@@ -423,10 +415,10 @@ func (v *DeleteS2SharedTargetsInput) Validate() error {
 }
 
 type DeleteS2SharedTargetsOutput struct {
-	Message       string   `json:"message" name:"message"`
-	Action        string   `json:"action" name:"action" location:"elements"`
-	RetCode       int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SharedTargets []string `json:"shared_targets" name:"shared_targets" location:"elements"`
+	Message       *string   `json:"message" name:"message"`
+	Action        *string   `json:"action" name:"action" location:"elements"`
+	RetCode       *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SharedTargets []*string `json:"shared_targets" name:"shared_targets" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/describle_s2_default_parameters.html
@@ -456,23 +448,19 @@ func (s *SharedStorageService) DescribeS2DefaultParameters(i *DescribeS2DefaultP
 }
 
 type DescribeS2DefaultParametersInput struct {
-	Limit  int `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset int `json:"offset" name:"offset" default:"0" location:"params"`
+	Limit  *int `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset *int `json:"offset" name:"offset" default:"0" location:"params"`
 	// ServiceType's available values: vsan
-	ServiceType string `json:"service_type" name:"service_type" location:"params"`
+	ServiceType *string `json:"service_type" name:"service_type" location:"params"`
 	// TargetType's available values: ISCSI
-	TargetType string `json:"target_type" name:"target_type" location:"params"`
+	TargetType *string `json:"target_type" name:"target_type" location:"params"`
 }
 
 func (v *DescribeS2DefaultParametersInput) Validate() error {
 
-	serviceTypeParameterValue := fmt.Sprint(v.ServiceType)
-	if serviceTypeParameterValue == "0" {
-		serviceTypeParameterValue = ""
-	}
-	if serviceTypeParameterValue != "" {
+	if v.ServiceType != nil {
 		serviceTypeValidValues := []string{"vsan"}
-		serviceTypeParameterValue := fmt.Sprint(v.ServiceType)
+		serviceTypeParameterValue := fmt.Sprint(*v.ServiceType)
 
 		serviceTypeIsValid := false
 		for _, value := range serviceTypeValidValues {
@@ -482,7 +470,7 @@ func (v *DescribeS2DefaultParametersInput) Validate() error {
 		}
 
 		if !serviceTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "ServiceType",
 				ParameterValue: serviceTypeParameterValue,
 				AllowedValues:  serviceTypeValidValues,
@@ -490,13 +478,9 @@ func (v *DescribeS2DefaultParametersInput) Validate() error {
 		}
 	}
 
-	targetTypeParameterValue := fmt.Sprint(v.TargetType)
-	if targetTypeParameterValue == "0" {
-		targetTypeParameterValue = ""
-	}
-	if targetTypeParameterValue != "" {
+	if v.TargetType != nil {
 		targetTypeValidValues := []string{"ISCSI"}
-		targetTypeParameterValue := fmt.Sprint(v.TargetType)
+		targetTypeParameterValue := fmt.Sprint(*v.TargetType)
 
 		targetTypeIsValid := false
 		for _, value := range targetTypeValidValues {
@@ -506,7 +490,7 @@ func (v *DescribeS2DefaultParametersInput) Validate() error {
 		}
 
 		if !targetTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "TargetType",
 				ParameterValue: targetTypeParameterValue,
 				AllowedValues:  targetTypeValidValues,
@@ -518,11 +502,11 @@ func (v *DescribeS2DefaultParametersInput) Validate() error {
 }
 
 type DescribeS2DefaultParametersOutput struct {
-	Message                string                 `json:"message" name:"message"`
-	Action                 string                 `json:"action" name:"action" location:"elements"`
-	RetCode                int                    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message                *string                `json:"message" name:"message"`
+	Action                 *string                `json:"action" name:"action" location:"elements"`
+	RetCode                *int                   `json:"ret_code" name:"ret_code" location:"elements"`
 	S2DefaultParametersSet []*S2DefaultParameters `json:"s2_default_parameters_set" name:"s2_default_parameters_set" location:"elements"`
-	TotalCount             int                    `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount             *int                   `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/describe_s2_servers.html
@@ -552,13 +536,13 @@ func (s *SharedStorageService) DescribeS2Servers(i *DescribeS2ServersInput) (*De
 }
 
 type DescribeS2ServersInput struct {
-	Limit      int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     int      `json:"offset" name:"offset" default:"0" location:"params"`
-	S2Servers  []string `json:"s2_servers" name:"s2_servers" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
-	Status     []string `json:"status" name:"status" location:"params"`
-	Tags       []string `json:"tags" name:"tags" location:"params"`
-	Verbose    int      `json:"verbose" name:"verbose" location:"params"`
+	Limit      *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	S2Servers  []*string `json:"s2_servers" name:"s2_servers" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
+	Status     []*string `json:"status" name:"status" location:"params"`
+	Tags       []*string `json:"tags" name:"tags" location:"params"`
+	Verbose    *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeS2ServersInput) Validate() error {
@@ -567,11 +551,11 @@ func (v *DescribeS2ServersInput) Validate() error {
 }
 
 type DescribeS2ServersOutput struct {
-	Message     string      `json:"message" name:"message"`
-	Action      string      `json:"action" name:"action" location:"elements"`
-	RetCode     int         `json:"ret_code" name:"ret_code" location:"elements"`
+	Message     *string     `json:"message" name:"message"`
+	Action      *string     `json:"action" name:"action" location:"elements"`
+	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
 	S2ServerSet []*S2Server `json:"s2_server_set" name:"s2_server_set" location:"elements"`
-	TotalCount  int         `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/describe_s2_shared_targets.html
@@ -601,12 +585,12 @@ func (s *SharedStorageService) DescribeS2SharedTargets(i *DescribeS2SharedTarget
 }
 
 type DescribeS2SharedTargetsInput struct {
-	Limit         int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset        int      `json:"offset" name:"offset" default:"0" location:"params"`
-	S2ServerID    string   `json:"s2_server_id" name:"s2_server_id" location:"params"`
-	SearchWord    string   `json:"search_word" name:"search_word" location:"params"`
-	SharedTargets []string `json:"shared_targets" name:"shared_targets" location:"params"`
-	Verbose       int      `json:"verbose" name:"verbose" location:"params"`
+	Limit         *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset        *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	S2ServerID    *string   `json:"s2_server_id" name:"s2_server_id" location:"params"`
+	SearchWord    *string   `json:"search_word" name:"search_word" location:"params"`
+	SharedTargets []*string `json:"shared_targets" name:"shared_targets" location:"params"`
+	Verbose       *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeS2SharedTargetsInput) Validate() error {
@@ -615,11 +599,11 @@ func (v *DescribeS2SharedTargetsInput) Validate() error {
 }
 
 type DescribeS2SharedTargetsOutput struct {
-	Message         string            `json:"message" name:"message"`
-	Action          string            `json:"action" name:"action" location:"elements"`
-	RetCode         int               `json:"ret_code" name:"ret_code" location:"elements"`
+	Message         *string           `json:"message" name:"message"`
+	Action          *string           `json:"action" name:"action" location:"elements"`
+	RetCode         *int              `json:"ret_code" name:"ret_code" location:"elements"`
 	SharedTargetSet []*S2SharedTarget `json:"shared_target_set" name:"shared_target_set" location:"elements"`
-	TotalCount      int               `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount      *int              `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/detach_from_s2_shared_target.html
@@ -649,21 +633,21 @@ func (s *SharedStorageService) DetachFromS2SharedTarget(i *DetachFromS2SharedTar
 }
 
 type DetachFromS2SharedTargetInput struct {
-	SharedTarget string   `json:"shared_target" name:"shared_target" location:"params"` // Required
-	Volumes      []string `json:"volumes" name:"volumes" location:"params"`             // Required
+	SharedTarget *string   `json:"shared_target" name:"shared_target" location:"params"` // Required
+	Volumes      []*string `json:"volumes" name:"volumes" location:"params"`             // Required
 }
 
 func (v *DetachFromS2SharedTargetInput) Validate() error {
 
-	if fmt.Sprint(v.SharedTarget) == "" {
-		return errs.ParameterRequiredError{
+	if v.SharedTarget == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SharedTarget",
 			ParentName:    "DetachFromS2SharedTargetInput",
 		}
 	}
 
 	if len(v.Volumes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Volumes",
 			ParentName:    "DetachFromS2SharedTargetInput",
 		}
@@ -673,9 +657,9 @@ func (v *DetachFromS2SharedTargetInput) Validate() error {
 }
 
 type DetachFromS2SharedTargetOutput struct {
-	Message      string          `json:"message" name:"message"`
-	Action       string          `json:"action" name:"action" location:"elements"`
-	RetCode      int             `json:"ret_code" name:"ret_code" location:"elements"`
+	Message      *string         `json:"message" name:"message"`
+	Action       *string         `json:"action" name:"action" location:"elements"`
+	RetCode      *int            `json:"ret_code" name:"ret_code" location:"elements"`
 	SharedTarget *S2SharedTarget `json:"shared_target" name:"shared_target" location:"elements"`
 }
 
@@ -706,13 +690,13 @@ func (s *SharedStorageService) DisableS2SharedTargets(i *DisableS2SharedTargetsI
 }
 
 type DisableS2SharedTargetsInput struct {
-	SharedTargets []string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
+	SharedTargets []*string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
 }
 
 func (v *DisableS2SharedTargetsInput) Validate() error {
 
 	if len(v.SharedTargets) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SharedTargets",
 			ParentName:    "DisableS2SharedTargetsInput",
 		}
@@ -722,10 +706,10 @@ func (v *DisableS2SharedTargetsInput) Validate() error {
 }
 
 type DisableS2SharedTargetsOutput struct {
-	Message       string   `json:"message" name:"message"`
-	Action        string   `json:"action" name:"action" location:"elements"`
-	RetCode       int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SharedTargets []string `json:"shared_targets" name:"shared_targets" location:"elements"`
+	Message       *string   `json:"message" name:"message"`
+	Action        *string   `json:"action" name:"action" location:"elements"`
+	RetCode       *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SharedTargets []*string `json:"shared_targets" name:"shared_targets" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/enable_s2_shared_targets.html
@@ -755,13 +739,13 @@ func (s *SharedStorageService) EnableS2SharedTargets(i *EnableS2SharedTargetsInp
 }
 
 type EnableS2SharedTargetsInput struct {
-	SharedTargets []string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
+	SharedTargets []*string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
 }
 
 func (v *EnableS2SharedTargetsInput) Validate() error {
 
 	if len(v.SharedTargets) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SharedTargets",
 			ParentName:    "EnableS2SharedTargetsInput",
 		}
@@ -771,10 +755,10 @@ func (v *EnableS2SharedTargetsInput) Validate() error {
 }
 
 type EnableS2SharedTargetsOutput struct {
-	Message       string   `json:"message" name:"message"`
-	Action        string   `json:"action" name:"action" location:"elements"`
-	RetCode       int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SharedTargets []string `json:"shared_targets" name:"shared_targets" location:"elements"`
+	Message       *string   `json:"message" name:"message"`
+	Action        *string   `json:"action" name:"action" location:"elements"`
+	RetCode       *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SharedTargets []*string `json:"shared_targets" name:"shared_targets" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/modify_s2_server.html
@@ -804,15 +788,15 @@ func (s *SharedStorageService) ModifyS2Server(i *ModifyS2ServerInput) (*ModifyS2
 }
 
 type ModifyS2ServerInput struct {
-	Description  string `json:"description" name:"description" location:"params"`
-	S2Server     string `json:"s2_server" name:"s2_server" location:"params"` // Required
-	S2ServerName string `json:"s2_server_name" name:"s2_server_name" location:"params"`
+	Description  *string `json:"description" name:"description" location:"params"`
+	S2Server     *string `json:"s2_server" name:"s2_server" location:"params"` // Required
+	S2ServerName *string `json:"s2_server_name" name:"s2_server_name" location:"params"`
 }
 
 func (v *ModifyS2ServerInput) Validate() error {
 
-	if fmt.Sprint(v.S2Server) == "" {
-		return errs.ParameterRequiredError{
+	if v.S2Server == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "S2Server",
 			ParentName:    "ModifyS2ServerInput",
 		}
@@ -822,9 +806,9 @@ func (v *ModifyS2ServerInput) Validate() error {
 }
 
 type ModifyS2ServerOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/modify_s2_shared_target.html
@@ -854,30 +838,30 @@ func (s *SharedStorageService) ModifyS2SharedTargets(i *ModifyS2SharedTargetsInp
 }
 
 type ModifyS2SharedTargetsInput struct {
-	InitiatorNames []string `json:"initiator_names" name:"initiator_names" location:"params"`
-	Operation      string   `json:"operation" name:"operation" location:"params"`           // Required
-	Parameters     []string `json:"parameters" name:"parameters" location:"params"`         // Required
-	SharedTargets  []string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
+	InitiatorNames []*string `json:"initiator_names" name:"initiator_names" location:"params"`
+	Operation      *string   `json:"operation" name:"operation" location:"params"`           // Required
+	Parameters     []*string `json:"parameters" name:"parameters" location:"params"`         // Required
+	SharedTargets  []*string `json:"shared_targets" name:"shared_targets" location:"params"` // Required
 }
 
 func (v *ModifyS2SharedTargetsInput) Validate() error {
 
-	if fmt.Sprint(v.Operation) == "" {
-		return errs.ParameterRequiredError{
+	if v.Operation == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Operation",
 			ParentName:    "ModifyS2SharedTargetsInput",
 		}
 	}
 
 	if len(v.Parameters) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Parameters",
 			ParentName:    "ModifyS2SharedTargetsInput",
 		}
 	}
 
 	if len(v.SharedTargets) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SharedTargets",
 			ParentName:    "ModifyS2SharedTargetsInput",
 		}
@@ -887,9 +871,9 @@ func (v *ModifyS2SharedTargetsInput) Validate() error {
 }
 
 type ModifyS2SharedTargetsOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/poweroff_s2_servers.html
@@ -919,13 +903,13 @@ func (s *SharedStorageService) PowerOffS2Servers(i *PowerOffS2ServersInput) (*Po
 }
 
 type PowerOffS2ServersInput struct {
-	S2Servers string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
+	S2Servers *string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
 }
 
 func (v *PowerOffS2ServersInput) Validate() error {
 
-	if fmt.Sprint(v.S2Servers) == "" {
-		return errs.ParameterRequiredError{
+	if v.S2Servers == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "S2Servers",
 			ParentName:    "PowerOffS2ServersInput",
 		}
@@ -935,10 +919,10 @@ func (v *PowerOffS2ServersInput) Validate() error {
 }
 
 type PowerOffS2ServersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/poweron_s2_servers.html
@@ -968,13 +952,13 @@ func (s *SharedStorageService) PowerOnS2Servers(i *PowerOnS2ServersInput) (*Powe
 }
 
 type PowerOnS2ServersInput struct {
-	S2Servers []string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
+	S2Servers []*string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
 }
 
 func (v *PowerOnS2ServersInput) Validate() error {
 
 	if len(v.S2Servers) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "S2Servers",
 			ParentName:    "PowerOnS2ServersInput",
 		}
@@ -984,10 +968,10 @@ func (v *PowerOnS2ServersInput) Validate() error {
 }
 
 type PowerOnS2ServersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/resize_s2_servers.html
@@ -1017,21 +1001,21 @@ func (s *SharedStorageService) ResizeS2Servers(i *ResizeS2ServersInput) (*Resize
 }
 
 type ResizeS2ServersInput struct {
-	S2Server     string `json:"s2_server" name:"s2_server" location:"params"`           // Required
-	S2ServerType int    `json:"s2_server_type" name:"s2_server_type" location:"params"` // Required
+	S2Server     *string `json:"s2_server" name:"s2_server" location:"params"`           // Required
+	S2ServerType *int    `json:"s2_server_type" name:"s2_server_type" location:"params"` // Required
 }
 
 func (v *ResizeS2ServersInput) Validate() error {
 
-	if fmt.Sprint(v.S2Server) == "" {
-		return errs.ParameterRequiredError{
+	if v.S2Server == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "S2Server",
 			ParentName:    "ResizeS2ServersInput",
 		}
 	}
 
-	if fmt.Sprint(v.S2ServerType) == "" {
-		return errs.ParameterRequiredError{
+	if v.S2ServerType == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "S2ServerType",
 			ParentName:    "ResizeS2ServersInput",
 		}
@@ -1041,10 +1025,10 @@ func (v *ResizeS2ServersInput) Validate() error {
 }
 
 type ResizeS2ServersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/update_s2_servers.html
@@ -1074,13 +1058,13 @@ func (s *SharedStorageService) UpdateS2Servers(i *UpdateS2ServersInput) (*Update
 }
 
 type UpdateS2ServersInput struct {
-	S2Servers []string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
+	S2Servers []*string `json:"s2_servers" name:"s2_servers" location:"params"` // Required
 }
 
 func (v *UpdateS2ServersInput) Validate() error {
 
 	if len(v.S2Servers) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "S2Servers",
 			ParentName:    "UpdateS2ServersInput",
 		}
@@ -1090,8 +1074,8 @@ func (v *UpdateS2ServersInput) Validate() error {
 }
 
 type UpdateS2ServersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type InstanceService struct {
 
 type InstanceServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Instance(zone string) (*InstanceService, error) {
 	properties := &InstanceServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &InstanceService{Config: s.Config, Properties: properties}, nil
@@ -74,7 +74,7 @@ func (s *InstanceService) DescribeInstanceTypes(i *DescribeInstanceTypesInput) (
 }
 
 type DescribeInstanceTypesInput struct {
-	InstanceTypes []string `json:"instance_types" name:"instance_types" location:"params"`
+	InstanceTypes []*string `json:"instance_types" name:"instance_types" location:"params"`
 }
 
 func (v *DescribeInstanceTypesInput) Validate() error {
@@ -83,11 +83,11 @@ func (v *DescribeInstanceTypesInput) Validate() error {
 }
 
 type DescribeInstanceTypesOutput struct {
-	Message         string          `json:"message" name:"message"`
-	Action          string          `json:"action" name:"action" location:"elements"`
+	Message         *string         `json:"message" name:"message"`
+	Action          *string         `json:"action" name:"action" location:"elements"`
 	InstanceTypeSet []*InstanceType `json:"instance_type_set" name:"instance_type_set" location:"elements"`
-	RetCode         int             `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount      int             `json:"total_count" name:"total_count" location:"elements"`
+	RetCode         *int            `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount      *int            `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/describe_instances.html
@@ -117,29 +117,25 @@ func (s *InstanceService) DescribeInstances(i *DescribeInstancesInput) (*Describ
 }
 
 type DescribeInstancesInput struct {
-	ImageID []string `json:"image_id" name:"image_id" location:"params"`
+	ImageID []*string `json:"image_id" name:"image_id" location:"params"`
 	// InstanceClass's available values: 0, 1
-	InstanceClass int      `json:"instance_class" name:"instance_class" default:"0" location:"params"`
-	InstanceType  []string `json:"instance_type" name:"instance_type" location:"params"`
-	Instances     []string `json:"instances" name:"instances" location:"params"`
-	Limit         int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset        int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord    string   `json:"search_word" name:"search_word" location:"params"`
-	Status        []string `json:"status" name:"status" location:"params"`
-	Tags          []string `json:"tags" name:"tags" location:"params"`
+	InstanceClass *int      `json:"instance_class" name:"instance_class" default:"0" location:"params"`
+	InstanceType  []*string `json:"instance_type" name:"instance_type" location:"params"`
+	Instances     []*string `json:"instances" name:"instances" location:"params"`
+	Limit         *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset        *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord    *string   `json:"search_word" name:"search_word" location:"params"`
+	Status        []*string `json:"status" name:"status" location:"params"`
+	Tags          []*string `json:"tags" name:"tags" location:"params"`
 	// Verbose's available values: 0, 1
-	Verbose int `json:"verbose" name:"verbose" location:"params"`
+	Verbose *int `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeInstancesInput) Validate() error {
 
-	instanceClassParameterValue := fmt.Sprint(v.InstanceClass)
-	if instanceClassParameterValue == "0" {
-		instanceClassParameterValue = ""
-	}
-	if instanceClassParameterValue != "" {
+	if v.InstanceClass != nil {
 		instanceClassValidValues := []string{"0", "1"}
-		instanceClassParameterValue := fmt.Sprint(v.InstanceClass)
+		instanceClassParameterValue := fmt.Sprint(*v.InstanceClass)
 
 		instanceClassIsValid := false
 		for _, value := range instanceClassValidValues {
@@ -149,7 +145,7 @@ func (v *DescribeInstancesInput) Validate() error {
 		}
 
 		if !instanceClassIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "InstanceClass",
 				ParameterValue: instanceClassParameterValue,
 				AllowedValues:  instanceClassValidValues,
@@ -157,13 +153,9 @@ func (v *DescribeInstancesInput) Validate() error {
 		}
 	}
 
-	verboseParameterValue := fmt.Sprint(v.Verbose)
-	if verboseParameterValue == "0" {
-		verboseParameterValue = ""
-	}
-	if verboseParameterValue != "" {
+	if v.Verbose != nil {
 		verboseValidValues := []string{"0", "1"}
-		verboseParameterValue := fmt.Sprint(v.Verbose)
+		verboseParameterValue := fmt.Sprint(*v.Verbose)
 
 		verboseIsValid := false
 		for _, value := range verboseValidValues {
@@ -173,7 +165,7 @@ func (v *DescribeInstancesInput) Validate() error {
 		}
 
 		if !verboseIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Verbose",
 				ParameterValue: verboseParameterValue,
 				AllowedValues:  verboseValidValues,
@@ -185,11 +177,11 @@ func (v *DescribeInstancesInput) Validate() error {
 }
 
 type DescribeInstancesOutput struct {
-	Message     string      `json:"message" name:"message"`
-	Action      string      `json:"action" name:"action" location:"elements"`
+	Message     *string     `json:"message" name:"message"`
+	Action      *string     `json:"action" name:"action" location:"elements"`
 	InstanceSet []*Instance `json:"instance_set" name:"instance_set" location:"elements"`
-	RetCode     int         `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount  int         `json:"total_count" name:"total_count" location:"elements"`
+	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_monitor.html
@@ -219,44 +211,40 @@ func (s *InstanceService) GetInstanceMonitor(i *GetInstanceMonitorInput) (*GetIn
 }
 
 type GetInstanceMonitorInput struct {
-	EndTime   time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
-	Meters    []string  `json:"meters" name:"meters" location:"params"`                           // Required
-	Resource  string    `json:"resource" name:"resource" location:"params"`                       // Required
-	StartTime time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
+	EndTime   *time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
+	Meters    []*string  `json:"meters" name:"meters" location:"params"`                           // Required
+	Resource  *string    `json:"resource" name:"resource" location:"params"`                       // Required
+	StartTime *time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
 	// Step's available values: 5m, 15m, 2h, 1d
-	Step string `json:"step" name:"step" location:"params"` // Required
+	Step *string `json:"step" name:"step" location:"params"` // Required
 }
 
 func (v *GetInstanceMonitorInput) Validate() error {
 
 	if len(v.Meters) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Meters",
 			ParentName:    "GetInstanceMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Resource) == "" {
-		return errs.ParameterRequiredError{
+	if v.Resource == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Resource",
 			ParentName:    "GetInstanceMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Step) == "" {
-		return errs.ParameterRequiredError{
+	if v.Step == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Step",
 			ParentName:    "GetInstanceMonitorInput",
 		}
 	}
 
-	stepParameterValue := fmt.Sprint(v.Step)
-	if stepParameterValue == "0" {
-		stepParameterValue = ""
-	}
-	if stepParameterValue != "" {
+	if v.Step != nil {
 		stepValidValues := []string{"5m", "15m", "2h", "1d"}
-		stepParameterValue := fmt.Sprint(v.Step)
+		stepParameterValue := fmt.Sprint(*v.Step)
 
 		stepIsValid := false
 		for _, value := range stepValidValues {
@@ -266,7 +254,7 @@ func (v *GetInstanceMonitorInput) Validate() error {
 		}
 
 		if !stepIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Step",
 				ParameterValue: stepParameterValue,
 				AllowedValues:  stepValidValues,
@@ -278,11 +266,11 @@ func (v *GetInstanceMonitorInput) Validate() error {
 }
 
 type GetInstanceMonitorOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID string   `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/modify_instance_attributes.html
@@ -312,15 +300,15 @@ func (s *InstanceService) ModifyInstanceAttributes(i *ModifyInstanceAttributesIn
 }
 
 type ModifyInstanceAttributesInput struct {
-	Description  string `json:"description" name:"description" location:"params"`
-	Instance     string `json:"instance" name:"instance" location:"params"` // Required
-	InstanceName string `json:"instance_name" name:"instance_name" location:"params"`
+	Description  *string `json:"description" name:"description" location:"params"`
+	Instance     *string `json:"instance" name:"instance" location:"params"` // Required
+	InstanceName *string `json:"instance_name" name:"instance_name" location:"params"`
 }
 
 func (v *ModifyInstanceAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.Instance) == "" {
-		return errs.ParameterRequiredError{
+	if v.Instance == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Instance",
 			ParentName:    "ModifyInstanceAttributesInput",
 		}
@@ -330,9 +318,9 @@ func (v *ModifyInstanceAttributesInput) Validate() error {
 }
 
 type ModifyInstanceAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/reset_instances.html
@@ -362,38 +350,34 @@ func (s *InstanceService) ResetInstances(i *ResetInstancesInput) (*ResetInstance
 }
 
 type ResetInstancesInput struct {
-	Instances    []string `json:"instances" name:"instances" location:"params"` // Required
-	LoginKeyPair string   `json:"login_keypair" name:"login_keypair" location:"params"`
+	Instances    []*string `json:"instances" name:"instances" location:"params"` // Required
+	LoginKeyPair *string   `json:"login_keypair" name:"login_keypair" location:"params"`
 	// LoginMode's available values: keypair, passwd
-	LoginMode   string `json:"login_mode" name:"login_mode" location:"params"` // Required
-	LoginPasswd string `json:"login_passwd" name:"login_passwd" location:"params"`
+	LoginMode   *string `json:"login_mode" name:"login_mode" location:"params"` // Required
+	LoginPasswd *string `json:"login_passwd" name:"login_passwd" location:"params"`
 	// NeedNewSID's available values: 0, 1
-	NeedNewSID int `json:"need_newsid" name:"need_newsid" default:"0" location:"params"`
+	NeedNewSID *int `json:"need_newsid" name:"need_newsid" default:"0" location:"params"`
 }
 
 func (v *ResetInstancesInput) Validate() error {
 
 	if len(v.Instances) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Instances",
 			ParentName:    "ResetInstancesInput",
 		}
 	}
 
-	if fmt.Sprint(v.LoginMode) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoginMode == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoginMode",
 			ParentName:    "ResetInstancesInput",
 		}
 	}
 
-	loginModeParameterValue := fmt.Sprint(v.LoginMode)
-	if loginModeParameterValue == "0" {
-		loginModeParameterValue = ""
-	}
-	if loginModeParameterValue != "" {
+	if v.LoginMode != nil {
 		loginModeValidValues := []string{"keypair", "passwd"}
-		loginModeParameterValue := fmt.Sprint(v.LoginMode)
+		loginModeParameterValue := fmt.Sprint(*v.LoginMode)
 
 		loginModeIsValid := false
 		for _, value := range loginModeValidValues {
@@ -403,7 +387,7 @@ func (v *ResetInstancesInput) Validate() error {
 		}
 
 		if !loginModeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "LoginMode",
 				ParameterValue: loginModeParameterValue,
 				AllowedValues:  loginModeValidValues,
@@ -411,13 +395,9 @@ func (v *ResetInstancesInput) Validate() error {
 		}
 	}
 
-	needNewSIDParameterValue := fmt.Sprint(v.NeedNewSID)
-	if needNewSIDParameterValue == "0" {
-		needNewSIDParameterValue = ""
-	}
-	if needNewSIDParameterValue != "" {
+	if v.NeedNewSID != nil {
 		needNewSIDValidValues := []string{"0", "1"}
-		needNewSIDParameterValue := fmt.Sprint(v.NeedNewSID)
+		needNewSIDParameterValue := fmt.Sprint(*v.NeedNewSID)
 
 		needNewSIDIsValid := false
 		for _, value := range needNewSIDValidValues {
@@ -427,7 +407,7 @@ func (v *ResetInstancesInput) Validate() error {
 		}
 
 		if !needNewSIDIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "NeedNewSID",
 				ParameterValue: needNewSIDParameterValue,
 				AllowedValues:  needNewSIDValidValues,
@@ -439,10 +419,10 @@ func (v *ResetInstancesInput) Validate() error {
 }
 
 type ResetInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/resize_instances.html
@@ -474,22 +454,18 @@ func (s *InstanceService) ResizeInstances(i *ResizeInstancesInput) (*ResizeInsta
 type ResizeInstancesInput struct {
 
 	// CPU's available values: 1, 2, 4, 8, 16
-	CPU          int      `json:"cpu" name:"cpu" location:"params"`
-	InstanceType string   `json:"instance_type" name:"instance_type" location:"params"`
-	Instances    []string `json:"instances" name:"instances" location:"params"` // Required
+	CPU          *int      `json:"cpu" name:"cpu" location:"params"`
+	InstanceType *string   `json:"instance_type" name:"instance_type" location:"params"`
+	Instances    []*string `json:"instances" name:"instances" location:"params"` // Required
 	// Memory's available values: 1024, 2048, 4096, 6144, 8192, 12288, 16384, 24576, 32768
-	Memory int `json:"memory" name:"memory" location:"params"`
+	Memory *int `json:"memory" name:"memory" location:"params"`
 }
 
 func (v *ResizeInstancesInput) Validate() error {
 
-	cpuParameterValue := fmt.Sprint(v.CPU)
-	if cpuParameterValue == "0" {
-		cpuParameterValue = ""
-	}
-	if cpuParameterValue != "" {
+	if v.CPU != nil {
 		cpuValidValues := []string{"1", "2", "4", "8", "16"}
-		cpuParameterValue := fmt.Sprint(v.CPU)
+		cpuParameterValue := fmt.Sprint(*v.CPU)
 
 		cpuIsValid := false
 		for _, value := range cpuValidValues {
@@ -499,7 +475,7 @@ func (v *ResizeInstancesInput) Validate() error {
 		}
 
 		if !cpuIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "CPU",
 				ParameterValue: cpuParameterValue,
 				AllowedValues:  cpuValidValues,
@@ -508,19 +484,15 @@ func (v *ResizeInstancesInput) Validate() error {
 	}
 
 	if len(v.Instances) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Instances",
 			ParentName:    "ResizeInstancesInput",
 		}
 	}
 
-	memoryParameterValue := fmt.Sprint(v.Memory)
-	if memoryParameterValue == "0" {
-		memoryParameterValue = ""
-	}
-	if memoryParameterValue != "" {
+	if v.Memory != nil {
 		memoryValidValues := []string{"1024", "2048", "4096", "6144", "8192", "12288", "16384", "24576", "32768"}
-		memoryParameterValue := fmt.Sprint(v.Memory)
+		memoryParameterValue := fmt.Sprint(*v.Memory)
 
 		memoryIsValid := false
 		for _, value := range memoryValidValues {
@@ -530,7 +502,7 @@ func (v *ResizeInstancesInput) Validate() error {
 		}
 
 		if !memoryIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Memory",
 				ParameterValue: memoryParameterValue,
 				AllowedValues:  memoryValidValues,
@@ -542,10 +514,10 @@ func (v *ResizeInstancesInput) Validate() error {
 }
 
 type ResizeInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/restart_instances.html
@@ -575,13 +547,13 @@ func (s *InstanceService) RestartInstances(i *RestartInstancesInput) (*RestartIn
 }
 
 type RestartInstancesInput struct {
-	Instances []string `json:"instances" name:"instances" location:"params"` // Required
+	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
 }
 
 func (v *RestartInstancesInput) Validate() error {
 
 	if len(v.Instances) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Instances",
 			ParentName:    "RestartInstancesInput",
 		}
@@ -591,10 +563,10 @@ func (v *RestartInstancesInput) Validate() error {
 }
 
 type RestartInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/run_instances.html
@@ -624,46 +596,42 @@ func (s *InstanceService) RunInstances(i *RunInstancesInput) (*RunInstancesOutpu
 }
 
 type RunInstancesInput struct {
-	BillingID string `json:"billing_id" name:"billing_id" location:"params"`
-	Count     int    `json:"count" name:"count" default:"1" location:"params"`
+	BillingID *string `json:"billing_id" name:"billing_id" location:"params"`
+	Count     *int    `json:"count" name:"count" default:"1" location:"params"`
 	// CPU's available values: 1, 2, 4, 8, 16
-	CPU      int    `json:"cpu" name:"cpu" default:"1" location:"params"`
-	Hostname string `json:"hostname" name:"hostname" location:"params"`
-	ImageID  string `json:"image_id" name:"image_id" location:"params"` // Required
+	CPU      *int    `json:"cpu" name:"cpu" default:"1" location:"params"`
+	Hostname *string `json:"hostname" name:"hostname" location:"params"`
+	ImageID  *string `json:"image_id" name:"image_id" location:"params"` // Required
 	// InstanceClass's available values: 0, 1
-	InstanceClass int    `json:"instance_class" name:"instance_class" location:"params"`
-	InstanceName  string `json:"instance_name" name:"instance_name" location:"params"`
-	InstanceType  string `json:"instance_type" name:"instance_type" location:"params"`
-	LoginKeyPair  string `json:"login_keypair" name:"login_keypair" location:"params"`
+	InstanceClass *int    `json:"instance_class" name:"instance_class" location:"params"`
+	InstanceName  *string `json:"instance_name" name:"instance_name" location:"params"`
+	InstanceType  *string `json:"instance_type" name:"instance_type" location:"params"`
+	LoginKeyPair  *string `json:"login_keypair" name:"login_keypair" location:"params"`
 	// LoginMode's available values: keypair, passwd
-	LoginMode   string `json:"login_mode" name:"login_mode" location:"params"` // Required
-	LoginPasswd string `json:"login_passwd" name:"login_passwd" location:"params"`
+	LoginMode   *string `json:"login_mode" name:"login_mode" location:"params"` // Required
+	LoginPasswd *string `json:"login_passwd" name:"login_passwd" location:"params"`
 	// Memory's available values: 1024, 2048, 4096, 6144, 8192, 12288, 16384, 24576, 32768
-	Memory int `json:"memory" name:"memory" default:"1024" location:"params"`
+	Memory *int `json:"memory" name:"memory" default:"1024" location:"params"`
 	// NeedNewSID's available values: 0, 1
-	NeedNewSID int `json:"need_newsid" name:"need_newsid" default:"0" location:"params"`
+	NeedNewSID *int `json:"need_newsid" name:"need_newsid" default:"0" location:"params"`
 	// NeedUserdata's available values: 0, 1
-	NeedUserdata  int    `json:"need_userdata" name:"need_userdata" default:"0" location:"params"`
-	SecurityGroup string `json:"security_group" name:"security_group" location:"params"`
-	UIType        string `json:"ui_type" name:"ui_type" location:"params"`
-	UserdataFile  string `json:"userdata_file" name:"userdata_file" default:"etc/rc.local" location:"params"`
-	UserdataPath  string `json:"userdata_path" name:"userdata_path" default:"etc/qingcloud/userdata" location:"params"`
+	NeedUserdata  *int    `json:"need_userdata" name:"need_userdata" default:"0" location:"params"`
+	SecurityGroup *string `json:"security_group" name:"security_group" location:"params"`
+	UIType        *string `json:"ui_type" name:"ui_type" location:"params"`
+	UserdataFile  *string `json:"userdata_file" name:"userdata_file" default:"etc/rc.local" location:"params"`
+	UserdataPath  *string `json:"userdata_path" name:"userdata_path" default:"etc/qingcloud/userdata" location:"params"`
 	// UserdataType's available values: plain, exec, tar
-	UserdataType  string   `json:"userdata_type" name:"userdata_type" location:"params"`
-	UserdataValue string   `json:"userdata_value" name:"userdata_value" location:"params"`
-	Volumes       []string `json:"volumes" name:"volumes" location:"params"`
-	VxNets        []string `json:"vxnets" name:"vxnets" location:"params"`
+	UserdataType  *string   `json:"userdata_type" name:"userdata_type" location:"params"`
+	UserdataValue *string   `json:"userdata_value" name:"userdata_value" location:"params"`
+	Volumes       []*string `json:"volumes" name:"volumes" location:"params"`
+	VxNets        []*string `json:"vxnets" name:"vxnets" location:"params"`
 }
 
 func (v *RunInstancesInput) Validate() error {
 
-	cpuParameterValue := fmt.Sprint(v.CPU)
-	if cpuParameterValue == "0" {
-		cpuParameterValue = ""
-	}
-	if cpuParameterValue != "" {
+	if v.CPU != nil {
 		cpuValidValues := []string{"1", "2", "4", "8", "16"}
-		cpuParameterValue := fmt.Sprint(v.CPU)
+		cpuParameterValue := fmt.Sprint(*v.CPU)
 
 		cpuIsValid := false
 		for _, value := range cpuValidValues {
@@ -673,7 +641,7 @@ func (v *RunInstancesInput) Validate() error {
 		}
 
 		if !cpuIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "CPU",
 				ParameterValue: cpuParameterValue,
 				AllowedValues:  cpuValidValues,
@@ -681,20 +649,16 @@ func (v *RunInstancesInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.ImageID) == "" {
-		return errs.ParameterRequiredError{
+	if v.ImageID == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "ImageID",
 			ParentName:    "RunInstancesInput",
 		}
 	}
 
-	instanceClassParameterValue := fmt.Sprint(v.InstanceClass)
-	if instanceClassParameterValue == "0" {
-		instanceClassParameterValue = ""
-	}
-	if instanceClassParameterValue != "" {
+	if v.InstanceClass != nil {
 		instanceClassValidValues := []string{"0", "1"}
-		instanceClassParameterValue := fmt.Sprint(v.InstanceClass)
+		instanceClassParameterValue := fmt.Sprint(*v.InstanceClass)
 
 		instanceClassIsValid := false
 		for _, value := range instanceClassValidValues {
@@ -704,7 +668,7 @@ func (v *RunInstancesInput) Validate() error {
 		}
 
 		if !instanceClassIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "InstanceClass",
 				ParameterValue: instanceClassParameterValue,
 				AllowedValues:  instanceClassValidValues,
@@ -712,20 +676,16 @@ func (v *RunInstancesInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.LoginMode) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoginMode == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoginMode",
 			ParentName:    "RunInstancesInput",
 		}
 	}
 
-	loginModeParameterValue := fmt.Sprint(v.LoginMode)
-	if loginModeParameterValue == "0" {
-		loginModeParameterValue = ""
-	}
-	if loginModeParameterValue != "" {
+	if v.LoginMode != nil {
 		loginModeValidValues := []string{"keypair", "passwd"}
-		loginModeParameterValue := fmt.Sprint(v.LoginMode)
+		loginModeParameterValue := fmt.Sprint(*v.LoginMode)
 
 		loginModeIsValid := false
 		for _, value := range loginModeValidValues {
@@ -735,7 +695,7 @@ func (v *RunInstancesInput) Validate() error {
 		}
 
 		if !loginModeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "LoginMode",
 				ParameterValue: loginModeParameterValue,
 				AllowedValues:  loginModeValidValues,
@@ -743,13 +703,9 @@ func (v *RunInstancesInput) Validate() error {
 		}
 	}
 
-	memoryParameterValue := fmt.Sprint(v.Memory)
-	if memoryParameterValue == "0" {
-		memoryParameterValue = ""
-	}
-	if memoryParameterValue != "" {
+	if v.Memory != nil {
 		memoryValidValues := []string{"1024", "2048", "4096", "6144", "8192", "12288", "16384", "24576", "32768"}
-		memoryParameterValue := fmt.Sprint(v.Memory)
+		memoryParameterValue := fmt.Sprint(*v.Memory)
 
 		memoryIsValid := false
 		for _, value := range memoryValidValues {
@@ -759,7 +715,7 @@ func (v *RunInstancesInput) Validate() error {
 		}
 
 		if !memoryIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Memory",
 				ParameterValue: memoryParameterValue,
 				AllowedValues:  memoryValidValues,
@@ -767,13 +723,9 @@ func (v *RunInstancesInput) Validate() error {
 		}
 	}
 
-	needNewSIDParameterValue := fmt.Sprint(v.NeedNewSID)
-	if needNewSIDParameterValue == "0" {
-		needNewSIDParameterValue = ""
-	}
-	if needNewSIDParameterValue != "" {
+	if v.NeedNewSID != nil {
 		needNewSIDValidValues := []string{"0", "1"}
-		needNewSIDParameterValue := fmt.Sprint(v.NeedNewSID)
+		needNewSIDParameterValue := fmt.Sprint(*v.NeedNewSID)
 
 		needNewSIDIsValid := false
 		for _, value := range needNewSIDValidValues {
@@ -783,7 +735,7 @@ func (v *RunInstancesInput) Validate() error {
 		}
 
 		if !needNewSIDIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "NeedNewSID",
 				ParameterValue: needNewSIDParameterValue,
 				AllowedValues:  needNewSIDValidValues,
@@ -791,13 +743,9 @@ func (v *RunInstancesInput) Validate() error {
 		}
 	}
 
-	needUserdataParameterValue := fmt.Sprint(v.NeedUserdata)
-	if needUserdataParameterValue == "0" {
-		needUserdataParameterValue = ""
-	}
-	if needUserdataParameterValue != "" {
+	if v.NeedUserdata != nil {
 		needUserdataValidValues := []string{"0", "1"}
-		needUserdataParameterValue := fmt.Sprint(v.NeedUserdata)
+		needUserdataParameterValue := fmt.Sprint(*v.NeedUserdata)
 
 		needUserdataIsValid := false
 		for _, value := range needUserdataValidValues {
@@ -807,7 +755,7 @@ func (v *RunInstancesInput) Validate() error {
 		}
 
 		if !needUserdataIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "NeedUserdata",
 				ParameterValue: needUserdataParameterValue,
 				AllowedValues:  needUserdataValidValues,
@@ -815,13 +763,9 @@ func (v *RunInstancesInput) Validate() error {
 		}
 	}
 
-	userdataTypeParameterValue := fmt.Sprint(v.UserdataType)
-	if userdataTypeParameterValue == "0" {
-		userdataTypeParameterValue = ""
-	}
-	if userdataTypeParameterValue != "" {
+	if v.UserdataType != nil {
 		userdataTypeValidValues := []string{"plain", "exec", "tar"}
-		userdataTypeParameterValue := fmt.Sprint(v.UserdataType)
+		userdataTypeParameterValue := fmt.Sprint(*v.UserdataType)
 
 		userdataTypeIsValid := false
 		for _, value := range userdataTypeValidValues {
@@ -831,7 +775,7 @@ func (v *RunInstancesInput) Validate() error {
 		}
 
 		if !userdataTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "UserdataType",
 				ParameterValue: userdataTypeParameterValue,
 				AllowedValues:  userdataTypeValidValues,
@@ -843,11 +787,11 @@ func (v *RunInstancesInput) Validate() error {
 }
 
 type RunInstancesOutput struct {
-	Message   string   `json:"message" name:"message"`
-	Action    string   `json:"action" name:"action" location:"elements"`
-	Instances []string `json:"instances" name:"instances" location:"elements"`
-	JobID     string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode   int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message   *string   `json:"message" name:"message"`
+	Action    *string   `json:"action" name:"action" location:"elements"`
+	Instances []*string `json:"instances" name:"instances" location:"elements"`
+	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode   *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/start_instances.html
@@ -877,13 +821,13 @@ func (s *InstanceService) StartInstances(i *StartInstancesInput) (*StartInstance
 }
 
 type StartInstancesInput struct {
-	Instances []string `json:"instances" name:"instances" location:"params"` // Required
+	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
 }
 
 func (v *StartInstancesInput) Validate() error {
 
 	if len(v.Instances) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Instances",
 			ParentName:    "StartInstancesInput",
 		}
@@ -893,10 +837,10 @@ func (v *StartInstancesInput) Validate() error {
 }
 
 type StartInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/stop_instances.html
@@ -928,19 +872,15 @@ func (s *InstanceService) StopInstances(i *StopInstancesInput) (*StopInstancesOu
 type StopInstancesInput struct {
 
 	// Force's available values: 0, 1
-	Force     int      `json:"force" name:"force" default:"0" location:"params"`
-	Instances []string `json:"instances" name:"instances" location:"params"` // Required
+	Force     *int      `json:"force" name:"force" default:"0" location:"params"`
+	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
 }
 
 func (v *StopInstancesInput) Validate() error {
 
-	forceParameterValue := fmt.Sprint(v.Force)
-	if forceParameterValue == "0" {
-		forceParameterValue = ""
-	}
-	if forceParameterValue != "" {
+	if v.Force != nil {
 		forceValidValues := []string{"0", "1"}
-		forceParameterValue := fmt.Sprint(v.Force)
+		forceParameterValue := fmt.Sprint(*v.Force)
 
 		forceIsValid := false
 		for _, value := range forceValidValues {
@@ -950,7 +890,7 @@ func (v *StopInstancesInput) Validate() error {
 		}
 
 		if !forceIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Force",
 				ParameterValue: forceParameterValue,
 				AllowedValues:  forceValidValues,
@@ -959,7 +899,7 @@ func (v *StopInstancesInput) Validate() error {
 	}
 
 	if len(v.Instances) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Instances",
 			ParentName:    "StopInstancesInput",
 		}
@@ -969,10 +909,10 @@ func (v *StopInstancesInput) Validate() error {
 }
 
 type StopInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/terminate_instances.html
@@ -1002,13 +942,13 @@ func (s *InstanceService) TerminateInstances(i *TerminateInstancesInput) (*Termi
 }
 
 type TerminateInstancesInput struct {
-	Instances []string `json:"instances" name:"instances" location:"params"` // Required
+	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
 }
 
 func (v *TerminateInstancesInput) Validate() error {
 
 	if len(v.Instances) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Instances",
 			ParentName:    "TerminateInstancesInput",
 		}
@@ -1018,8 +958,8 @@ func (v *TerminateInstancesInput) Validate() error {
 }
 
 type TerminateInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

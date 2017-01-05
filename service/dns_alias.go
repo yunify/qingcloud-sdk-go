@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type DNSAliasService struct {
 
 type DNSAliasServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) DNSAlias(zone string) (*DNSAliasService, error) {
 	properties := &DNSAliasServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &DNSAliasService{Config: s.Config, Properties: properties}, nil
@@ -74,21 +74,21 @@ func (s *DNSAliasService) AssociateDNSAlias(i *AssociateDNSAliasInput) (*Associa
 }
 
 type AssociateDNSAliasInput struct {
-	Prefix   string `json:"prefix" name:"prefix" location:"params"`     // Required
-	Resource string `json:"resource" name:"resource" location:"params"` // Required
+	Prefix   *string `json:"prefix" name:"prefix" location:"params"`     // Required
+	Resource *string `json:"resource" name:"resource" location:"params"` // Required
 }
 
 func (v *AssociateDNSAliasInput) Validate() error {
 
-	if fmt.Sprint(v.Prefix) == "" {
-		return errs.ParameterRequiredError{
+	if v.Prefix == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Prefix",
 			ParentName:    "AssociateDNSAliasInput",
 		}
 	}
 
-	if fmt.Sprint(v.Resource) == "" {
-		return errs.ParameterRequiredError{
+	if v.Resource == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Resource",
 			ParentName:    "AssociateDNSAliasInput",
 		}
@@ -98,12 +98,12 @@ func (v *AssociateDNSAliasInput) Validate() error {
 }
 
 type AssociateDNSAliasOutput struct {
-	Message    string `json:"message" name:"message"`
-	Action     string `json:"action" name:"action" location:"elements"`
-	DNSAliasID string `json:"dns_alias_id" name:"dns_alias_id" location:"elements"`
-	DomainName string `json:"domain_name" name:"domain_name" location:"elements"`
-	JobID      string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode    int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string `json:"message" name:"message"`
+	Action     *string `json:"action" name:"action" location:"elements"`
+	DNSAliasID *string `json:"dns_alias_id" name:"dns_alias_id" location:"elements"`
+	DomainName *string `json:"domain_name" name:"domain_name" location:"elements"`
+	JobID      *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/dns_alias/describe_dns_aliases.html
@@ -133,11 +133,11 @@ func (s *DNSAliasService) DescribeDNSAliases(i *DescribeDNSAliasesInput) (*Descr
 }
 
 type DescribeDNSAliasesInput struct {
-	DNSAliases []string `json:"dns_aliases" name:"dns_aliases" location:"params"`
-	Limit      int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     int      `json:"offset" name:"offset" default:"0" location:"params"`
-	ResourceID string   `json:"resource_id" name:"resource_id" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
+	DNSAliases []*string `json:"dns_aliases" name:"dns_aliases" location:"params"`
+	Limit      *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	ResourceID *string   `json:"resource_id" name:"resource_id" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
 }
 
 func (v *DescribeDNSAliasesInput) Validate() error {
@@ -146,11 +146,11 @@ func (v *DescribeDNSAliasesInput) Validate() error {
 }
 
 type DescribeDNSAliasesOutput struct {
-	Message     string      `json:"message" name:"message"`
-	Action      string      `json:"action" name:"action" location:"elements"`
+	Message     *string     `json:"message" name:"message"`
+	Action      *string     `json:"action" name:"action" location:"elements"`
 	DNSAliasSet []*DNSAlias `json:"dns_alias_set" name:"dns_alias_set" location:"elements"`
-	RetCode     int         `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount  int         `json:"total_count" name:"total_count" location:"elements"`
+	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/dns_alias/dissociate_dns_aliases.html
@@ -180,13 +180,13 @@ func (s *DNSAliasService) DissociateDNSAliases(i *DissociateDNSAliasesInput) (*D
 }
 
 type DissociateDNSAliasesInput struct {
-	DNSAliases []string `json:"dns_aliases" name:"dns_aliases" location:"params"` // Required
+	DNSAliases []*string `json:"dns_aliases" name:"dns_aliases" location:"params"` // Required
 }
 
 func (v *DissociateDNSAliasesInput) Validate() error {
 
 	if len(v.DNSAliases) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "DNSAliases",
 			ParentName:    "DissociateDNSAliasesInput",
 		}
@@ -196,10 +196,10 @@ func (v *DissociateDNSAliasesInput) Validate() error {
 }
 
 type DissociateDNSAliasesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/dns_alias/get_dns_label.html
@@ -237,9 +237,9 @@ func (v *GetDNSLabelInput) Validate() error {
 }
 
 type GetDNSLabelOutput struct {
-	Message    string `json:"message" name:"message"`
-	Action     string `json:"action" name:"action" location:"elements"`
-	DNSLabel   string `json:"dns_label" name:"dns_label" location:"elements"`
-	DomainName string `json:"domain_name" name:"domain_name" location:"elements"`
-	RetCode    int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string `json:"message" name:"message"`
+	Action     *string `json:"action" name:"action" location:"elements"`
+	DNSLabel   *string `json:"dns_label" name:"dns_label" location:"elements"`
+	DomainName *string `json:"domain_name" name:"domain_name" location:"elements"`
+	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

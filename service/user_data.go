@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type UserDataService struct {
 
 type UserDataServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) UserData(zone string) (*UserDataService, error) {
 	properties := &UserDataServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &UserDataService{Config: s.Config, Properties: properties}, nil
@@ -74,14 +74,14 @@ func (s *UserDataService) UploadUserDataAttachment(i *UploadUserDataAttachmentIn
 }
 
 type UploadUserDataAttachmentInput struct {
-	AttachmentContent string `json:"attachment_content" name:"attachment_content" location:"params"` // Required
-	AttachmentName    string `json:"attachment_name" name:"attachment_name" location:"params"`
+	AttachmentContent *string `json:"attachment_content" name:"attachment_content" location:"params"` // Required
+	AttachmentName    *string `json:"attachment_name" name:"attachment_name" location:"params"`
 }
 
 func (v *UploadUserDataAttachmentInput) Validate() error {
 
-	if fmt.Sprint(v.AttachmentContent) == "" {
-		return errs.ParameterRequiredError{
+	if v.AttachmentContent == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "AttachmentContent",
 			ParentName:    "UploadUserDataAttachmentInput",
 		}
@@ -91,8 +91,8 @@ func (v *UploadUserDataAttachmentInput) Validate() error {
 }
 
 type UploadUserDataAttachmentOutput struct {
-	Message      string `json:"message" name:"message"`
-	Action       string `json:"action" name:"action" location:"elements"`
-	AttachmentID string `json:"attachment_id" name:"attachment_id" location:"elements"`
-	RetCode      int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message      *string `json:"message" name:"message"`
+	Action       *string `json:"action" name:"action" location:"elements"`
+	AttachmentID *string `json:"attachment_id" name:"attachment_id" location:"elements"`
+	RetCode      *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

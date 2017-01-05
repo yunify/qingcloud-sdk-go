@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type EIPService struct {
 
 type EIPServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) EIP(zone string) (*EIPService, error) {
 	properties := &EIPServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &EIPService{Config: s.Config, Properties: properties}, nil
@@ -74,31 +74,27 @@ func (s *EIPService) AllocateEIPs(i *AllocateEIPsInput) (*AllocateEIPsOutput, er
 }
 
 type AllocateEIPsInput struct {
-	Bandwidth int `json:"bandwidth" name:"bandwidth" location:"params"` // Required
+	Bandwidth *int `json:"bandwidth" name:"bandwidth" location:"params"` // Required
 	// BillingMode's available values: bandwidth, traffic
-	BillingMode string `json:"billing_mode" name:"billing_mode" default:"bandwidth" location:"params"`
-	Count       int    `json:"count" name:"count" default:"1" location:"params"`
-	EIPName     string `json:"eip_name" name:"eip_name" location:"params"`
+	BillingMode *string `json:"billing_mode" name:"billing_mode" default:"bandwidth" location:"params"`
+	Count       *int    `json:"count" name:"count" default:"1" location:"params"`
+	EIPName     *string `json:"eip_name" name:"eip_name" location:"params"`
 	// NeedICP's available values: 0, 1
-	NeedICP int `json:"need_icp" name:"need_icp" default:"0" location:"params"`
+	NeedICP *int `json:"need_icp" name:"need_icp" default:"0" location:"params"`
 }
 
 func (v *AllocateEIPsInput) Validate() error {
 
-	if fmt.Sprint(v.Bandwidth) == "" {
-		return errs.ParameterRequiredError{
+	if v.Bandwidth == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Bandwidth",
 			ParentName:    "AllocateEIPsInput",
 		}
 	}
 
-	billingModeParameterValue := fmt.Sprint(v.BillingMode)
-	if billingModeParameterValue == "0" {
-		billingModeParameterValue = ""
-	}
-	if billingModeParameterValue != "" {
+	if v.BillingMode != nil {
 		billingModeValidValues := []string{"bandwidth", "traffic"}
-		billingModeParameterValue := fmt.Sprint(v.BillingMode)
+		billingModeParameterValue := fmt.Sprint(*v.BillingMode)
 
 		billingModeIsValid := false
 		for _, value := range billingModeValidValues {
@@ -108,7 +104,7 @@ func (v *AllocateEIPsInput) Validate() error {
 		}
 
 		if !billingModeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "BillingMode",
 				ParameterValue: billingModeParameterValue,
 				AllowedValues:  billingModeValidValues,
@@ -116,13 +112,9 @@ func (v *AllocateEIPsInput) Validate() error {
 		}
 	}
 
-	needICPParameterValue := fmt.Sprint(v.NeedICP)
-	if needICPParameterValue == "0" {
-		needICPParameterValue = ""
-	}
-	if needICPParameterValue != "" {
+	if v.NeedICP != nil {
 		needICPValidValues := []string{"0", "1"}
-		needICPParameterValue := fmt.Sprint(v.NeedICP)
+		needICPParameterValue := fmt.Sprint(*v.NeedICP)
 
 		needICPIsValid := false
 		for _, value := range needICPValidValues {
@@ -132,7 +124,7 @@ func (v *AllocateEIPsInput) Validate() error {
 		}
 
 		if !needICPIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "NeedICP",
 				ParameterValue: needICPParameterValue,
 				AllowedValues:  needICPValidValues,
@@ -144,10 +136,10 @@ func (v *AllocateEIPsInput) Validate() error {
 }
 
 type AllocateEIPsOutput struct {
-	Message string   `json:"message" name:"message"`
-	Action  string   `json:"action" name:"action" location:"elements"`
-	EIPs    []string `json:"eips" name:"eips" location:"elements"`
-	RetCode int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string   `json:"message" name:"message"`
+	Action  *string   `json:"action" name:"action" location:"elements"`
+	EIPs    []*string `json:"eips" name:"eips" location:"elements"`
+	RetCode *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/associate_eip.html
@@ -177,21 +169,21 @@ func (s *EIPService) AssociateEIP(i *AssociateEIPInput) (*AssociateEIPOutput, er
 }
 
 type AssociateEIPInput struct {
-	EIP      string `json:"eip" name:"eip" location:"params"`           // Required
-	Instance string `json:"instance" name:"instance" location:"params"` // Required
+	EIP      *string `json:"eip" name:"eip" location:"params"`           // Required
+	Instance *string `json:"instance" name:"instance" location:"params"` // Required
 }
 
 func (v *AssociateEIPInput) Validate() error {
 
-	if fmt.Sprint(v.EIP) == "" {
-		return errs.ParameterRequiredError{
+	if v.EIP == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "EIP",
 			ParentName:    "AssociateEIPInput",
 		}
 	}
 
-	if fmt.Sprint(v.Instance) == "" {
-		return errs.ParameterRequiredError{
+	if v.Instance == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Instance",
 			ParentName:    "AssociateEIPInput",
 		}
@@ -201,10 +193,10 @@ func (v *AssociateEIPInput) Validate() error {
 }
 
 type AssociateEIPOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/dissociate_eips.html
@@ -234,21 +226,21 @@ func (s *EIPService) ChangeEIPsBandwidth(i *ChangeEIPsBandwidthInput) (*ChangeEI
 }
 
 type ChangeEIPsBandwidthInput struct {
-	Bandwidth int      `json:"bandwidth" name:"bandwidth" location:"params"` // Required
-	EIPs      []string `json:"eips" name:"eips" location:"params"`           // Required
+	Bandwidth *int      `json:"bandwidth" name:"bandwidth" location:"params"` // Required
+	EIPs      []*string `json:"eips" name:"eips" location:"params"`           // Required
 }
 
 func (v *ChangeEIPsBandwidthInput) Validate() error {
 
-	if fmt.Sprint(v.Bandwidth) == "" {
-		return errs.ParameterRequiredError{
+	if v.Bandwidth == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Bandwidth",
 			ParentName:    "ChangeEIPsBandwidthInput",
 		}
 	}
 
 	if len(v.EIPs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "EIPs",
 			ParentName:    "ChangeEIPsBandwidthInput",
 		}
@@ -258,10 +250,10 @@ func (v *ChangeEIPsBandwidthInput) Validate() error {
 }
 
 type ChangeEIPsBandwidthOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/change_eips_billing_mode.html
@@ -293,27 +285,23 @@ func (s *EIPService) ChangeEIPsBillingMode(i *ChangeEIPsBillingModeInput) (*Chan
 type ChangeEIPsBillingModeInput struct {
 
 	// BillingMode's available values: bandwidth, traffic
-	BillingMode string   `json:"billing_mode" name:"billing_mode" default:"bandwidth" location:"params"` // Required
-	EIPGroup    string   `json:"eip_group" name:"eip_group" location:"params"`
-	EIPs        []string `json:"eips" name:"eips" location:"params"` // Required
+	BillingMode *string   `json:"billing_mode" name:"billing_mode" default:"bandwidth" location:"params"` // Required
+	EIPGroup    *string   `json:"eip_group" name:"eip_group" location:"params"`
+	EIPs        []*string `json:"eips" name:"eips" location:"params"` // Required
 }
 
 func (v *ChangeEIPsBillingModeInput) Validate() error {
 
-	if fmt.Sprint(v.BillingMode) == "" {
-		return errs.ParameterRequiredError{
+	if v.BillingMode == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "BillingMode",
 			ParentName:    "ChangeEIPsBillingModeInput",
 		}
 	}
 
-	billingModeParameterValue := fmt.Sprint(v.BillingMode)
-	if billingModeParameterValue == "0" {
-		billingModeParameterValue = ""
-	}
-	if billingModeParameterValue != "" {
+	if v.BillingMode != nil {
 		billingModeValidValues := []string{"bandwidth", "traffic"}
-		billingModeParameterValue := fmt.Sprint(v.BillingMode)
+		billingModeParameterValue := fmt.Sprint(*v.BillingMode)
 
 		billingModeIsValid := false
 		for _, value := range billingModeValidValues {
@@ -323,7 +311,7 @@ func (v *ChangeEIPsBillingModeInput) Validate() error {
 		}
 
 		if !billingModeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "BillingMode",
 				ParameterValue: billingModeParameterValue,
 				AllowedValues:  billingModeValidValues,
@@ -332,7 +320,7 @@ func (v *ChangeEIPsBillingModeInput) Validate() error {
 	}
 
 	if len(v.EIPs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "EIPs",
 			ParentName:    "ChangeEIPsBillingModeInput",
 		}
@@ -342,10 +330,10 @@ func (v *ChangeEIPsBillingModeInput) Validate() error {
 }
 
 type ChangeEIPsBillingModeOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/describe_eips.html
@@ -375,14 +363,14 @@ func (s *EIPService) DescribeEIPs(i *DescribeEIPsInput) (*DescribeEIPsOutput, er
 }
 
 type DescribeEIPsInput struct {
-	EIPs       []string `json:"eips" name:"eips" location:"params"`
-	InstanceID string   `json:"instance_id" name:"instance_id" location:"params"`
-	Limit      int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
-	Status     []string `json:"status" name:"status" location:"params"`
-	Tags       []string `json:"tags" name:"tags" location:"params"`
-	Verbose    int      `json:"verbose" name:"verbose" location:"params"`
+	EIPs       []*string `json:"eips" name:"eips" location:"params"`
+	InstanceID *string   `json:"instance_id" name:"instance_id" location:"params"`
+	Limit      *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
+	Status     []*string `json:"status" name:"status" location:"params"`
+	Tags       []*string `json:"tags" name:"tags" location:"params"`
+	Verbose    *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeEIPsInput) Validate() error {
@@ -391,11 +379,11 @@ func (v *DescribeEIPsInput) Validate() error {
 }
 
 type DescribeEIPsOutput struct {
-	Message    string `json:"message" name:"message"`
-	Action     string `json:"action" name:"action" location:"elements"`
-	EIPSet     []*EIP `json:"eip_set" name:"eip_set" location:"elements"`
-	RetCode    int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string `json:"message" name:"message"`
+	Action     *string `json:"action" name:"action" location:"elements"`
+	EIPSet     []*EIP  `json:"eip_set" name:"eip_set" location:"elements"`
+	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/dissociate_eips.html
@@ -425,13 +413,13 @@ func (s *EIPService) DissociateEIPs(i *DissociateEIPsInput) (*DissociateEIPsOutp
 }
 
 type DissociateEIPsInput struct {
-	EIPs []string `json:"eips" name:"eips" location:"params"` // Required
+	EIPs []*string `json:"eips" name:"eips" location:"params"` // Required
 }
 
 func (v *DissociateEIPsInput) Validate() error {
 
 	if len(v.EIPs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "EIPs",
 			ParentName:    "DissociateEIPsInput",
 		}
@@ -441,10 +429,10 @@ func (v *DissociateEIPsInput) Validate() error {
 }
 
 type DissociateEIPsOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_monitor.html
@@ -474,44 +462,40 @@ func (s *EIPService) GetEIPMonitor(i *GetEIPMonitorInput) (*GetEIPMonitorOutput,
 }
 
 type GetEIPMonitorInput struct {
-	EndTime   time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
-	Meters    []string  `json:"meters" name:"meters" location:"params"`                           // Required
-	Resource  string    `json:"resource" name:"resource" location:"params"`                       // Required
-	StartTime time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
+	EndTime   *time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
+	Meters    []*string  `json:"meters" name:"meters" location:"params"`                           // Required
+	Resource  *string    `json:"resource" name:"resource" location:"params"`                       // Required
+	StartTime *time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
 	// Step's available values: 5m, 15m, 2h, 1d
-	Step string `json:"step" name:"step" location:"params"` // Required
+	Step *string `json:"step" name:"step" location:"params"` // Required
 }
 
 func (v *GetEIPMonitorInput) Validate() error {
 
 	if len(v.Meters) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Meters",
 			ParentName:    "GetEIPMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Resource) == "" {
-		return errs.ParameterRequiredError{
+	if v.Resource == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Resource",
 			ParentName:    "GetEIPMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Step) == "" {
-		return errs.ParameterRequiredError{
+	if v.Step == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Step",
 			ParentName:    "GetEIPMonitorInput",
 		}
 	}
 
-	stepParameterValue := fmt.Sprint(v.Step)
-	if stepParameterValue == "0" {
-		stepParameterValue = ""
-	}
-	if stepParameterValue != "" {
+	if v.Step != nil {
 		stepValidValues := []string{"5m", "15m", "2h", "1d"}
-		stepParameterValue := fmt.Sprint(v.Step)
+		stepParameterValue := fmt.Sprint(*v.Step)
 
 		stepIsValid := false
 		for _, value := range stepValidValues {
@@ -521,7 +505,7 @@ func (v *GetEIPMonitorInput) Validate() error {
 		}
 
 		if !stepIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Step",
 				ParameterValue: stepParameterValue,
 				AllowedValues:  stepValidValues,
@@ -533,11 +517,11 @@ func (v *GetEIPMonitorInput) Validate() error {
 }
 
 type GetEIPMonitorOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID string   `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/modify_eip_attributes.html
@@ -567,15 +551,15 @@ func (s *EIPService) ModifyEIPAttributes(i *ModifyEIPAttributesInput) (*ModifyEI
 }
 
 type ModifyEIPAttributesInput struct {
-	Description string `json:"description" name:"description" location:"params"`
-	EIP         string `json:"eip" name:"eip" location:"params"` // Required
-	EIPName     string `json:"eip_name" name:"eip_name" location:"params"`
+	Description *string `json:"description" name:"description" location:"params"`
+	EIP         *string `json:"eip" name:"eip" location:"params"` // Required
+	EIPName     *string `json:"eip_name" name:"eip_name" location:"params"`
 }
 
 func (v *ModifyEIPAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.EIP) == "" {
-		return errs.ParameterRequiredError{
+	if v.EIP == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "EIP",
 			ParentName:    "ModifyEIPAttributesInput",
 		}
@@ -585,10 +569,10 @@ func (v *ModifyEIPAttributesInput) Validate() error {
 }
 
 type ModifyEIPAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	EIPID   string `json:"eip_id" name:"eip_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	EIPID   *string `json:"eip_id" name:"eip_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/release_eips.html
@@ -618,13 +602,13 @@ func (s *EIPService) ReleaseEIPs(i *ReleaseEIPsInput) (*ReleaseEIPsOutput, error
 }
 
 type ReleaseEIPsInput struct {
-	EIPs []string `json:"eips" name:"eips" location:"params"` // Required
+	EIPs []*string `json:"eips" name:"eips" location:"params"` // Required
 }
 
 func (v *ReleaseEIPsInput) Validate() error {
 
 	if len(v.EIPs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "EIPs",
 			ParentName:    "ReleaseEIPsInput",
 		}
@@ -634,8 +618,8 @@ func (v *ReleaseEIPsInput) Validate() error {
 }
 
 type ReleaseEIPsOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
