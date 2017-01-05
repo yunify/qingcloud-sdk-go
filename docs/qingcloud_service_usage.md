@@ -6,7 +6,7 @@ Each API function take a Input struct and return an Output struct. The Input str
 
 ``` go
 import (
-	"github.com/yunify/qingcloud-sdk-go/service"
+	qc "github.com/yunify/qingcloud-sdk-go/service"
 )
 ```
 
@@ -15,7 +15,7 @@ import (
 Initialize the QingCloud service with a configuration
 
 ``` go
-qcService, _ := service.Init(configuration)
+qcService, _ := qc.Init(configuration)
 ```
 
 Initialize the instance service in a zone
@@ -28,36 +28,36 @@ DescribeInstances
 
 ``` go
 iOutput, _ := pek3aInstance.DescribeInstances(
-	&service.DescribeInstancesInput{
-		Instances: []string{"i-xxxxxxxx"},
+	&qc.DescribeInstancesInput{
+		Instances: qc.StringSlice([]string{"i-xxxxxxxx"}),
 	},
 )
 
 // Print the return code.
-fmt.Println(iOutput.RetCode)
+fmt.Println(qc.IntValue(iOutput.RetCode))
 
 // Print the first instance ID.
-fmt.Println(iOutput.InstanceSet[0].InstanceID)
+fmt.Println(qc.StringValue(iOutput.InstanceSet[0].InstanceID))
 ```
 
 RunInstances
 
 ``` go
 iOutput, _ := pek3aInstance.RunInstances(
-	&service.RunInstancesInput{
-		ImageID:      "centos7x64d",
-		CPU:          1,
-		Memory:       1024,
-		LoginMode:    "keypair",
-		LoginKeyPair: "kp-xxxxxxxx",
+	&qc.RunInstancesInput{
+		ImageID:      qc.String("centos7x64d"),
+		CPU:          qc.Int(1),
+		Memory:       qc.Int(1024),
+		LoginMode:    qc.String("keypair"),
+		LoginKeyPair: qc.String("kp-xxxxxxxx"),
 	},
 )
 
 // Print the return code.
-fmt.Println(iOutput.RetCode)
+fmt.Println(qc.IntValue(iOutput.RetCode))
 
 // Print the job ID.
-fmt.Println(iOutput.JobID)
+fmt.Println(qc.StringValue(iOutput.JobID))
 ```
 
 Initialize the volume service in a zone
@@ -69,31 +69,31 @@ pek3aVolume, _ := qcService.Volume("pek3a")
 DescribeVolumes
 
 ``` go
-volOutput, _ := pek3aVolume.DescribeVolumes(&service.DescribeVolumesInput{
-	Volumes: []string{"vol-xxxxxxxx"},
+volOutput, _ := pek3aVolume.DescribeVolumes(&qc.DescribeVolumesInput{
+	Volumes: qc.StringValue([]string{"vol-xxxxxxxx"}),
 })
 
 // Print the return code.
-fmt.Println(volOutput.RetCode)
+fmt.Println(qc.IntValue(volOutput.RetCode))
 
 // Print the first volume name.
-fmt.Println(volOutput.VolumeSet[0].VolumeName)
+fmt.Println(qc.StringValue(volOutput.VolumeSet[0].VolumeName))
 ```
 
 CreateVolumes
 
 ``` go
 volOutput, _ := pek3aVolume.CreateVolumes(
-	&service.CreateVolumesInput{
-		Size:  10,
-		Count: 2,
+	&qc.CreateVolumesInput{
+		Size:  qc.Int(10),
+		Count: qc.Int(2),
 	},
 )
 
 // Print the return code.
-fmt.Println(volOutput.RetCode)
+fmt.Println(qc.IntValue(volOutput.RetCode))
 
 // Print the job ID.
-fmt.Println(volOutput.JobID)
+fmt.Println(qc.StringValue(volOutput.JobID))
 ```
 
