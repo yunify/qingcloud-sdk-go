@@ -630,18 +630,18 @@ func (v *EIPResource) Validate() error {
 }
 
 type Extra struct {
-	BlockBus   string            `json:"block_bus" name:"block_bus"`
-	BootDev    string            `json:"boot_dev" name:"boot_dev"`
-	CPUMax     int               `json:"cpu_max" name:"cpu_max"`
-	CPUModel   string            `json:"cpu_model" name:"cpu_model"`
-	Features   int               `json:"features" name:"features"`
-	Hypervisor string            `json:"hypervisor" name:"hypervisor"`
-	MemMax     int               `json:"mem_max" name:"mem_max"`
-	NICMqueue  int               `json:"nic_mqueue" name:"nic_mqueue"`
-	NoLimit    int               `json:"no_limit" name:"no_limit"`
-	NoRestrict int               `json:"no_restrict" name:"no_restrict"`
-	OSDiskSize int               `json:"os_disk_size" name:"os_disk_size"`
-	USB        int               `json:"usb" name:"usb"`
+	BlockBus   string `json:"block_bus" name:"block_bus"`
+	BootDev    string `json:"boot_dev" name:"boot_dev"`
+	CPUMax     int    `json:"cpu_max" name:"cpu_max"`
+	CPUModel   string `json:"cpu_model" name:"cpu_model"`
+	Features   int    `json:"features" name:"features"`
+	Hypervisor string `json:"hypervisor" name:"hypervisor"`
+	MemMax     int    `json:"mem_max" name:"mem_max"`
+	NICMqueue  int    `json:"nic_mqueue" name:"nic_mqueue"`
+	NoLimit    int    `json:"no_limit" name:"no_limit"`
+	NoRestrict int    `json:"no_restrict" name:"no_restrict"`
+	OSDiskSize int    `json:"os_disk_size" name:"os_disk_size"`
+	USB        int    `json:"usb" name:"usb"`
 }
 
 func (v *Extra) Validate() error {
