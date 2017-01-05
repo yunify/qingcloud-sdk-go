@@ -92,11 +92,14 @@ func (b *Builder) parseRequestProperties() error {
 	fields := reflect.ValueOf(b.operation.Properties).Elem()
 	for i := 0; i < fields.NumField(); i++ {
 		switch value := fields.Field(i).Interface().(type) {
-		case string:
-			propertiesMap[fields.Type().Field(i).Tag.Get("name")] = value
-		case int:
-			numberString := strconv.Itoa(int(value))
-			propertiesMap[fields.Type().Field(i).Tag.Get("name")] = numberString
+		case *string:
+			if value != nil {
+				propertiesMap[fields.Type().Field(i).Tag.Get("name")] = *value
+			}
+		case *int:
+			if value != nil {
+				propertiesMap[fields.Type().Field(i).Tag.Get("name")] = strconv.Itoa(int(*value))
+			}
 		}
 	}
 
@@ -128,57 +131,47 @@ func (b *Builder) parseRequestParams() error {
 		tagDefault := b.input.Elem().Type().Field(i).Tag.Get("default")
 		if tagName != "" && tagLocation != "" && requestParams != nil {
 			switch value := b.input.Elem().Field(i).Interface().(type) {
-			case string:
-				if value != "" {
-					requestParams[tagName] = value
+			case *string:
+				if tagDefault != "" {
+					requestParams[tagName] = tagDefault
 				}
-			case int:
-				numberString := strconv.Itoa(int(value))
-				if numberString == "0" {
-					numberString = ""
-					if tagDefault != "" {
-						numberString = tagDefault
-					}
+				if value != nil {
+					requestParams[tagName] = *value
 				}
-				if numberString != "" {
-					requestParams[tagName] = numberString
+			case *int:
+				if tagDefault != "" {
+					requestParams[tagName] = tagDefault
 				}
-			case bool:
-			case time.Time:
-				zero := time.Time{}
-				if value != zero {
-					var timeString string
+				if value != nil {
+					requestParams[tagName] = strconv.Itoa(int(*value))
+				}
+			case *bool:
+			case *time.Time:
+				if tagDefault != "" {
+					requestParams[tagName] = tagDefault
+				}
+				if value != nil {
 					format := b.input.Elem().Type().Field(i).Tag.Get("format")
-					timeString = utils.TimeToString(value, format)
-					if timeString != "" {
-						requestParams[tagName] = timeString
+					requestParams[tagName] = utils.TimeToString(*value, format)
+				}
+			case []*string:
+				for index, item := range value {
+					key := tagName + "." + strconv.Itoa(index+1)
+					if tagDefault != "" {
+						requestParams[tagName] = tagDefault
+					}
+					if item != nil {
+						requestParams[key] = *item
 					}
 				}
-			case []string:
-				if len(value) > 0 {
-					for index, item := range value {
-						key := tagName + "." + strconv.Itoa(index+1)
-						requestParams[key] = item
+			case []*int:
+				for index, item := range value {
+					key := tagName + "." + strconv.Itoa(index+1)
+					if tagDefault != "" {
+						requestParams[tagName] = tagDefault
 					}
-				}
-			case []int:
-				if len(value) > 0 {
-					numbersString := []string{}
-					for _, number := range value {
-						numberString := strconv.Itoa(int(number))
-						if numberString == "0" {
-							numberString = ""
-							if tagDefault != "" {
-								numberString = tagDefault
-							}
-						}
-						if numberString != "" {
-							numbersString = append(numbersString, numberString)
-						}
-					}
-
-					for index, item := range numbersString {
-						requestParams[tagName+"."+strconv.Itoa(index+1)] = item
+					if item != nil {
+						requestParams[key] = strconv.Itoa(int(*item))
 					}
 				}
 			default:
@@ -197,20 +190,13 @@ func (b *Builder) parseRequestParams() error {
 								tagKey := tagName + "." + strconv.Itoa(i+1) + "." + fieldTagName
 
 								switch fieldValue := item.Field(j).Interface().(type) {
-								case int:
-									numberString := strconv.Itoa(int(fieldValue))
-									if numberString == "0" {
-										numberString = ""
-										if tagDefault != "" {
-											numberString = tagDefault
-										}
+								case *int:
+									if fieldValue != nil {
+										requestParams[tagKey] = strconv.Itoa(int(*fieldValue))
 									}
-									if numberString != "" {
-										requestParams[tagKey] = numberString
-									}
-								case string:
-									if fieldValue != "" {
-										requestParams[tagKey] = fieldValue
+								case *string:
+									if fieldValue != nil {
+										requestParams[tagKey] = *fieldValue
 									}
 								}
 							}

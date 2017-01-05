@@ -30,33 +30,54 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
+func StringValue(v *string) string {
+	if v != nil {
+		return *v
+	}
+	return ""
+}
+
+func IntValue(v *int) int {
+	if v != nil {
+		return *v
+	}
+	return 0
+}
+
+func TimeValue(v *time.Time) time.Time {
+	if v != nil {
+		return *v
+	}
+	return time.Time{}
+}
+
 func TestUnpackerUnpackHTTPRequest(t *testing.T) {
 	type Instance struct {
-		Device       string `json:"device" name:"device"`
-		InstanceID   string `json:"instance_id" name:"instance_id"`
-		InstanceName string `json:"instance_name" name:"instance_name"`
+		Device       *string `json:"device" name:"device"`
+		InstanceID   *string `json:"instance_id" name:"instance_id"`
+		InstanceName *string `json:"instance_name" name:"instance_name"`
 	}
 
 	type Volume struct {
-		CreateTime       time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
-		Description      string    `json:"description" name:"description"`
-		Instance         *Instance `json:"instance" name:"instance"`
-		Size             int       `json:"size" name:"size"`
-		Status           string    `json:"status" name:"status"`
-		StatusTime       time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-		SubCode          int       `json:"sub_code" name:"sub_code"`
-		TransitionStatus string    `json:"transition_status" name:"transition_status"`
-		VolumeID         string    `json:"volume_id" name:"volume_id"`
-		VolumeName       string    `json:"volume_name" name:"volume_name"`
+		CreateTime       *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
+		Description      *string    `json:"description" name:"description"`
+		Instance         *Instance  `json:"instance" name:"instance"`
+		Size             *int       `json:"size" name:"size"`
+		Status           *string    `json:"status" name:"status"`
+		StatusTime       *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+		SubCode          *int       `json:"sub_code" name:"sub_code"`
+		TransitionStatus *string    `json:"transition_status" name:"transition_status"`
+		VolumeID         *string    `json:"volume_id" name:"volume_id"`
+		VolumeName       *string    `json:"volume_name" name:"volume_name"`
 	}
 
 	type DescribeVolumesOutput struct {
 		StatusCode int `location:"statusCode"`
 		Error      *errors.QingCloudError
 
-		Action     string    `json:"action" name:"action"`
-		RetCode    int       `json:"ret_code" name:"ret_code"`
-		TotalCount int       `json:"total_count" name:"total_count"`
+		Action     *string   `json:"action" name:"action"`
+		RetCode    *int      `json:"ret_code" name:"ret_code"`
+		TotalCount *int      `json:"total_count" name:"total_count"`
 		VolumeSet  []*Volume `json:"volume_set" name:"volume_set"`
 	}
 
@@ -94,18 +115,18 @@ func TestUnpackerUnpackHTTPRequest(t *testing.T) {
 	unpacker := Unpacker{}
 	err := unpacker.UnpackHTTPRequest(&data.Operation{}, httpResponse, &outputValue)
 	assert.Nil(t, err)
-	assert.Equal(t, "i-xxxxxxxx", output.VolumeSet[0].Instance.InstanceID)
-	assert.Equal(t, "vol-xxxxxxxx", output.VolumeSet[0].VolumeID)
-	assert.Equal(t, "vol name", output.VolumeSet[0].VolumeName)
-	assert.Equal(t, 1024, output.TotalCount)
+	assert.Equal(t, "i-xxxxxxxx", StringValue(output.VolumeSet[0].Instance.InstanceID))
+	assert.Equal(t, "vol-xxxxxxxx", StringValue(output.VolumeSet[0].VolumeID))
+	assert.Equal(t, "vol name", StringValue(output.VolumeSet[0].VolumeName))
+	assert.Equal(t, 1024, IntValue(output.TotalCount))
 	statusTime := time.Date(2013, 8, 30, 5, 13, 32, 0, time.UTC)
-	assert.Equal(t, statusTime, output.VolumeSet[0].StatusTime)
+	assert.Equal(t, statusTime, TimeValue(output.VolumeSet[0].StatusTime))
 }
 
 func TestUnpacker_UnpackHTTPRequestWithError(t *testing.T) {
 	type DescribeInstanceTypesOutput struct {
-		RetCode int    `json:"ret_code" name:"ret_code"`
-		Message string `json:"message" name:"message"`
+		RetCode *int    `json:"ret_code" name:"ret_code"`
+		Message *string `json:"message" name:"message"`
 	}
 
 	httpResponse := &http.Response{Header: http.Header{}}
