@@ -27,7 +27,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 func TestUnpackerUnpackHTTPRequest(t *testing.T) {
@@ -52,7 +52,7 @@ func TestUnpackerUnpackHTTPRequest(t *testing.T) {
 
 	type DescribeVolumesOutput struct {
 		StatusCode int `location:"statusCode"`
-		Error      *errs.QingCloudError
+		Error      *errors.QingCloudError
 
 		Action     string    `json:"action" name:"action"`
 		RetCode    int       `json:"ret_code" name:"ret_code"`
@@ -123,7 +123,7 @@ func TestUnpacker_UnpackHTTPRequestWithError(t *testing.T) {
 	err := unpacker.UnpackHTTPRequest(&data.Operation{}, httpResponse, &outputValue)
 	assert.NotNil(t, err)
 	switch e := err.(type) {
-	case errs.QingCloudError:
+	case errors.QingCloudError:
 		assert.Equal(t, e.RetCode, 1400)
 	}
 }
