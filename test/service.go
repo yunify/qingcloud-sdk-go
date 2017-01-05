@@ -24,8 +24,8 @@ import (
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
-	"github.com/yunify/qingcloud-sdk-go/service"
+	qcErrors "github.com/yunify/qingcloud-sdk-go/request/errors"
+	qc "github.com/yunify/qingcloud-sdk-go/service"
 )
 
 // QingCloudServiceFeatureContext provides feature context for QingCloudService.
@@ -59,22 +59,22 @@ func QingCloudServiceFeatureContext(s *godog.Suite) {
 
 // --------------------------------------------------------------------------
 
-var instanceService *service.InstanceService
-var jobService *service.JobService
+var instanceService *qc.InstanceService
+var jobService *qc.JobService
 
 func initializeQingCloudService() error {
 	return nil
 }
 
 func theQingCloudServiceIsInitialized() error {
-	if qingcloudService == nil {
+	if qcService == nil {
 		return errors.New("QingCloud service is not initialized")
 	}
 	return nil
 }
 
 func initializeInstanceService() error {
-	instanceService, err = qingcloudService.Instance(tc.Zone)
+	instanceService, err = qcService.Instance(tc.Zone)
 	return err
 }
 
@@ -86,7 +86,7 @@ func theInstanceServiceIsInitialized() error {
 }
 
 func initializeJobService() error {
-	jobService, err = qingcloudService.Job(tc.Zone)
+	jobService, err = qcService.Job(tc.Zone)
 	return err
 }
 
@@ -99,10 +99,10 @@ func theJobServiceIsInitialized() error {
 
 // --------------------------------------------------------------------------
 
-var describeZonesOutput *service.DescribeZonesOutput
+var describeZonesOutput *qc.DescribeZonesOutput
 
 func describeZones() error {
-	describeZonesOutput, err = qingcloudService.DescribeZones(nil)
+	describeZonesOutput, err = qcService.DescribeZones(nil)
 	return err
 }
 
@@ -115,7 +115,7 @@ func describeZonesShouldGetZoneAtLeast(count int) error {
 
 func describeZonesShouldHaveTheZoneIamUsing() error {
 	for _, zone := range describeZonesOutput.ZoneSet {
-		if zone.ZoneID == tc.Zone {
+		if qc.StringValue(zone.ZoneID) == tc.Zone {
 			return nil
 		}
 	}
@@ -125,8 +125,8 @@ func describeZonesShouldHaveTheZoneIamUsing() error {
 
 // --------------------------------------------------------------------------
 
-var runInstanceInput *service.RunInstancesInput
-var runInstanceOutput *service.RunInstancesOutput
+var runInstanceInput *qc.RunInstancesInput
+var runInstanceOutput *qc.RunInstancesOutput
 
 func instanceConfiguration(configuration *gherkin.DataTable) error {
 	count, err := strconv.Atoi(configuration.Rows[1].Cells[2].Value)
@@ -134,12 +134,12 @@ func instanceConfiguration(configuration *gherkin.DataTable) error {
 		return err
 	}
 
-	runInstanceInput = &service.RunInstancesInput{
-		ImageID:      configuration.Rows[1].Cells[0].Value,
-		InstanceType: configuration.Rows[1].Cells[1].Value,
-		Count:        count,
-		LoginMode:    configuration.Rows[1].Cells[3].Value,
-		LoginPasswd:  configuration.Rows[1].Cells[4].Value,
+	runInstanceInput = &qc.RunInstancesInput{
+		ImageID:      qc.String(configuration.Rows[1].Cells[0].Value),
+		InstanceType: qc.String(configuration.Rows[1].Cells[1].Value),
+		Count:        qc.Int(count),
+		LoginMode:    qc.String(configuration.Rows[1].Cells[3].Value),
+		LoginPasswd:  qc.String(configuration.Rows[1].Cells[4].Value),
 	}
 	return nil
 }
@@ -150,7 +150,7 @@ func runInstances() error {
 }
 
 func runInstancesShouldGetAJobID() error {
-	if runInstanceOutput.JobID != "" {
+	if runInstanceOutput.JobID != nil {
 		return nil
 	}
 	return errors.New("RunInstances don't get a job ID")
@@ -160,14 +160,14 @@ func runInstancesWillBeFinished() error {
 	retries := 0
 	for retries < tc.MaxRetries {
 		describeJobOutput, err := jobService.DescribeJobs(
-			&service.DescribeJobsInput{
-				Jobs: []string{runInstanceOutput.JobID},
+			&qc.DescribeJobsInput{
+				Jobs: []*string{runInstanceOutput.JobID},
 			},
 		)
 		if err != nil {
 			return err
 		}
-		if describeJobOutput.JobSet[0].Status == "successful" {
+		if qc.StringValue(describeJobOutput.JobSet[0].Status) == "successful" {
 			return nil
 		}
 		retries++
@@ -178,20 +178,20 @@ func runInstancesWillBeFinished() error {
 
 // --------------------------------------------------------------------------
 
-var terminateInstanceOutput *service.TerminateInstancesOutput
+var terminateInstanceOutput *qc.TerminateInstancesOutput
 
 func terminateInstances() error {
 	retries := 0
 	for retries < tc.MaxRetries {
 		terminateInstanceOutput, err = instanceService.TerminateInstances(
-			&service.TerminateInstancesInput{
+			&qc.TerminateInstancesInput{
 				Instances: runInstanceOutput.Instances,
 			},
 		)
 		if err != nil {
-			fmt.Println(err)
 			switch e := err.(type) {
-			case *errs.QingCloudError:
+			case *qcErrors.QingCloudError:
+				fmt.Println(e)
 				if e.RetCode != 1400 {
 					return e
 				}
@@ -208,7 +208,7 @@ func terminateInstances() error {
 }
 
 func terminateInstancesShouldGetAJobID() error {
-	if terminateInstanceOutput.JobID != "" {
+	if terminateInstanceOutput.JobID != nil {
 		return nil
 	}
 	return errors.New("TerminateInstances doesn't get a job ID")
@@ -218,14 +218,14 @@ func terminateInstancesWillBeFinished() error {
 	retries := 0
 	for retries < tc.MaxRetries {
 		describeJobOutput, err := jobService.DescribeJobs(
-			&service.DescribeJobsInput{
-				Jobs: []string{terminateInstanceOutput.JobID},
+			&qc.DescribeJobsInput{
+				Jobs: []*string{terminateInstanceOutput.JobID},
 			},
 		)
 		if err != nil {
 			return err
 		}
-		if describeJobOutput.JobSet[0].Status == "successful" {
+		if qc.StringValue(describeJobOutput.JobSet[0].Status) == "successful" {
 			return nil
 		}
 		retries++
@@ -236,7 +236,7 @@ func terminateInstancesWillBeFinished() error {
 
 // --------------------------------------------------------------------------
 
-var describeJobOutput *service.DescribeJobsOutput
+var describeJobOutput *qc.DescribeJobsOutput
 
 func describeJobs() error {
 	describeJobOutput, err = jobService.DescribeJobs(nil)
@@ -253,10 +253,10 @@ func describeJobsShouldGetJobAtLeast(count int) error {
 func describeJobsShouldHaveTheJobsIJustCreated() error {
 	okCount := 0
 	for _, job := range describeJobOutput.JobSet {
-		if job.JobID == runInstanceOutput.JobID {
+		if qc.StringValue(job.JobID) == qc.StringValue(runInstanceOutput.JobID) {
 			okCount++
 		}
-		if job.JobID == terminateInstanceOutput.JobID {
+		if qc.StringValue(job.JobID) == qc.StringValue(terminateInstanceOutput.JobID) {
 			okCount++
 		}
 	}
