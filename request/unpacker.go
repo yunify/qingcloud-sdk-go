@@ -122,13 +122,13 @@ func (u *Unpacker) parseError() error {
 	retCodeValue := u.output.Elem().FieldByName("RetCode")
 	messageValue := u.output.Elem().FieldByName("Message")
 
-	if retCodeValue.IsValid() && retCodeValue.Type().String() == "int" &&
-		messageValue.IsValid() && messageValue.Type().String() == "string" &&
-		retCodeValue.Int() != 0 {
+	if retCodeValue.IsValid() && retCodeValue.Type().String() == "*int" &&
+		messageValue.IsValid() && messageValue.Type().String() == "*string" &&
+		retCodeValue.Elem().Int() != 0 {
 
 		return &errors.QingCloudError{
-			RetCode: int(retCodeValue.Int()),
-			Message: messageValue.String(),
+			RetCode: int(retCodeValue.Elem().Int()),
+			Message: messageValue.Elem().String(),
 		}
 	}
 

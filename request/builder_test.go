@@ -27,23 +27,40 @@ import (
 )
 
 type InstanceServiceProperties struct {
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
+
 type DescribeInstancesInput struct {
-	ImageID       []string `json:"image_id" name:"image_id" location:"params"`
-	InstanceClass int      `json:"instance_class" name:"instance_class" location:"params" default:"0"` // Available values: 0, 1
-	InstanceType  []string `json:"instance_type" name:"instance_type" location:"params"`
-	Instances     []string `json:"instances" name:"instances" location:"params"`
-	Limit         int      `json:"limit" name:"limit" omitEmpty:"true" location:"params"`
-	Offset        int      `json:"offset" name:"offset" location:"params"`
-	SearchWord    string   `json:"search_word" name:"search_word" location:"params"`
-	Status        []string `json:"status" name:"status" location:"params"` // Available values: pending, running, stopped, suspended, terminated, ceased
-	Tags          []string `json:"tags" name:"tags" location:"params"`
-	Verbose       int      `json:"verbose" name:"verbose" location:"params"` // Available values: 0, 1
+	ImageID       []*string `json:"image_id" name:"image_id" location:"params"`
+	InstanceClass *int      `json:"instance_class" name:"instance_class" location:"params" default:"0"` // Available values: 0, 1
+	InstanceType  []*string `json:"instance_type" name:"instance_type" location:"params"`
+	Instances     []*string `json:"instances" name:"instances" location:"params"`
+	Limit         *int      `json:"limit" name:"limit" location:"params"`
+	Offset        *int      `json:"offset" name:"offset" location:"params"`
+	SearchWord    *string   `json:"search_word" name:"search_word" location:"params"`
+	Status        []*string `json:"status" name:"status" location:"params"` // Available values: pending, running, stopped, suspended, terminated, ceased
+	Tags          []*string `json:"tags" name:"tags" location:"params"`
+	Verbose       *int      `json:"verbose" name:"verbose" location:"params"` // Available values: 0, 1
 }
 
 func (i *DescribeInstancesInput) Validate() error {
 	return nil
+}
+
+func String(v string) *string {
+	return &v
+}
+
+func StringSlice(src []string) []*string {
+	dst := make([]*string, len(src))
+	for i := 0; i < len(src); i++ {
+		dst[i] = &(src[i])
+	}
+	return dst
+}
+
+func Int(v int) *int {
+	return &v
 }
 
 func TestBuilder(t *testing.T) {
@@ -56,7 +73,7 @@ func TestBuilder(t *testing.T) {
 	operation := &data.Operation{
 		Config: conf,
 		Properties: &InstanceServiceProperties{
-			Zone: "beta",
+			Zone: String("beta"),
 		},
 		APIName:       "DescribeInstances",
 		ServiceName:   "Instance",
@@ -67,16 +84,14 @@ func TestBuilder(t *testing.T) {
 		},
 	}
 	inputValue := reflect.ValueOf(&DescribeInstancesInput{
-		ImageID:       []string{"img-xxxxxxxx", "img-zzzzzzzz"},
-		InstanceClass: 0,
-		InstanceType:  []string{"type1", "type2"},
-		Instances:     []string{"i-xxxxxxxx", "i-zzzzzzzz"},
-		Limit:         0,
-		Offset:        0,
-		SearchWord:    "search_word",
-		Status:        []string{"running"},
-		Tags:          []string{"tag1", "tag2"},
-		Verbose:       1,
+		ImageID:       StringSlice([]string{"img-xxxxxxxx", "img-zzzzzzzz"}),
+		InstanceClass: Int(0),
+		InstanceType:  StringSlice([]string{"type1", "type2"}),
+		Instances:     StringSlice([]string{"i-xxxxxxxx", "i-zzzzzzzz"}),
+		SearchWord:    String("search_word"),
+		Status:        StringSlice([]string{"running"}),
+		Tags:          StringSlice([]string{"tag1", "tag2"}),
+		Verbose:       Int(1),
 	})
 	httpRequest, err := builder.BuildHTTPRequest(operation, &inputValue)
 	assert.Nil(t, err)
