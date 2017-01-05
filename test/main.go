@@ -24,7 +24,7 @@ import (
 	"github.com/DATA-DOG/godog"
 
 	"github.com/yunify/qingcloud-sdk-go/config"
-	"github.com/yunify/qingcloud-sdk-go/service"
+	qc "github.com/yunify/qingcloud-sdk-go/service"
 )
 
 func main() {
@@ -52,7 +52,7 @@ func setUp() {
 var err error
 var tc *testConfig
 var c *config.Config
-var qingcloudService *service.QingCloudService
+var qcService *qc.QingCloudService
 
 type testConfig struct {
 	Zone string `json:"zone" yaml:"zone"`
@@ -83,8 +83,8 @@ func loadConfig() {
 }
 
 func initQingStorService() {
-	if qingcloudService == nil {
-		qingcloudService, err = service.Init(c)
+	if qcService == nil {
+		qcService, err = qc.Init(c)
 		checkErrorForExit(err)
 	}
 }
