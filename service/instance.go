@@ -119,7 +119,7 @@ func (s *InstanceService) DescribeInstances(i *DescribeInstancesInput) (*Describ
 type DescribeInstancesInput struct {
 	ImageID []string `json:"image_id" name:"image_id" location:"params"`
 	// InstanceClass's available values: 0, 1
-	InstanceClass int      `json:"instance_class" name:"instance_class" default:"0" location:"params"`
+	InstanceClass int      `json:"instance_class" name:"instance_class" location:"params"`
 	InstanceType  []string `json:"instance_type" name:"instance_type" location:"params"`
 	Instances     []string `json:"instances" name:"instances" location:"params"`
 	Limit         int      `json:"limit" name:"limit" default:"20" location:"params"`
