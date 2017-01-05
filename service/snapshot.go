@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type SnapshotService struct {
 
 type SnapshotServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Snapshot(zone string) (*SnapshotService, error) {
 	properties := &SnapshotServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &SnapshotService{Config: s.Config, Properties: properties}, nil
@@ -74,13 +74,13 @@ func (s *SnapshotService) ApplySnapshots(i *ApplySnapshotsInput) (*ApplySnapshot
 }
 
 type ApplySnapshotsInput struct {
-	Snapshots []string `json:"snapshots" name:"snapshots" location:"params"` // Required
+	Snapshots []*string `json:"snapshots" name:"snapshots" location:"params"` // Required
 }
 
 func (v *ApplySnapshotsInput) Validate() error {
 
 	if len(v.Snapshots) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Snapshots",
 			ParentName:    "ApplySnapshotsInput",
 		}
@@ -90,10 +90,10 @@ func (v *ApplySnapshotsInput) Validate() error {
 }
 
 type ApplySnapshotsOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/snapshot/capture_instance_from_snapshot.html
@@ -123,14 +123,14 @@ func (s *SnapshotService) CaptureInstanceFromSnapshot(i *CaptureInstanceFromSnap
 }
 
 type CaptureInstanceFromSnapshotInput struct {
-	ImageName string `json:"image_name" name:"image_name" location:"params"`
-	Snapshot  string `json:"snapshot" name:"snapshot" location:"params"` // Required
+	ImageName *string `json:"image_name" name:"image_name" location:"params"`
+	Snapshot  *string `json:"snapshot" name:"snapshot" location:"params"` // Required
 }
 
 func (v *CaptureInstanceFromSnapshotInput) Validate() error {
 
-	if fmt.Sprint(v.Snapshot) == "" {
-		return errs.ParameterRequiredError{
+	if v.Snapshot == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Snapshot",
 			ParentName:    "CaptureInstanceFromSnapshotInput",
 		}
@@ -140,11 +140,11 @@ func (v *CaptureInstanceFromSnapshotInput) Validate() error {
 }
 
 type CaptureInstanceFromSnapshotOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	ImageID string `json:"image_id" name:"image_id" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	ImageID *string `json:"image_id" name:"image_id" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/snapshot/create_snapshots.html
@@ -176,20 +176,16 @@ func (s *SnapshotService) CreateSnapshots(i *CreateSnapshotsInput) (*CreateSnaps
 type CreateSnapshotsInput struct {
 
 	// IsFull's available values: 0, 1
-	IsFull       int      `json:"is_full" name:"is_full" location:"params"`
-	Resources    []string `json:"resources" name:"resources" location:"params"` // Required
-	SnapshotName string   `json:"snapshot_name" name:"snapshot_name" location:"params"`
+	IsFull       *int      `json:"is_full" name:"is_full" location:"params"`
+	Resources    []*string `json:"resources" name:"resources" location:"params"` // Required
+	SnapshotName *string   `json:"snapshot_name" name:"snapshot_name" location:"params"`
 }
 
 func (v *CreateSnapshotsInput) Validate() error {
 
-	isFullParameterValue := fmt.Sprint(v.IsFull)
-	if isFullParameterValue == "0" {
-		isFullParameterValue = ""
-	}
-	if isFullParameterValue != "" {
+	if v.IsFull != nil {
 		isFullValidValues := []string{"0", "1"}
-		isFullParameterValue := fmt.Sprint(v.IsFull)
+		isFullParameterValue := fmt.Sprint(*v.IsFull)
 
 		isFullIsValid := false
 		for _, value := range isFullValidValues {
@@ -199,7 +195,7 @@ func (v *CreateSnapshotsInput) Validate() error {
 		}
 
 		if !isFullIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "IsFull",
 				ParameterValue: isFullParameterValue,
 				AllowedValues:  isFullValidValues,
@@ -208,7 +204,7 @@ func (v *CreateSnapshotsInput) Validate() error {
 	}
 
 	if len(v.Resources) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Resources",
 			ParentName:    "CreateSnapshotsInput",
 		}
@@ -218,11 +214,11 @@ func (v *CreateSnapshotsInput) Validate() error {
 }
 
 type CreateSnapshotsOutput struct {
-	Message   string   `json:"message" name:"message"`
-	Action    string   `json:"action" name:"action" location:"elements"`
-	JobID     string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode   int      `json:"ret_code" name:"ret_code" location:"elements"`
-	Snapshots []string `json:"snapshots" name:"snapshots" location:"elements"`
+	Message   *string   `json:"message" name:"message"`
+	Action    *string   `json:"action" name:"action" location:"elements"`
+	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode   *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Snapshots []*string `json:"snapshots" name:"snapshots" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/snapshot/create_volume_from_snapshot.html
@@ -252,14 +248,14 @@ func (s *SnapshotService) CreateVolumeFromSnapshot(i *CreateVolumeFromSnapshotIn
 }
 
 type CreateVolumeFromSnapshotInput struct {
-	Snapshot   string `json:"snapshot" name:"snapshot" location:"params"` // Required
-	VolumeName string `json:"volume_name" name:"volume_name" location:"params"`
+	Snapshot   *string `json:"snapshot" name:"snapshot" location:"params"` // Required
+	VolumeName *string `json:"volume_name" name:"volume_name" location:"params"`
 }
 
 func (v *CreateVolumeFromSnapshotInput) Validate() error {
 
-	if fmt.Sprint(v.Snapshot) == "" {
-		return errs.ParameterRequiredError{
+	if v.Snapshot == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Snapshot",
 			ParentName:    "CreateVolumeFromSnapshotInput",
 		}
@@ -269,11 +265,11 @@ func (v *CreateVolumeFromSnapshotInput) Validate() error {
 }
 
 type CreateVolumeFromSnapshotOutput struct {
-	Message  string `json:"message" name:"message"`
-	Action   string `json:"action" name:"action" location:"elements"`
-	JobID    string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode  int    `json:"ret_code" name:"ret_code" location:"elements"`
-	VolumeID string `json:"volume_id" name:"volume_id" location:"elements"`
+	Message  *string `json:"message" name:"message"`
+	Action   *string `json:"action" name:"action" location:"elements"`
+	JobID    *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode  *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	VolumeID *string `json:"volume_id" name:"volume_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/snapshot/delete_snapshots.html
@@ -303,13 +299,13 @@ func (s *SnapshotService) DeleteSnapshots(i *DeleteSnapshotsInput) (*DeleteSnaps
 }
 
 type DeleteSnapshotsInput struct {
-	Snapshots []string `json:"snapshots" name:"snapshots" location:"params"` // Required
+	Snapshots []*string `json:"snapshots" name:"snapshots" location:"params"` // Required
 }
 
 func (v *DeleteSnapshotsInput) Validate() error {
 
 	if len(v.Snapshots) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Snapshots",
 			ParentName:    "DeleteSnapshotsInput",
 		}
@@ -319,10 +315,10 @@ func (v *DeleteSnapshotsInput) Validate() error {
 }
 
 type DeleteSnapshotsOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/snapshot/describe_snapshots.html
@@ -352,28 +348,24 @@ func (s *SnapshotService) DescribeSnapshots(i *DescribeSnapshotsInput) (*Describ
 }
 
 type DescribeSnapshotsInput struct {
-	Limit      int    `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     int    `json:"offset" name:"offset" default:"0" location:"params"`
-	ResourceID string `json:"resource_id" name:"resource_id" location:"params"`
-	SearchWord string `json:"search_word" name:"search_word" location:"params"`
+	Limit      *int    `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset     *int    `json:"offset" name:"offset" default:"0" location:"params"`
+	ResourceID *string `json:"resource_id" name:"resource_id" location:"params"`
+	SearchWord *string `json:"search_word" name:"search_word" location:"params"`
 	// SnapshotType's available values: 0, 1
-	SnapshotType int      `json:"snapshot_type" name:"snapshot_type" location:"params"`
-	Snapshots    []string `json:"snapshots" name:"snapshots" location:"params"`
-	Status       []string `json:"status" name:"status" location:"params"`
-	Tags         []string `json:"tags" name:"tags" location:"params"`
+	SnapshotType *int      `json:"snapshot_type" name:"snapshot_type" location:"params"`
+	Snapshots    []*string `json:"snapshots" name:"snapshots" location:"params"`
+	Status       []*string `json:"status" name:"status" location:"params"`
+	Tags         []*string `json:"tags" name:"tags" location:"params"`
 	// Verbose's available values: 0, 1
-	Verbose int `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
 }
 
 func (v *DescribeSnapshotsInput) Validate() error {
 
-	snapshotTypeParameterValue := fmt.Sprint(v.SnapshotType)
-	if snapshotTypeParameterValue == "0" {
-		snapshotTypeParameterValue = ""
-	}
-	if snapshotTypeParameterValue != "" {
+	if v.SnapshotType != nil {
 		snapshotTypeValidValues := []string{"0", "1"}
-		snapshotTypeParameterValue := fmt.Sprint(v.SnapshotType)
+		snapshotTypeParameterValue := fmt.Sprint(*v.SnapshotType)
 
 		snapshotTypeIsValid := false
 		for _, value := range snapshotTypeValidValues {
@@ -383,7 +375,7 @@ func (v *DescribeSnapshotsInput) Validate() error {
 		}
 
 		if !snapshotTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "SnapshotType",
 				ParameterValue: snapshotTypeParameterValue,
 				AllowedValues:  snapshotTypeValidValues,
@@ -391,13 +383,9 @@ func (v *DescribeSnapshotsInput) Validate() error {
 		}
 	}
 
-	verboseParameterValue := fmt.Sprint(v.Verbose)
-	if verboseParameterValue == "0" {
-		verboseParameterValue = ""
-	}
-	if verboseParameterValue != "" {
+	if v.Verbose != nil {
 		verboseValidValues := []string{"0", "1"}
-		verboseParameterValue := fmt.Sprint(v.Verbose)
+		verboseParameterValue := fmt.Sprint(*v.Verbose)
 
 		verboseIsValid := false
 		for _, value := range verboseValidValues {
@@ -407,7 +395,7 @@ func (v *DescribeSnapshotsInput) Validate() error {
 		}
 
 		if !verboseIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Verbose",
 				ParameterValue: verboseParameterValue,
 				AllowedValues:  verboseValidValues,
@@ -419,9 +407,9 @@ func (v *DescribeSnapshotsInput) Validate() error {
 }
 
 type DescribeSnapshotsOutput struct {
-	Message     string      `json:"message" name:"message"`
-	Action      string      `json:"action" name:"action" location:"elements"`
-	RetCode     int         `json:"ret_code" name:"ret_code" location:"elements"`
+	Message     *string     `json:"message" name:"message"`
+	Action      *string     `json:"action" name:"action" location:"elements"`
+	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
 	SnapshotSet []*Snapshot `json:"snapshot_set" name:"snapshot_set" location:"elements"`
 }
 
@@ -452,15 +440,15 @@ func (s *SnapshotService) ModifySnapshotAttributes(i *ModifySnapshotAttributesIn
 }
 
 type ModifySnapshotAttributesInput struct {
-	Description  string `json:"description" name:"description" location:"params"`
-	Snapshot     string `json:"snapshot" name:"snapshot" location:"params"` // Required
-	SnapshotName string `json:"snapshot_name" name:"snapshot_name" location:"params"`
+	Description  *string `json:"description" name:"description" location:"params"`
+	Snapshot     *string `json:"snapshot" name:"snapshot" location:"params"` // Required
+	SnapshotName *string `json:"snapshot_name" name:"snapshot_name" location:"params"`
 }
 
 func (v *ModifySnapshotAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.Snapshot) == "" {
-		return errs.ParameterRequiredError{
+	if v.Snapshot == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Snapshot",
 			ParentName:    "ModifySnapshotAttributesInput",
 		}
@@ -470,7 +458,7 @@ func (v *ModifySnapshotAttributesInput) Validate() error {
 }
 
 type ModifySnapshotAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

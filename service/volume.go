@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type VolumeService struct {
 
 type VolumeServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Volume(zone string) (*VolumeService, error) {
 	properties := &VolumeServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &VolumeService{Config: s.Config, Properties: properties}, nil
@@ -74,21 +74,21 @@ func (s *VolumeService) AttachVolumes(i *AttachVolumesInput) (*AttachVolumesOutp
 }
 
 type AttachVolumesInput struct {
-	Instance string   `json:"instance" name:"instance" location:"params"` // Required
-	Volumes  []string `json:"volumes" name:"volumes" location:"params"`   // Required
+	Instance *string   `json:"instance" name:"instance" location:"params"` // Required
+	Volumes  []*string `json:"volumes" name:"volumes" location:"params"`   // Required
 }
 
 func (v *AttachVolumesInput) Validate() error {
 
-	if fmt.Sprint(v.Instance) == "" {
-		return errs.ParameterRequiredError{
+	if v.Instance == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Instance",
 			ParentName:    "AttachVolumesInput",
 		}
 	}
 
 	if len(v.Volumes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Volumes",
 			ParentName:    "AttachVolumesInput",
 		}
@@ -98,10 +98,10 @@ func (v *AttachVolumesInput) Validate() error {
 }
 
 type AttachVolumesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/volume/create_volumes.html
@@ -131,29 +131,25 @@ func (s *VolumeService) CreateVolumes(i *CreateVolumesInput) (*CreateVolumesOutp
 }
 
 type CreateVolumesInput struct {
-	Count      int    `json:"count" name:"count" default:"1" location:"params"`
-	Size       int    `json:"size" name:"size" location:"params"` // Required
-	VolumeName string `json:"volume_name" name:"volume_name" location:"params"`
+	Count      *int    `json:"count" name:"count" default:"1" location:"params"`
+	Size       *int    `json:"size" name:"size" location:"params"` // Required
+	VolumeName *string `json:"volume_name" name:"volume_name" location:"params"`
 	// VolumeType's available values: 0, 1, 2, 3
-	VolumeType int `json:"volume_type" name:"volume_type" default:"0" location:"params"`
+	VolumeType *int `json:"volume_type" name:"volume_type" default:"0" location:"params"`
 }
 
 func (v *CreateVolumesInput) Validate() error {
 
-	if fmt.Sprint(v.Size) == "" {
-		return errs.ParameterRequiredError{
+	if v.Size == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Size",
 			ParentName:    "CreateVolumesInput",
 		}
 	}
 
-	volumeTypeParameterValue := fmt.Sprint(v.VolumeType)
-	if volumeTypeParameterValue == "0" {
-		volumeTypeParameterValue = ""
-	}
-	if volumeTypeParameterValue != "" {
+	if v.VolumeType != nil {
 		volumeTypeValidValues := []string{"0", "1", "2", "3"}
-		volumeTypeParameterValue := fmt.Sprint(v.VolumeType)
+		volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
 
 		volumeTypeIsValid := false
 		for _, value := range volumeTypeValidValues {
@@ -163,7 +159,7 @@ func (v *CreateVolumesInput) Validate() error {
 		}
 
 		if !volumeTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "VolumeType",
 				ParameterValue: volumeTypeParameterValue,
 				AllowedValues:  volumeTypeValidValues,
@@ -175,11 +171,11 @@ func (v *CreateVolumesInput) Validate() error {
 }
 
 type CreateVolumesOutput struct {
-	Message string   `json:"message" name:"message"`
-	Action  string   `json:"action" name:"action" location:"elements"`
-	JobID   string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int      `json:"ret_code" name:"ret_code" location:"elements"`
-	Volumes []string `json:"volumes" name:"volumes" location:"elements"`
+	Message *string   `json:"message" name:"message"`
+	Action  *string   `json:"action" name:"action" location:"elements"`
+	JobID   *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Volumes []*string `json:"volumes" name:"volumes" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/volume/delete_volumes.html
@@ -209,13 +205,13 @@ func (s *VolumeService) DeleteVolumes(i *DeleteVolumesInput) (*DeleteVolumesOutp
 }
 
 type DeleteVolumesInput struct {
-	Volumes []string `json:"volumes" name:"volumes" location:"params"` // Required
+	Volumes []*string `json:"volumes" name:"volumes" location:"params"` // Required
 }
 
 func (v *DeleteVolumesInput) Validate() error {
 
 	if len(v.Volumes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Volumes",
 			ParentName:    "DeleteVolumesInput",
 		}
@@ -225,10 +221,10 @@ func (v *DeleteVolumesInput) Validate() error {
 }
 
 type DeleteVolumesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/volume/describe_volumes.html
@@ -258,27 +254,23 @@ func (s *VolumeService) DescribeVolumes(i *DescribeVolumesInput) (*DescribeVolum
 }
 
 type DescribeVolumesInput struct {
-	Limit      int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
-	Status     []string `json:"status" name:"status" location:"params"`
-	Tags       []string `json:"tags" name:"tags" location:"params"`
+	Limit      *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
+	Status     []*string `json:"status" name:"status" location:"params"`
+	Tags       []*string `json:"tags" name:"tags" location:"params"`
 	// Verbose's available values: 0, 1
-	Verbose int `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
 	// VolumeType's available values: 0, 1, 2, 3
-	VolumeType int      `json:"volume_type" name:"volume_type" default:"0" location:"params"`
-	Volumes    []string `json:"volumes" name:"volumes" location:"params"`
+	VolumeType *int      `json:"volume_type" name:"volume_type" default:"0" location:"params"`
+	Volumes    []*string `json:"volumes" name:"volumes" location:"params"`
 }
 
 func (v *DescribeVolumesInput) Validate() error {
 
-	verboseParameterValue := fmt.Sprint(v.Verbose)
-	if verboseParameterValue == "0" {
-		verboseParameterValue = ""
-	}
-	if verboseParameterValue != "" {
+	if v.Verbose != nil {
 		verboseValidValues := []string{"0", "1"}
-		verboseParameterValue := fmt.Sprint(v.Verbose)
+		verboseParameterValue := fmt.Sprint(*v.Verbose)
 
 		verboseIsValid := false
 		for _, value := range verboseValidValues {
@@ -288,7 +280,7 @@ func (v *DescribeVolumesInput) Validate() error {
 		}
 
 		if !verboseIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Verbose",
 				ParameterValue: verboseParameterValue,
 				AllowedValues:  verboseValidValues,
@@ -296,13 +288,9 @@ func (v *DescribeVolumesInput) Validate() error {
 		}
 	}
 
-	volumeTypeParameterValue := fmt.Sprint(v.VolumeType)
-	if volumeTypeParameterValue == "0" {
-		volumeTypeParameterValue = ""
-	}
-	if volumeTypeParameterValue != "" {
+	if v.VolumeType != nil {
 		volumeTypeValidValues := []string{"0", "1", "2", "3"}
-		volumeTypeParameterValue := fmt.Sprint(v.VolumeType)
+		volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
 
 		volumeTypeIsValid := false
 		for _, value := range volumeTypeValidValues {
@@ -312,7 +300,7 @@ func (v *DescribeVolumesInput) Validate() error {
 		}
 
 		if !volumeTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "VolumeType",
 				ParameterValue: volumeTypeParameterValue,
 				AllowedValues:  volumeTypeValidValues,
@@ -324,10 +312,10 @@ func (v *DescribeVolumesInput) Validate() error {
 }
 
 type DescribeVolumesOutput struct {
-	Message    string    `json:"message" name:"message"`
-	Action     string    `json:"action" name:"action" location:"elements"`
-	RetCode    int       `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount int       `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string   `json:"message" name:"message"`
+	Action     *string   `json:"action" name:"action" location:"elements"`
+	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int      `json:"total_count" name:"total_count" location:"elements"`
 	VolumeSet  []*Volume `json:"volume_set" name:"volume_set" location:"elements"`
 }
 
@@ -358,21 +346,21 @@ func (s *VolumeService) DetachVolumes(i *DetachVolumesInput) (*DetachVolumesOutp
 }
 
 type DetachVolumesInput struct {
-	Instance string   `json:"instance" name:"instance" location:"params"` // Required
-	Volumes  []string `json:"volumes" name:"volumes" location:"params"`   // Required
+	Instance *string   `json:"instance" name:"instance" location:"params"` // Required
+	Volumes  []*string `json:"volumes" name:"volumes" location:"params"`   // Required
 }
 
 func (v *DetachVolumesInput) Validate() error {
 
-	if fmt.Sprint(v.Instance) == "" {
-		return errs.ParameterRequiredError{
+	if v.Instance == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Instance",
 			ParentName:    "DetachVolumesInput",
 		}
 	}
 
 	if len(v.Volumes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Volumes",
 			ParentName:    "DetachVolumesInput",
 		}
@@ -382,10 +370,10 @@ func (v *DetachVolumesInput) Validate() error {
 }
 
 type DetachVolumesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/volume/modify_volume_attributes.html
@@ -415,15 +403,15 @@ func (s *VolumeService) ModifyVolumeAttributes(i *ModifyVolumeAttributesInput) (
 }
 
 type ModifyVolumeAttributesInput struct {
-	Description string `json:"description" name:"description" location:"params"`
-	Volume      string `json:"volume" name:"volume" location:"params"` // Required
-	VolumeName  string `json:"volume_name" name:"volume_name" location:"params"`
+	Description *string `json:"description" name:"description" location:"params"`
+	Volume      *string `json:"volume" name:"volume" location:"params"` // Required
+	VolumeName  *string `json:"volume_name" name:"volume_name" location:"params"`
 }
 
 func (v *ModifyVolumeAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.Volume) == "" {
-		return errs.ParameterRequiredError{
+	if v.Volume == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Volume",
 			ParentName:    "ModifyVolumeAttributesInput",
 		}
@@ -433,9 +421,9 @@ func (v *ModifyVolumeAttributesInput) Validate() error {
 }
 
 type ModifyVolumeAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/volume/resize_volumes.html
@@ -465,21 +453,21 @@ func (s *VolumeService) ResizeVolumes(i *ResizeVolumesInput) (*ResizeVolumesOutp
 }
 
 type ResizeVolumesInput struct {
-	Size    int      `json:"size" name:"size" location:"params"`       // Required
-	Volumes []string `json:"volumes" name:"volumes" location:"params"` // Required
+	Size    *int      `json:"size" name:"size" location:"params"`       // Required
+	Volumes []*string `json:"volumes" name:"volumes" location:"params"` // Required
 }
 
 func (v *ResizeVolumesInput) Validate() error {
 
-	if fmt.Sprint(v.Size) == "" {
-		return errs.ParameterRequiredError{
+	if v.Size == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Size",
 			ParentName:    "ResizeVolumesInput",
 		}
 	}
 
 	if len(v.Volumes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Volumes",
 			ParentName:    "ResizeVolumesInput",
 		}
@@ -489,8 +477,8 @@ func (v *ResizeVolumesInput) Validate() error {
 }
 
 type ResizeVolumesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

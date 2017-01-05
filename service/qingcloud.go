@@ -65,8 +65,8 @@ func (s *QingCloudService) DescribeZones(i *DescribeZonesInput) (*DescribeZonesO
 }
 
 type DescribeZonesInput struct {
-	Status []string `json:"status" name:"status" location:"params"`
-	Zones  []string `json:"zones" name:"zones" location:"params"`
+	Status []*string `json:"status" name:"status" location:"params"`
+	Zones  []*string `json:"zones" name:"zones" location:"params"`
 }
 
 func (v *DescribeZonesInput) Validate() error {
@@ -75,9 +75,9 @@ func (v *DescribeZonesInput) Validate() error {
 }
 
 type DescribeZonesOutput struct {
-	Message    string  `json:"message" name:"message"`
-	Action     string  `json:"action" name:"action" location:"elements"`
-	RetCode    int     `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount int     `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string `json:"message" name:"message"`
+	Action     *string `json:"action" name:"action" location:"elements"`
+	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
 	ZoneSet    []*Zone `json:"zone_set" name:"zone_set" location:"elements"`
 }

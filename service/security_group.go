@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type SecurityGroupService struct {
 
 type SecurityGroupServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) SecurityGroup(zone string) (*SecurityGroupService, error) {
 	properties := &SecurityGroupServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &SecurityGroupService{Config: s.Config, Properties: properties}, nil
@@ -75,13 +75,13 @@ func (s *SecurityGroupService) AddSecurityGroupRules(i *AddSecurityGroupRulesInp
 
 type AddSecurityGroupRulesInput struct {
 	Rules         []*SecurityGroupRule `json:"rules" name:"rules" location:"params"`                   // Required
-	SecurityGroup string               `json:"security_group" name:"security_group" location:"params"` // Required
+	SecurityGroup *string              `json:"security_group" name:"security_group" location:"params"` // Required
 }
 
 func (v *AddSecurityGroupRulesInput) Validate() error {
 
 	if len(v.Rules) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Rules",
 			ParentName:    "AddSecurityGroupRulesInput",
 		}
@@ -95,8 +95,8 @@ func (v *AddSecurityGroupRulesInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.SecurityGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroup",
 			ParentName:    "AddSecurityGroupRulesInput",
 		}
@@ -106,10 +106,10 @@ func (v *AddSecurityGroupRulesInput) Validate() error {
 }
 
 type AddSecurityGroupRulesOutput struct {
-	Message            string   `json:"message" name:"message"`
-	Action             string   `json:"action" name:"action" location:"elements"`
-	RetCode            int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupRules []string `json:"security_group_rules" name:"security_group_rules" location:"elements"`
+	Message            *string   `json:"message" name:"message"`
+	Action             *string   `json:"action" name:"action" location:"elements"`
+	RetCode            *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupRules []*string `json:"security_group_rules" name:"security_group_rules" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/apply_security_group.html
@@ -139,14 +139,14 @@ func (s *SecurityGroupService) ApplySecurityGroup(i *ApplySecurityGroupInput) (*
 }
 
 type ApplySecurityGroupInput struct {
-	Instances     []string `json:"instances" name:"instances" location:"params"`
-	SecurityGroup string   `json:"security_group" name:"security_group" location:"params"` // Required
+	Instances     []*string `json:"instances" name:"instances" location:"params"`
+	SecurityGroup *string   `json:"security_group" name:"security_group" location:"params"` // Required
 }
 
 func (v *ApplySecurityGroupInput) Validate() error {
 
-	if fmt.Sprint(v.SecurityGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroup",
 			ParentName:    "ApplySecurityGroupInput",
 		}
@@ -156,10 +156,10 @@ func (v *ApplySecurityGroupInput) Validate() error {
 }
 
 type ApplySecurityGroupOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/create_security_group.html
@@ -189,7 +189,7 @@ func (s *SecurityGroupService) CreateSecurityGroup(i *CreateSecurityGroupInput) 
 }
 
 type CreateSecurityGroupInput struct {
-	SecurityGroupName string `json:"security_group_name" name:"security_group_name" location:"params"`
+	SecurityGroupName *string `json:"security_group_name" name:"security_group_name" location:"params"`
 }
 
 func (v *CreateSecurityGroupInput) Validate() error {
@@ -198,10 +198,10 @@ func (v *CreateSecurityGroupInput) Validate() error {
 }
 
 type CreateSecurityGroupOutput struct {
-	Message         string `json:"message" name:"message"`
-	Action          string `json:"action" name:"action" location:"elements"`
-	RetCode         int    `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupID string `json:"security_group_id" name:"security_group_id" location:"elements"`
+	Message         *string `json:"message" name:"message"`
+	Action          *string `json:"action" name:"action" location:"elements"`
+	RetCode         *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupID *string `json:"security_group_id" name:"security_group_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/create_security_group_ipset.html
@@ -233,27 +233,23 @@ func (s *SecurityGroupService) CreateSecurityGroupIPSet(i *CreateSecurityGroupIP
 type CreateSecurityGroupIPSetInput struct {
 
 	// IPSetType's available values: 0, 1
-	IPSetType              int    `json:"ipset_type" name:"ipset_type" location:"params"` // Required
-	SecurityGroupIPSetName string `json:"security_group_ipset_name" name:"security_group_ipset_name" location:"params"`
-	Val                    string `json:"val" name:"val" location:"params"` // Required
+	IPSetType              *int    `json:"ipset_type" name:"ipset_type" location:"params"` // Required
+	SecurityGroupIPSetName *string `json:"security_group_ipset_name" name:"security_group_ipset_name" location:"params"`
+	Val                    *string `json:"val" name:"val" location:"params"` // Required
 }
 
 func (v *CreateSecurityGroupIPSetInput) Validate() error {
 
-	if fmt.Sprint(v.IPSetType) == "" {
-		return errs.ParameterRequiredError{
+	if v.IPSetType == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "IPSetType",
 			ParentName:    "CreateSecurityGroupIPSetInput",
 		}
 	}
 
-	ipSetTypeParameterValue := fmt.Sprint(v.IPSetType)
-	if ipSetTypeParameterValue == "0" {
-		ipSetTypeParameterValue = ""
-	}
-	if ipSetTypeParameterValue != "" {
+	if v.IPSetType != nil {
 		ipSetTypeValidValues := []string{"0", "1"}
-		ipSetTypeParameterValue := fmt.Sprint(v.IPSetType)
+		ipSetTypeParameterValue := fmt.Sprint(*v.IPSetType)
 
 		ipSetTypeIsValid := false
 		for _, value := range ipSetTypeValidValues {
@@ -263,7 +259,7 @@ func (v *CreateSecurityGroupIPSetInput) Validate() error {
 		}
 
 		if !ipSetTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "IPSetType",
 				ParameterValue: ipSetTypeParameterValue,
 				AllowedValues:  ipSetTypeValidValues,
@@ -271,8 +267,8 @@ func (v *CreateSecurityGroupIPSetInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.Val) == "" {
-		return errs.ParameterRequiredError{
+	if v.Val == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Val",
 			ParentName:    "CreateSecurityGroupIPSetInput",
 		}
@@ -282,10 +278,10 @@ func (v *CreateSecurityGroupIPSetInput) Validate() error {
 }
 
 type CreateSecurityGroupIPSetOutput struct {
-	Message              string `json:"message" name:"message"`
-	Action               string `json:"action" name:"action" location:"elements"`
-	RetCode              int    `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupIPSetID string `json:"security_group_ipset_id" name:"security_group_ipset_id" location:"elements"`
+	Message              *string `json:"message" name:"message"`
+	Action               *string `json:"action" name:"action" location:"elements"`
+	RetCode              *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupIPSetID *string `json:"security_group_ipset_id" name:"security_group_ipset_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/create_security_group_snapshot.html
@@ -315,14 +311,14 @@ func (s *SecurityGroupService) CreateSecurityGroupSnapshot(i *CreateSecurityGrou
 }
 
 type CreateSecurityGroupSnapshotInput struct {
-	Name          string `json:"name" name:"name" location:"params"`
-	SecurityGroup string `json:"security_group" name:"security_group" location:"params"` // Required
+	Name          *string `json:"name" name:"name" location:"params"`
+	SecurityGroup *string `json:"security_group" name:"security_group" location:"params"` // Required
 }
 
 func (v *CreateSecurityGroupSnapshotInput) Validate() error {
 
-	if fmt.Sprint(v.SecurityGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroup",
 			ParentName:    "CreateSecurityGroupSnapshotInput",
 		}
@@ -332,11 +328,11 @@ func (v *CreateSecurityGroupSnapshotInput) Validate() error {
 }
 
 type CreateSecurityGroupSnapshotOutput struct {
-	Message                 string `json:"message" name:"message"`
-	Action                  string `json:"action" name:"action" location:"elements"`
-	RetCode                 int    `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupID         string `json:"security_group_id" name:"security_group_id" location:"elements"`
-	SecurityGroupSnapshotID string `json:"security_group_snapshot_id" name:"security_group_snapshot_id" location:"elements"`
+	Message                 *string `json:"message" name:"message"`
+	Action                  *string `json:"action" name:"action" location:"elements"`
+	RetCode                 *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupID         *string `json:"security_group_id" name:"security_group_id" location:"elements"`
+	SecurityGroupSnapshotID *string `json:"security_group_snapshot_id" name:"security_group_snapshot_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/delete_security_group_ipsets.html
@@ -366,13 +362,13 @@ func (s *SecurityGroupService) DeleteSecurityGroupIPSets(i *DeleteSecurityGroupI
 }
 
 type DeleteSecurityGroupIPSetsInput struct {
-	SecurityGroupIPSets []string `json:"security_group_ipsets" name:"security_group_ipsets" location:"params"` // Required
+	SecurityGroupIPSets []*string `json:"security_group_ipsets" name:"security_group_ipsets" location:"params"` // Required
 }
 
 func (v *DeleteSecurityGroupIPSetsInput) Validate() error {
 
 	if len(v.SecurityGroupIPSets) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroupIPSets",
 			ParentName:    "DeleteSecurityGroupIPSetsInput",
 		}
@@ -382,10 +378,10 @@ func (v *DeleteSecurityGroupIPSetsInput) Validate() error {
 }
 
 type DeleteSecurityGroupIPSetsOutput struct {
-	Message             string   `json:"message" name:"message"`
-	Action              string   `json:"action" name:"action" location:"elements"`
-	RetCode             int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupIPSets []string `json:"security_group_ipsets" name:"security_group_ipsets" location:"elements"`
+	Message             *string   `json:"message" name:"message"`
+	Action              *string   `json:"action" name:"action" location:"elements"`
+	RetCode             *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupIPSets []*string `json:"security_group_ipsets" name:"security_group_ipsets" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/delete_security_group_rules.html
@@ -415,13 +411,13 @@ func (s *SecurityGroupService) DeleteSecurityGroupRules(i *DeleteSecurityGroupRu
 }
 
 type DeleteSecurityGroupRulesInput struct {
-	SecurityGroupRules []string `json:"security_group_rules" name:"security_group_rules" location:"params"` // Required
+	SecurityGroupRules []*string `json:"security_group_rules" name:"security_group_rules" location:"params"` // Required
 }
 
 func (v *DeleteSecurityGroupRulesInput) Validate() error {
 
 	if len(v.SecurityGroupRules) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroupRules",
 			ParentName:    "DeleteSecurityGroupRulesInput",
 		}
@@ -431,10 +427,10 @@ func (v *DeleteSecurityGroupRulesInput) Validate() error {
 }
 
 type DeleteSecurityGroupRulesOutput struct {
-	Message            string   `json:"message" name:"message"`
-	Action             string   `json:"action" name:"action" location:"elements"`
-	RetCode            int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupRules []string `json:"security_group_rules" name:"security_group_rules" location:"elements"`
+	Message            *string   `json:"message" name:"message"`
+	Action             *string   `json:"action" name:"action" location:"elements"`
+	RetCode            *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupRules []*string `json:"security_group_rules" name:"security_group_rules" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/delete_security_group_snapshots.html
@@ -464,13 +460,13 @@ func (s *SecurityGroupService) DeleteSecurityGroupSnapshots(i *DeleteSecurityGro
 }
 
 type DeleteSecurityGroupSnapshotsInput struct {
-	SecurityGroupSnapshots []string `json:"security_group_snapshots" name:"security_group_snapshots" location:"params"` // Required
+	SecurityGroupSnapshots []*string `json:"security_group_snapshots" name:"security_group_snapshots" location:"params"` // Required
 }
 
 func (v *DeleteSecurityGroupSnapshotsInput) Validate() error {
 
 	if len(v.SecurityGroupSnapshots) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroupSnapshots",
 			ParentName:    "DeleteSecurityGroupSnapshotsInput",
 		}
@@ -480,10 +476,10 @@ func (v *DeleteSecurityGroupSnapshotsInput) Validate() error {
 }
 
 type DeleteSecurityGroupSnapshotsOutput struct {
-	Message                string   `json:"message" name:"message"`
-	Action                 string   `json:"action" name:"action" location:"elements"`
-	RetCode                int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupSnapshots []string `json:"security_group_snapshots" name:"security_group_snapshots" location:"elements"`
+	Message                *string   `json:"message" name:"message"`
+	Action                 *string   `json:"action" name:"action" location:"elements"`
+	RetCode                *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupSnapshots []*string `json:"security_group_snapshots" name:"security_group_snapshots" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/delete_security_groups.html
@@ -513,13 +509,13 @@ func (s *SecurityGroupService) DeleteSecurityGroups(i *DeleteSecurityGroupsInput
 }
 
 type DeleteSecurityGroupsInput struct {
-	SecurityGroups []string `json:"security_groups" name:"security_groups" location:"params"` // Required
+	SecurityGroups []*string `json:"security_groups" name:"security_groups" location:"params"` // Required
 }
 
 func (v *DeleteSecurityGroupsInput) Validate() error {
 
 	if len(v.SecurityGroups) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroups",
 			ParentName:    "DeleteSecurityGroupsInput",
 		}
@@ -529,10 +525,10 @@ func (v *DeleteSecurityGroupsInput) Validate() error {
 }
 
 type DeleteSecurityGroupsOutput struct {
-	Message        string   `json:"message" name:"message"`
-	Action         string   `json:"action" name:"action" location:"elements"`
-	RetCode        int      `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroups []string `json:"security_groups" name:"security_groups" location:"elements"`
+	Message        *string   `json:"message" name:"message"`
+	Action         *string   `json:"action" name:"action" location:"elements"`
+	RetCode        *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroups []*string `json:"security_groups" name:"security_groups" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/describe_security_group_ipsets.html
@@ -564,24 +560,20 @@ func (s *SecurityGroupService) DescribeSecurityGroupIPSets(i *DescribeSecurityGr
 type DescribeSecurityGroupIPSetsInput struct {
 
 	// IPSetType's available values: 0, 1
-	IPSetType              int      `json:"ipset_type" name:"ipset_type" location:"params"`
-	Limit                  int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset                 int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SecurityGroupIPSetName string   `json:"security_group_ipset_name" name:"security_group_ipset_name" location:"params"`
-	SecurityGroupIPSets    []string `json:"security_group_ipsets" name:"security_group_ipsets" location:"params"`
-	Tags                   []string `json:"tags" name:"tags" location:"params"`
-	Verbose                int      `json:"verbose" name:"verbose" default:"0" location:"params"`
+	IPSetType              *int      `json:"ipset_type" name:"ipset_type" location:"params"`
+	Limit                  *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset                 *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SecurityGroupIPSetName *string   `json:"security_group_ipset_name" name:"security_group_ipset_name" location:"params"`
+	SecurityGroupIPSets    []*string `json:"security_group_ipsets" name:"security_group_ipsets" location:"params"`
+	Tags                   []*string `json:"tags" name:"tags" location:"params"`
+	Verbose                *int      `json:"verbose" name:"verbose" default:"0" location:"params"`
 }
 
 func (v *DescribeSecurityGroupIPSetsInput) Validate() error {
 
-	ipSetTypeParameterValue := fmt.Sprint(v.IPSetType)
-	if ipSetTypeParameterValue == "0" {
-		ipSetTypeParameterValue = ""
-	}
-	if ipSetTypeParameterValue != "" {
+	if v.IPSetType != nil {
 		ipSetTypeValidValues := []string{"0", "1"}
-		ipSetTypeParameterValue := fmt.Sprint(v.IPSetType)
+		ipSetTypeParameterValue := fmt.Sprint(*v.IPSetType)
 
 		ipSetTypeIsValid := false
 		for _, value := range ipSetTypeValidValues {
@@ -591,7 +583,7 @@ func (v *DescribeSecurityGroupIPSetsInput) Validate() error {
 		}
 
 		if !ipSetTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "IPSetType",
 				ParameterValue: ipSetTypeParameterValue,
 				AllowedValues:  ipSetTypeValidValues,
@@ -603,11 +595,11 @@ func (v *DescribeSecurityGroupIPSetsInput) Validate() error {
 }
 
 type DescribeSecurityGroupIPSetsOutput struct {
-	Message               string                `json:"message" name:"message"`
-	Action                string                `json:"action" name:"action" location:"elements"`
-	RetCode               int                   `json:"ret_code" name:"ret_code" location:"elements"`
+	Message               *string               `json:"message" name:"message"`
+	Action                *string               `json:"action" name:"action" location:"elements"`
+	RetCode               *int                  `json:"ret_code" name:"ret_code" location:"elements"`
 	SecurityGroupIPSetSet []*SecurityGroupIPSet `json:"security_group_ipset_set" name:"security_group_ipset_set" location:"elements"`
-	TotalCount            int                   `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount            *int                  `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/describe_security_group_rules.html
@@ -639,22 +631,18 @@ func (s *SecurityGroupService) DescribeSecurityGroupRules(i *DescribeSecurityGro
 type DescribeSecurityGroupRulesInput struct {
 
 	// Direction's available values: 0, 1
-	Direction          int      `json:"direction" name:"direction" default:"0" location:"params"`
-	Limit              int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset             int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SecurityGroup      string   `json:"security_group" name:"security_group" location:"params"` // Required
-	SecurityGroupRules []string `json:"security_group_rules" name:"security_group_rules" location:"params"`
+	Direction          *int      `json:"direction" name:"direction" default:"0" location:"params"`
+	Limit              *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset             *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SecurityGroup      *string   `json:"security_group" name:"security_group" location:"params"` // Required
+	SecurityGroupRules []*string `json:"security_group_rules" name:"security_group_rules" location:"params"`
 }
 
 func (v *DescribeSecurityGroupRulesInput) Validate() error {
 
-	directionParameterValue := fmt.Sprint(v.Direction)
-	if directionParameterValue == "0" {
-		directionParameterValue = ""
-	}
-	if directionParameterValue != "" {
+	if v.Direction != nil {
 		directionValidValues := []string{"0", "1"}
-		directionParameterValue := fmt.Sprint(v.Direction)
+		directionParameterValue := fmt.Sprint(*v.Direction)
 
 		directionIsValid := false
 		for _, value := range directionValidValues {
@@ -664,7 +652,7 @@ func (v *DescribeSecurityGroupRulesInput) Validate() error {
 		}
 
 		if !directionIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Direction",
 				ParameterValue: directionParameterValue,
 				AllowedValues:  directionValidValues,
@@ -672,8 +660,8 @@ func (v *DescribeSecurityGroupRulesInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.SecurityGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroup",
 			ParentName:    "DescribeSecurityGroupRulesInput",
 		}
@@ -683,11 +671,11 @@ func (v *DescribeSecurityGroupRulesInput) Validate() error {
 }
 
 type DescribeSecurityGroupRulesOutput struct {
-	Message              string               `json:"message" name:"message"`
-	Action               string               `json:"action" name:"action" location:"elements"`
-	RetCode              int                  `json:"ret_code" name:"ret_code" location:"elements"`
+	Message              *string              `json:"message" name:"message"`
+	Action               *string              `json:"action" name:"action" location:"elements"`
+	RetCode              *int                 `json:"ret_code" name:"ret_code" location:"elements"`
 	SecurityGroupRuleSet []*SecurityGroupRule `json:"security_group_rule_set" name:"security_group_rule_set" location:"elements"`
-	TotalCount           int                  `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount           *int                 `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/describe_security_group_snapshots.html
@@ -717,17 +705,17 @@ func (s *SecurityGroupService) DescribeSecurityGroupSnapshots(i *DescribeSecurit
 }
 
 type DescribeSecurityGroupSnapshotsInput struct {
-	Limit                  int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset                 int      `json:"offset" name:"offset" default:"0" location:"params"`
-	Reverse                int      `json:"reverse" name:"reverse" default:"1" location:"params"`
-	SecurityGroup          string   `json:"security_group" name:"security_group" location:"params"` // Required
-	SecurityGroupSnapshots []string `json:"security_group_snapshots" name:"security_group_snapshots" location:"params"`
+	Limit                  *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset                 *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	Reverse                *int      `json:"reverse" name:"reverse" default:"1" location:"params"`
+	SecurityGroup          *string   `json:"security_group" name:"security_group" location:"params"` // Required
+	SecurityGroupSnapshots []*string `json:"security_group_snapshots" name:"security_group_snapshots" location:"params"`
 }
 
 func (v *DescribeSecurityGroupSnapshotsInput) Validate() error {
 
-	if fmt.Sprint(v.SecurityGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroup",
 			ParentName:    "DescribeSecurityGroupSnapshotsInput",
 		}
@@ -737,11 +725,11 @@ func (v *DescribeSecurityGroupSnapshotsInput) Validate() error {
 }
 
 type DescribeSecurityGroupSnapshotsOutput struct {
-	Message                  string                   `json:"message" name:"message"`
-	Action                   string                   `json:"action" name:"action" location:"elements"`
-	RetCode                  int                      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message                  *string                  `json:"message" name:"message"`
+	Action                   *string                  `json:"action" name:"action" location:"elements"`
+	RetCode                  *int                     `json:"ret_code" name:"ret_code" location:"elements"`
 	SecurityGroupSnapshotSet []*SecurityGroupSnapshot `json:"security_group_snapshot_set" name:"security_group_snapshot_set" location:"elements"`
-	TotalCount               int                      `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount               *int                     `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/describe_security_groups.html
@@ -771,12 +759,12 @@ func (s *SecurityGroupService) DescribeSecurityGroups(i *DescribeSecurityGroupsI
 }
 
 type DescribeSecurityGroupsInput struct {
-	Limit          int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset         int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord     string   `json:"search_word" name:"search_word" location:"params"`
-	SecurityGroups []string `json:"security_groups" name:"security_groups" location:"params"`
-	Tags           []string `json:"tags" name:"tags" location:"params"`
-	Verbose        int      `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Limit          *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset         *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord     *string   `json:"search_word" name:"search_word" location:"params"`
+	SecurityGroups []*string `json:"security_groups" name:"security_groups" location:"params"`
+	Tags           []*string `json:"tags" name:"tags" location:"params"`
+	Verbose        *int      `json:"verbose" name:"verbose" default:"0" location:"params"`
 }
 
 func (v *DescribeSecurityGroupsInput) Validate() error {
@@ -785,11 +773,11 @@ func (v *DescribeSecurityGroupsInput) Validate() error {
 }
 
 type DescribeSecurityGroupsOutput struct {
-	Message          string           `json:"message" name:"message"`
-	Action           string           `json:"action" name:"action" location:"elements"`
-	RetCode          int              `json:"ret_code" name:"ret_code" location:"elements"`
+	Message          *string          `json:"message" name:"message"`
+	Action           *string          `json:"action" name:"action" location:"elements"`
+	RetCode          *int             `json:"ret_code" name:"ret_code" location:"elements"`
 	SecurityGroupSet []*SecurityGroup `json:"security_group_set" name:"security_group_set" location:"elements"`
-	TotalCount       int              `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount       *int             `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/modify_security_group_attributes.html
@@ -819,15 +807,15 @@ func (s *SecurityGroupService) ModifySecurityGroupAttributes(i *ModifySecurityGr
 }
 
 type ModifySecurityGroupAttributesInput struct {
-	Description       string `json:"description" name:"description" location:"params"`
-	SecurityGroup     string `json:"security_group" name:"security_group" location:"params"` // Required
-	SecurityGroupName string `json:"security_group_name" name:"security_group_name" location:"params"`
+	Description       *string `json:"description" name:"description" location:"params"`
+	SecurityGroup     *string `json:"security_group" name:"security_group" location:"params"` // Required
+	SecurityGroupName *string `json:"security_group_name" name:"security_group_name" location:"params"`
 }
 
 func (v *ModifySecurityGroupAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.SecurityGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroup",
 			ParentName:    "ModifySecurityGroupAttributesInput",
 		}
@@ -837,10 +825,10 @@ func (v *ModifySecurityGroupAttributesInput) Validate() error {
 }
 
 type ModifySecurityGroupAttributesOutput struct {
-	Message         string `json:"message" name:"message"`
-	Action          string `json:"action" name:"action" location:"elements"`
-	RetCode         int    `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupID string `json:"security_group_id" name:"security_group_id" location:"elements"`
+	Message         *string `json:"message" name:"message"`
+	Action          *string `json:"action" name:"action" location:"elements"`
+	RetCode         *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupID *string `json:"security_group_id" name:"security_group_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/modify_security_group_ipset_attributes.html
@@ -870,16 +858,16 @@ func (s *SecurityGroupService) ModifySecurityGroupIPSetAttributes(i *ModifySecur
 }
 
 type ModifySecurityGroupIPSetAttributesInput struct {
-	Description            string `json:"description" name:"description" location:"params"`
-	SecurityGroupIPSet     string `json:"security_group_ipset" name:"security_group_ipset" location:"params"` // Required
-	SecurityGroupIPSetName string `json:"security_group_ipset_name" name:"security_group_ipset_name" location:"params"`
-	Val                    string `json:"val" name:"val" location:"params"`
+	Description            *string `json:"description" name:"description" location:"params"`
+	SecurityGroupIPSet     *string `json:"security_group_ipset" name:"security_group_ipset" location:"params"` // Required
+	SecurityGroupIPSetName *string `json:"security_group_ipset_name" name:"security_group_ipset_name" location:"params"`
+	Val                    *string `json:"val" name:"val" location:"params"`
 }
 
 func (v *ModifySecurityGroupIPSetAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.SecurityGroupIPSet) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroupIPSet == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroupIPSet",
 			ParentName:    "ModifySecurityGroupIPSetAttributesInput",
 		}
@@ -889,10 +877,10 @@ func (v *ModifySecurityGroupIPSetAttributesInput) Validate() error {
 }
 
 type ModifySecurityGroupIPSetAttributesOutput struct {
-	Message              string `json:"message" name:"message"`
-	Action               string `json:"action" name:"action" location:"elements"`
-	RetCode              int    `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupIPSetID string `json:"security_group_ipset_id" name:"security_group_ipset_id" location:"elements"`
+	Message              *string `json:"message" name:"message"`
+	Action               *string `json:"action" name:"action" location:"elements"`
+	RetCode              *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupIPSetID *string `json:"security_group_ipset_id" name:"security_group_ipset_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/modify_security_group_rule_attributes.html
@@ -924,28 +912,24 @@ func (s *SecurityGroupService) ModifySecurityGroupRuleAttributes(i *ModifySecuri
 type ModifySecurityGroupRuleAttributesInput struct {
 
 	// Direction's available values: 0, 1
-	Direction int    `json:"direction" name:"direction" location:"params"`
-	Priority  int    `json:"priority" name:"priority" location:"params"`
-	Protocol  string `json:"protocol" name:"protocol" location:"params"`
+	Direction *int    `json:"direction" name:"direction" location:"params"`
+	Priority  *int    `json:"priority" name:"priority" location:"params"`
+	Protocol  *string `json:"protocol" name:"protocol" location:"params"`
 	// RuleAction's available values: accept, drop
-	RuleAction            string `json:"rule_action" name:"rule_action" location:"params"`
-	SecurityGroup         string `json:"security_group" name:"security_group" location:"params"`
-	SecurityGroupRule     string `json:"security_group_rule" name:"security_group_rule" location:"params"` // Required
-	SecurityGroupRuleName string `json:"security_group_rule_name" name:"security_group_rule_name" location:"params"`
-	Val1                  int    `json:"val1" name:"val1" location:"params"`
-	Val2                  int    `json:"val2" name:"val2" location:"params"`
-	Val3                  int    `json:"val3" name:"val3" location:"params"`
+	RuleAction            *string `json:"rule_action" name:"rule_action" location:"params"`
+	SecurityGroup         *string `json:"security_group" name:"security_group" location:"params"`
+	SecurityGroupRule     *string `json:"security_group_rule" name:"security_group_rule" location:"params"` // Required
+	SecurityGroupRuleName *string `json:"security_group_rule_name" name:"security_group_rule_name" location:"params"`
+	Val1                  *int    `json:"val1" name:"val1" location:"params"`
+	Val2                  *int    `json:"val2" name:"val2" location:"params"`
+	Val3                  *int    `json:"val3" name:"val3" location:"params"`
 }
 
 func (v *ModifySecurityGroupRuleAttributesInput) Validate() error {
 
-	directionParameterValue := fmt.Sprint(v.Direction)
-	if directionParameterValue == "0" {
-		directionParameterValue = ""
-	}
-	if directionParameterValue != "" {
+	if v.Direction != nil {
 		directionValidValues := []string{"0", "1"}
-		directionParameterValue := fmt.Sprint(v.Direction)
+		directionParameterValue := fmt.Sprint(*v.Direction)
 
 		directionIsValid := false
 		for _, value := range directionValidValues {
@@ -955,7 +939,7 @@ func (v *ModifySecurityGroupRuleAttributesInput) Validate() error {
 		}
 
 		if !directionIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Direction",
 				ParameterValue: directionParameterValue,
 				AllowedValues:  directionValidValues,
@@ -963,13 +947,9 @@ func (v *ModifySecurityGroupRuleAttributesInput) Validate() error {
 		}
 	}
 
-	ruleActionParameterValue := fmt.Sprint(v.RuleAction)
-	if ruleActionParameterValue == "0" {
-		ruleActionParameterValue = ""
-	}
-	if ruleActionParameterValue != "" {
+	if v.RuleAction != nil {
 		ruleActionValidValues := []string{"accept", "drop"}
-		ruleActionParameterValue := fmt.Sprint(v.RuleAction)
+		ruleActionParameterValue := fmt.Sprint(*v.RuleAction)
 
 		ruleActionIsValid := false
 		for _, value := range ruleActionValidValues {
@@ -979,7 +959,7 @@ func (v *ModifySecurityGroupRuleAttributesInput) Validate() error {
 		}
 
 		if !ruleActionIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "RuleAction",
 				ParameterValue: ruleActionParameterValue,
 				AllowedValues:  ruleActionValidValues,
@@ -987,8 +967,8 @@ func (v *ModifySecurityGroupRuleAttributesInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.SecurityGroupRule) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroupRule == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroupRule",
 			ParentName:    "ModifySecurityGroupRuleAttributesInput",
 		}
@@ -998,10 +978,10 @@ func (v *ModifySecurityGroupRuleAttributesInput) Validate() error {
 }
 
 type ModifySecurityGroupRuleAttributesOutput struct {
-	Message             string `json:"message" name:"message"`
-	Action              string `json:"action" name:"action" location:"elements"`
-	RetCode             int    `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupRuleID string `json:"security_group_rule_id" name:"security_group_rule_id" location:"elements"`
+	Message             *string `json:"message" name:"message"`
+	Action              *string `json:"action" name:"action" location:"elements"`
+	RetCode             *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupRuleID *string `json:"security_group_rule_id" name:"security_group_rule_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/rollback_security_group.html
@@ -1031,21 +1011,21 @@ func (s *SecurityGroupService) RollbackSecurityGroup(i *RollbackSecurityGroupInp
 }
 
 type RollbackSecurityGroupInput struct {
-	SecurityGroup         string `json:"security_group" name:"security_group" location:"params"`                   // Required
-	SecurityGroupSnapshot string `json:"security_group_snapshot" name:"security_group_snapshot" location:"params"` // Required
+	SecurityGroup         *string `json:"security_group" name:"security_group" location:"params"`                   // Required
+	SecurityGroupSnapshot *string `json:"security_group_snapshot" name:"security_group_snapshot" location:"params"` // Required
 }
 
 func (v *RollbackSecurityGroupInput) Validate() error {
 
-	if fmt.Sprint(v.SecurityGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroup",
 			ParentName:    "RollbackSecurityGroupInput",
 		}
 	}
 
-	if fmt.Sprint(v.SecurityGroupSnapshot) == "" {
-		return errs.ParameterRequiredError{
+	if v.SecurityGroupSnapshot == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "SecurityGroupSnapshot",
 			ParentName:    "RollbackSecurityGroupInput",
 		}
@@ -1055,9 +1035,9 @@ func (v *RollbackSecurityGroupInput) Validate() error {
 }
 
 type RollbackSecurityGroupOutput struct {
-	Message                 string `json:"message" name:"message"`
-	Action                  string `json:"action" name:"action" location:"elements"`
-	RetCode                 int    `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupID         string `json:"security_group_id" name:"security_group_id" location:"elements"`
-	SecurityGroupSnapshotID string `json:"security_group_snapshot_id" name:"security_group_snapshot_id" location:"elements"`
+	Message                 *string `json:"message" name:"message"`
+	Action                  *string `json:"action" name:"action" location:"elements"`
+	RetCode                 *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupID         *string `json:"security_group_id" name:"security_group_id" location:"elements"`
+	SecurityGroupSnapshotID *string `json:"security_group_snapshot_id" name:"security_group_snapshot_id" location:"elements"`
 }

@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type CacheService struct {
 
 type CacheServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Cache(zone string) (*CacheService, error) {
 	properties := &CacheServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &CacheService{Config: s.Config, Properties: properties}, nil
@@ -74,22 +74,22 @@ func (s *CacheService) AddCacheNodes(i *AddCacheNodesInput) (*AddCacheNodesOutpu
 }
 
 type AddCacheNodesInput struct {
-	Cache      string            `json:"cache" name:"cache" location:"params"`           // Required
-	NodeCount  int               `json:"node_count" name:"node_count" location:"params"` // Required
+	Cache      *string           `json:"cache" name:"cache" location:"params"`           // Required
+	NodeCount  *int              `json:"node_count" name:"node_count" location:"params"` // Required
 	PrivateIPs []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
 }
 
 func (v *AddCacheNodesInput) Validate() error {
 
-	if fmt.Sprint(v.Cache) == "" {
-		return errs.ParameterRequiredError{
+	if v.Cache == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "AddCacheNodesInput",
 		}
 	}
 
-	if fmt.Sprint(v.NodeCount) == "" {
-		return errs.ParameterRequiredError{
+	if v.NodeCount == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "NodeCount",
 			ParentName:    "AddCacheNodesInput",
 		}
@@ -107,11 +107,11 @@ func (v *AddCacheNodesInput) Validate() error {
 }
 
 type AddCacheNodesOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
-	CacheNodes []string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
-	JobID      string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string   `json:"message" name:"message"`
+	Action     *string   `json:"action" name:"action" location:"elements"`
+	CacheNodes []*string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
+	JobID      *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/apply_cache_parameter_group.html
@@ -141,14 +141,14 @@ func (s *CacheService) ApplyCacheParameterGroup(i *ApplyCacheParameterGroupInput
 }
 
 type ApplyCacheParameterGroupInput struct {
-	CacheParameterGroup string   `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
-	Caches              []string `json:"caches" name:"caches" location:"params"`
+	CacheParameterGroup *string   `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
+	Caches              []*string `json:"caches" name:"caches" location:"params"`
 }
 
 func (v *ApplyCacheParameterGroupInput) Validate() error {
 
-	if fmt.Sprint(v.CacheParameterGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheParameterGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheParameterGroup",
 			ParentName:    "ApplyCacheParameterGroupInput",
 		}
@@ -158,10 +158,10 @@ func (v *ApplyCacheParameterGroupInput) Validate() error {
 }
 
 type ApplyCacheParameterGroupOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/change_cache_vxnet.html
@@ -191,15 +191,15 @@ func (s *CacheService) ChangeCacheVxNet(i *ChangeCacheVxNetInput) (*ChangeCacheV
 }
 
 type ChangeCacheVxNetInput struct {
-	Cache      string            `json:"cache" name:"cache" location:"params"` // Required
+	Cache      *string           `json:"cache" name:"cache" location:"params"` // Required
 	PrivateIPs []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	VxNet      string            `json:"vxnet" name:"vxnet" location:"params"` // Required
+	VxNet      *string           `json:"vxnet" name:"vxnet" location:"params"` // Required
 }
 
 func (v *ChangeCacheVxNetInput) Validate() error {
 
-	if fmt.Sprint(v.Cache) == "" {
-		return errs.ParameterRequiredError{
+	if v.Cache == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "ChangeCacheVxNetInput",
 		}
@@ -213,8 +213,8 @@ func (v *ChangeCacheVxNetInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.VxNet) == "" {
-		return errs.ParameterRequiredError{
+	if v.VxNet == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "VxNet",
 			ParentName:    "ChangeCacheVxNetInput",
 		}
@@ -224,12 +224,12 @@ func (v *ChangeCacheVxNetInput) Validate() error {
 }
 
 type ChangeCacheVxNetOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	CacheID string `json:"cache_id" name:"cache_id" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
-	VxNetID string `json:"vxnet_id" name:"vxnet_id" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	CacheID *string `json:"cache_id" name:"cache_id" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	VxNetID *string `json:"vxnet_id" name:"vxnet_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/create_cache.html
@@ -259,30 +259,26 @@ func (s *CacheService) CreateCache(i *CreateCacheInput) (*CreateCacheOutput, err
 }
 
 type CreateCacheInput struct {
-	AutoBackupTime int `json:"auto_backup_time" name:"auto_backup_time" default:"-1" location:"params"`
+	AutoBackupTime *int `json:"auto_backup_time" name:"auto_backup_time" default:"-1" location:"params"`
 	// CacheClass's available values: 0, 1
-	CacheClass          int               `json:"cache_class" name:"cache_class" location:"params"`
-	CacheName           string            `json:"cache_name" name:"cache_name" location:"params"`
-	CacheParameterGroup string            `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
-	CacheSize           int               `json:"cache_size" name:"cache_size" location:"params"` // Required
-	CacheType           string            `json:"cache_type" name:"cache_type" location:"params"` // Required
-	MasterCount         int               `json:"master_count" name:"master_count" location:"params"`
-	NetworkType         int               `json:"network_type" name:"network_type" location:"params"`
-	NodeCount           int               `json:"node_count" name:"node_count" default:"1" location:"params"`
+	CacheClass          *int              `json:"cache_class" name:"cache_class" location:"params"`
+	CacheName           *string           `json:"cache_name" name:"cache_name" location:"params"`
+	CacheParameterGroup *string           `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
+	CacheSize           *int              `json:"cache_size" name:"cache_size" location:"params"` // Required
+	CacheType           *string           `json:"cache_type" name:"cache_type" location:"params"` // Required
+	MasterCount         *int              `json:"master_count" name:"master_count" location:"params"`
+	NetworkType         *int              `json:"network_type" name:"network_type" location:"params"`
+	NodeCount           *int              `json:"node_count" name:"node_count" default:"1" location:"params"`
 	PrivateIPs          []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	ReplicateCount      int               `json:"replicate_count" name:"replicate_count" location:"params"`
-	VxNet               string            `json:"vxnet" name:"vxnet" location:"params"` // Required
+	ReplicateCount      *int              `json:"replicate_count" name:"replicate_count" location:"params"`
+	VxNet               *string           `json:"vxnet" name:"vxnet" location:"params"` // Required
 }
 
 func (v *CreateCacheInput) Validate() error {
 
-	cacheClassParameterValue := fmt.Sprint(v.CacheClass)
-	if cacheClassParameterValue == "0" {
-		cacheClassParameterValue = ""
-	}
-	if cacheClassParameterValue != "" {
+	if v.CacheClass != nil {
 		cacheClassValidValues := []string{"0", "1"}
-		cacheClassParameterValue := fmt.Sprint(v.CacheClass)
+		cacheClassParameterValue := fmt.Sprint(*v.CacheClass)
 
 		cacheClassIsValid := false
 		for _, value := range cacheClassValidValues {
@@ -292,7 +288,7 @@ func (v *CreateCacheInput) Validate() error {
 		}
 
 		if !cacheClassIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "CacheClass",
 				ParameterValue: cacheClassParameterValue,
 				AllowedValues:  cacheClassValidValues,
@@ -300,15 +296,15 @@ func (v *CreateCacheInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.CacheSize) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheSize == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheSize",
 			ParentName:    "CreateCacheInput",
 		}
 	}
 
-	if fmt.Sprint(v.CacheType) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheType == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheType",
 			ParentName:    "CreateCacheInput",
 		}
@@ -322,8 +318,8 @@ func (v *CreateCacheInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.VxNet) == "" {
-		return errs.ParameterRequiredError{
+	if v.VxNet == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "VxNet",
 			ParentName:    "CreateCacheInput",
 		}
@@ -333,12 +329,12 @@ func (v *CreateCacheInput) Validate() error {
 }
 
 type CreateCacheOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
-	CacheID    string   `json:"cache_id" name:"cache_id" location:"elements"`
-	CacheNodes []string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
-	JobID      string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string   `json:"message" name:"message"`
+	Action     *string   `json:"action" name:"action" location:"elements"`
+	CacheID    *string   `json:"cache_id" name:"cache_id" location:"elements"`
+	CacheNodes []*string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
+	JobID      *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/create_cache_from_snapshot.html
@@ -368,29 +364,25 @@ func (s *CacheService) CreateCacheFromSnapshot(i *CreateCacheFromSnapshotInput) 
 }
 
 type CreateCacheFromSnapshotInput struct {
-	AutoBackupTime int `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
+	AutoBackupTime *int `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
 	// CacheClass's available values: 0, 1
-	CacheClass          int               `json:"cache_class" name:"cache_class" location:"params"`
-	CacheName           string            `json:"cache_name" name:"cache_name" location:"params"`
-	CacheParameterGroup string            `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
-	CacheSize           int               `json:"cache_size" name:"cache_size" location:"params"`
-	CacheType           string            `json:"cache_type" name:"cache_type" location:"params"`
-	NetworkType         int               `json:"network_type" name:"network_type" location:"params"`
-	NodeCount           int               `json:"node_count" name:"node_count" location:"params"`
+	CacheClass          *int              `json:"cache_class" name:"cache_class" location:"params"`
+	CacheName           *string           `json:"cache_name" name:"cache_name" location:"params"`
+	CacheParameterGroup *string           `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
+	CacheSize           *int              `json:"cache_size" name:"cache_size" location:"params"`
+	CacheType           *string           `json:"cache_type" name:"cache_type" location:"params"`
+	NetworkType         *int              `json:"network_type" name:"network_type" location:"params"`
+	NodeCount           *int              `json:"node_count" name:"node_count" location:"params"`
 	PrivateIPs          []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	Snapshot            string            `json:"snapshot" name:"snapshot" location:"params"` // Required
-	VxNet               string            `json:"vxnet" name:"vxnet" location:"params"`       // Required
+	Snapshot            *string           `json:"snapshot" name:"snapshot" location:"params"` // Required
+	VxNet               *string           `json:"vxnet" name:"vxnet" location:"params"`       // Required
 }
 
 func (v *CreateCacheFromSnapshotInput) Validate() error {
 
-	cacheClassParameterValue := fmt.Sprint(v.CacheClass)
-	if cacheClassParameterValue == "0" {
-		cacheClassParameterValue = ""
-	}
-	if cacheClassParameterValue != "" {
+	if v.CacheClass != nil {
 		cacheClassValidValues := []string{"0", "1"}
-		cacheClassParameterValue := fmt.Sprint(v.CacheClass)
+		cacheClassParameterValue := fmt.Sprint(*v.CacheClass)
 
 		cacheClassIsValid := false
 		for _, value := range cacheClassValidValues {
@@ -400,7 +392,7 @@ func (v *CreateCacheFromSnapshotInput) Validate() error {
 		}
 
 		if !cacheClassIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "CacheClass",
 				ParameterValue: cacheClassParameterValue,
 				AllowedValues:  cacheClassValidValues,
@@ -416,15 +408,15 @@ func (v *CreateCacheFromSnapshotInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.Snapshot) == "" {
-		return errs.ParameterRequiredError{
+	if v.Snapshot == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Snapshot",
 			ParentName:    "CreateCacheFromSnapshotInput",
 		}
 	}
 
-	if fmt.Sprint(v.VxNet) == "" {
-		return errs.ParameterRequiredError{
+	if v.VxNet == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "VxNet",
 			ParentName:    "CreateCacheFromSnapshotInput",
 		}
@@ -434,12 +426,12 @@ func (v *CreateCacheFromSnapshotInput) Validate() error {
 }
 
 type CreateCacheFromSnapshotOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
-	CacheID    string   `json:"cache_id" name:"cache_id" location:"elements"`
-	CacheNodes []string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
-	JobID      string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string   `json:"message" name:"message"`
+	Action     *string   `json:"action" name:"action" location:"elements"`
+	CacheID    *string   `json:"cache_id" name:"cache_id" location:"elements"`
+	CacheNodes []*string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
+	JobID      *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/create_cache_parameter_group.html
@@ -469,27 +461,23 @@ func (s *CacheService) CreateCacheParameterGroup(i *CreateCacheParameterGroupInp
 }
 
 type CreateCacheParameterGroupInput struct {
-	CacheParameterGroupName string `json:"cache_parameter_group_name" name:"cache_parameter_group_name" location:"params"`
+	CacheParameterGroupName *string `json:"cache_parameter_group_name" name:"cache_parameter_group_name" location:"params"`
 	// CacheType's available values: redis2.8.17, memcached1.4.13
-	CacheType string `json:"cache_type" name:"cache_type" location:"params"` // Required
+	CacheType *string `json:"cache_type" name:"cache_type" location:"params"` // Required
 }
 
 func (v *CreateCacheParameterGroupInput) Validate() error {
 
-	if fmt.Sprint(v.CacheType) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheType == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheType",
 			ParentName:    "CreateCacheParameterGroupInput",
 		}
 	}
 
-	cacheTypeParameterValue := fmt.Sprint(v.CacheType)
-	if cacheTypeParameterValue == "0" {
-		cacheTypeParameterValue = ""
-	}
-	if cacheTypeParameterValue != "" {
+	if v.CacheType != nil {
 		cacheTypeValidValues := []string{"redis2.8.17", "memcached1.4.13"}
-		cacheTypeParameterValue := fmt.Sprint(v.CacheType)
+		cacheTypeParameterValue := fmt.Sprint(*v.CacheType)
 
 		cacheTypeIsValid := false
 		for _, value := range cacheTypeValidValues {
@@ -499,7 +487,7 @@ func (v *CreateCacheParameterGroupInput) Validate() error {
 		}
 
 		if !cacheTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "CacheType",
 				ParameterValue: cacheTypeParameterValue,
 				AllowedValues:  cacheTypeValidValues,
@@ -511,10 +499,10 @@ func (v *CreateCacheParameterGroupInput) Validate() error {
 }
 
 type CreateCacheParameterGroupOutput struct {
-	Message               string `json:"message" name:"message"`
-	Action                string `json:"action" name:"action" location:"elements"`
-	CacheParameterGroupID string `json:"cache_parameter_group_id" name:"cache_parameter_group_id" location:"elements"`
-	RetCode               int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message               *string `json:"message" name:"message"`
+	Action                *string `json:"action" name:"action" location:"elements"`
+	CacheParameterGroupID *string `json:"cache_parameter_group_id" name:"cache_parameter_group_id" location:"elements"`
+	RetCode               *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/delete_cache_nodes.html
@@ -544,21 +532,21 @@ func (s *CacheService) DeleteCacheNodes(i *DeleteCacheNodesInput) (*DeleteCacheN
 }
 
 type DeleteCacheNodesInput struct {
-	Cache      string   `json:"cache" name:"cache" location:"params"`             // Required
-	CacheNodes []string `json:"cache_nodes" name:"cache_nodes" location:"params"` // Required
+	Cache      *string   `json:"cache" name:"cache" location:"params"`             // Required
+	CacheNodes []*string `json:"cache_nodes" name:"cache_nodes" location:"params"` // Required
 }
 
 func (v *DeleteCacheNodesInput) Validate() error {
 
-	if fmt.Sprint(v.Cache) == "" {
-		return errs.ParameterRequiredError{
+	if v.Cache == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "DeleteCacheNodesInput",
 		}
 	}
 
 	if len(v.CacheNodes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheNodes",
 			ParentName:    "DeleteCacheNodesInput",
 		}
@@ -568,11 +556,11 @@ func (v *DeleteCacheNodesInput) Validate() error {
 }
 
 type DeleteCacheNodesOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
-	CacheNodes []string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
-	JobID      string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string   `json:"message" name:"message"`
+	Action     *string   `json:"action" name:"action" location:"elements"`
+	CacheNodes []*string `json:"cache_nodes" name:"cache_nodes" location:"elements"`
+	JobID      *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/delete_cache_parameter_groups.html
@@ -602,13 +590,13 @@ func (s *CacheService) DeleteCacheParameterGroups(i *DeleteCacheParameterGroupsI
 }
 
 type DeleteCacheParameterGroupsInput struct {
-	CacheParameterGroups []string `json:"cache_parameter_groups" name:"cache_parameter_groups" location:"params"` // Required
+	CacheParameterGroups []*string `json:"cache_parameter_groups" name:"cache_parameter_groups" location:"params"` // Required
 }
 
 func (v *DeleteCacheParameterGroupsInput) Validate() error {
 
 	if len(v.CacheParameterGroups) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheParameterGroups",
 			ParentName:    "DeleteCacheParameterGroupsInput",
 		}
@@ -618,10 +606,10 @@ func (v *DeleteCacheParameterGroupsInput) Validate() error {
 }
 
 type DeleteCacheParameterGroupsOutput struct {
-	Message         string   `json:"message" name:"message"`
-	Action          string   `json:"action" name:"action" location:"elements"`
-	ParameterGroups []string `json:"parameter_groups" name:"parameter_groups" location:"elements"`
-	RetCode         int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message         *string   `json:"message" name:"message"`
+	Action          *string   `json:"action" name:"action" location:"elements"`
+	ParameterGroups []*string `json:"parameter_groups" name:"parameter_groups" location:"elements"`
+	RetCode         *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/delete_caches.html
@@ -651,13 +639,13 @@ func (s *CacheService) DeleteCaches(i *DeleteCachesInput) (*DeleteCachesOutput, 
 }
 
 type DeleteCachesInput struct {
-	Caches []string `json:"caches" name:"caches" location:"params"` // Required
+	Caches []*string `json:"caches" name:"caches" location:"params"` // Required
 }
 
 func (v *DeleteCachesInput) Validate() error {
 
 	if len(v.Caches) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Caches",
 			ParentName:    "DeleteCachesInput",
 		}
@@ -667,11 +655,11 @@ func (v *DeleteCachesInput) Validate() error {
 }
 
 type DeleteCachesOutput struct {
-	Message  string   `json:"message" name:"message"`
-	Action   string   `json:"action" name:"action" location:"elements"`
-	CacheIDs []string `json:"cache_ids" name:"cache_ids" location:"elements"`
-	JobID    string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode  int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message  *string   `json:"message" name:"message"`
+	Action   *string   `json:"action" name:"action" location:"elements"`
+	CacheIDs []*string `json:"cache_ids" name:"cache_ids" location:"elements"`
+	JobID    *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode  *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/describe_cache_nodes.html
@@ -701,13 +689,13 @@ func (s *CacheService) DescribeCacheNodes(i *DescribeCacheNodesInput) (*Describe
 }
 
 type DescribeCacheNodesInput struct {
-	Cache      string   `json:"cache" name:"cache" location:"params"`
-	CacheNodes []string `json:"cache_nodes" name:"cache_nodes" location:"params"`
-	Limit      int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
-	Status     []string `json:"status" name:"status" location:"params"`
-	Verbose    int      `json:"verbose" name:"verbose" location:"params"`
+	Cache      *string   `json:"cache" name:"cache" location:"params"`
+	CacheNodes []*string `json:"cache_nodes" name:"cache_nodes" location:"params"`
+	Limit      *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
+	Status     []*string `json:"status" name:"status" location:"params"`
+	Verbose    *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeCacheNodesInput) Validate() error {
@@ -716,11 +704,11 @@ func (v *DescribeCacheNodesInput) Validate() error {
 }
 
 type DescribeCacheNodesOutput struct {
-	Message      string       `json:"message" name:"message"`
-	Action       string       `json:"action" name:"action" location:"elements"`
+	Message      *string      `json:"message" name:"message"`
+	Action       *string      `json:"action" name:"action" location:"elements"`
 	CacheNodeSet []*CacheNode `json:"cache_node_set" name:"cache_node_set" location:"elements"`
-	RetCode      int          `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   int          `json:"total_count" name:"total_count" location:"elements"`
+	RetCode      *int         `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int         `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/describe_cache_parameter_groups.html
@@ -750,12 +738,12 @@ func (s *CacheService) DescribeCacheParameterGroups(i *DescribeCacheParameterGro
 }
 
 type DescribeCacheParameterGroupsInput struct {
-	CacheParameterGroups []string `json:"cache_parameter_groups" name:"cache_parameter_groups" location:"params"`
-	CacheType            string   `json:"cache_type" name:"cache_type" location:"params"`
-	Limit                int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset               int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord           string   `json:"search_word" name:"search_word" location:"params"`
-	Verbose              int      `json:"verbose" name:"verbose" location:"params"`
+	CacheParameterGroups []*string `json:"cache_parameter_groups" name:"cache_parameter_groups" location:"params"`
+	CacheType            *string   `json:"cache_type" name:"cache_type" location:"params"`
+	Limit                *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset               *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord           *string   `json:"search_word" name:"search_word" location:"params"`
+	Verbose              *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeCacheParameterGroupsInput) Validate() error {
@@ -764,11 +752,11 @@ func (v *DescribeCacheParameterGroupsInput) Validate() error {
 }
 
 type DescribeCacheParameterGroupsOutput struct {
-	Message                string                 `json:"message" name:"message"`
-	Action                 string                 `json:"action" name:"action" location:"elements"`
+	Message                *string                `json:"message" name:"message"`
+	Action                 *string                `json:"action" name:"action" location:"elements"`
 	CacheParameterGroupSet []*CacheParameterGroup `json:"cache_parameter_group_set" name:"cache_parameter_group_set" location:"elements"`
-	RetCode                int                    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount             int                    `json:"total_count" name:"total_count" location:"elements"`
+	RetCode                *int                   `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount             *int                   `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/describe_cache_parameters.html
@@ -798,14 +786,14 @@ func (s *CacheService) DescribeCacheParameters(i *DescribeCacheParametersInput) 
 }
 
 type DescribeCacheParametersInput struct {
-	CacheParameterGroup string `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
-	Verbose             int    `json:"verbose" name:"verbose" location:"params"`
+	CacheParameterGroup *string `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
+	Verbose             *int    `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeCacheParametersInput) Validate() error {
 
-	if fmt.Sprint(v.CacheParameterGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheParameterGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheParameterGroup",
 			ParentName:    "DescribeCacheParametersInput",
 		}
@@ -815,11 +803,11 @@ func (v *DescribeCacheParametersInput) Validate() error {
 }
 
 type DescribeCacheParametersOutput struct {
-	Message           string            `json:"message" name:"message"`
-	Action            string            `json:"action" name:"action" location:"elements"`
+	Message           *string           `json:"message" name:"message"`
+	Action            *string           `json:"action" name:"action" location:"elements"`
 	CacheParameterSet []*CacheParameter `json:"cache_parameter_set" name:"cache_parameter_set" location:"elements"`
-	RetCode           int               `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount        int               `json:"total_count" name:"total_count" location:"elements"`
+	RetCode           *int              `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount        *int              `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/describe_caches.html
@@ -849,14 +837,14 @@ func (s *CacheService) DescribeCaches(i *DescribeCachesInput) (*DescribeCachesOu
 }
 
 type DescribeCachesInput struct {
-	CacheType  []string `json:"cache_type" name:"cache_type" location:"params"`
-	Caches     []string `json:"caches" name:"caches" location:"params"`
-	Limit      int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
-	Status     []string `json:"status" name:"status" location:"params"`
-	Tags       []string `json:"tags" name:"tags" location:"params"`
-	Verbose    int      `json:"verbose" name:"verbose" location:"params"`
+	CacheType  []*string `json:"cache_type" name:"cache_type" location:"params"`
+	Caches     []*string `json:"caches" name:"caches" location:"params"`
+	Limit      *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
+	Status     []*string `json:"status" name:"status" location:"params"`
+	Tags       []*string `json:"tags" name:"tags" location:"params"`
+	Verbose    *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeCachesInput) Validate() error {
@@ -865,11 +853,11 @@ func (v *DescribeCachesInput) Validate() error {
 }
 
 type DescribeCachesOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	CacheSet   []*Cache `json:"cache_set" name:"cache_set" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount int      `json:"total_count" name:"total_count" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int     `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_cache_monitor.html
@@ -899,44 +887,40 @@ func (s *CacheService) GetCacheMonitor(i *GetCacheMonitorInput) (*GetCacheMonito
 }
 
 type GetCacheMonitorInput struct {
-	EndTime   time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
-	Meters    []string  `json:"meters" name:"meters" location:"params"`                           // Required
-	Resource  string    `json:"resource" name:"resource" location:"params"`                       // Required
-	StartTime time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
+	EndTime   *time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
+	Meters    []*string  `json:"meters" name:"meters" location:"params"`                           // Required
+	Resource  *string    `json:"resource" name:"resource" location:"params"`                       // Required
+	StartTime *time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
 	// Step's available values: 5m, 15m, 2h, 1d
-	Step string `json:"step" name:"step" location:"params"` // Required
+	Step *string `json:"step" name:"step" location:"params"` // Required
 }
 
 func (v *GetCacheMonitorInput) Validate() error {
 
 	if len(v.Meters) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Meters",
 			ParentName:    "GetCacheMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Resource) == "" {
-		return errs.ParameterRequiredError{
+	if v.Resource == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Resource",
 			ParentName:    "GetCacheMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Step) == "" {
-		return errs.ParameterRequiredError{
+	if v.Step == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Step",
 			ParentName:    "GetCacheMonitorInput",
 		}
 	}
 
-	stepParameterValue := fmt.Sprint(v.Step)
-	if stepParameterValue == "0" {
-		stepParameterValue = ""
-	}
-	if stepParameterValue != "" {
+	if v.Step != nil {
 		stepValidValues := []string{"5m", "15m", "2h", "1d"}
-		stepParameterValue := fmt.Sprint(v.Step)
+		stepParameterValue := fmt.Sprint(*v.Step)
 
 		stepIsValid := false
 		for _, value := range stepValidValues {
@@ -946,7 +930,7 @@ func (v *GetCacheMonitorInput) Validate() error {
 		}
 
 		if !stepIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Step",
 				ParameterValue: stepParameterValue,
 				AllowedValues:  stepValidValues,
@@ -958,11 +942,11 @@ func (v *GetCacheMonitorInput) Validate() error {
 }
 
 type GetCacheMonitorOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID string   `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/modify_cache_attributes.html
@@ -992,16 +976,16 @@ func (s *CacheService) ModifyCacheAttributes(i *ModifyCacheAttributesInput) (*Mo
 }
 
 type ModifyCacheAttributesInput struct {
-	AutoBackupTime int    `json:"auto_backup_time" name:"auto_backup_time" default:"99" location:"params"`
-	Cache          string `json:"cache" name:"cache" location:"params"` // Required
-	CacheName      string `json:"cache_name" name:"cache_name" location:"params"`
-	Description    string `json:"description" name:"description" location:"params"`
+	AutoBackupTime *int    `json:"auto_backup_time" name:"auto_backup_time" default:"99" location:"params"`
+	Cache          *string `json:"cache" name:"cache" location:"params"` // Required
+	CacheName      *string `json:"cache_name" name:"cache_name" location:"params"`
+	Description    *string `json:"description" name:"description" location:"params"`
 }
 
 func (v *ModifyCacheAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.Cache) == "" {
-		return errs.ParameterRequiredError{
+	if v.Cache == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "ModifyCacheAttributesInput",
 		}
@@ -1011,9 +995,9 @@ func (v *ModifyCacheAttributesInput) Validate() error {
 }
 
 type ModifyCacheAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/modify_cache_node_attributes.html
@@ -1043,14 +1027,14 @@ func (s *CacheService) ModifyCacheNodeAttributes(i *ModifyCacheNodeAttributesInp
 }
 
 type ModifyCacheNodeAttributesInput struct {
-	CacheNode     string `json:"cache_node" name:"cache_node" location:"params"` // Required
-	CacheNodeName string `json:"cache_node_name" name:"cache_node_name" location:"params"`
+	CacheNode     *string `json:"cache_node" name:"cache_node" location:"params"` // Required
+	CacheNodeName *string `json:"cache_node_name" name:"cache_node_name" location:"params"`
 }
 
 func (v *ModifyCacheNodeAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.CacheNode) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheNode == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheNode",
 			ParentName:    "ModifyCacheNodeAttributesInput",
 		}
@@ -1060,9 +1044,9 @@ func (v *ModifyCacheNodeAttributesInput) Validate() error {
 }
 
 type ModifyCacheNodeAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/modify_cache_parameter_group_attributes.html
@@ -1092,15 +1076,15 @@ func (s *CacheService) ModifyCacheParameterGroupAttributes(i *ModifyCacheParamet
 }
 
 type ModifyCacheParameterGroupAttributesInput struct {
-	CacheParameterGroup     string `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
-	CacheParameterGroupName string `json:"cache_parameter_group_name" name:"cache_parameter_group_name" location:"params"`
-	Description             string `json:"description" name:"description" location:"params"`
+	CacheParameterGroup     *string `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
+	CacheParameterGroupName *string `json:"cache_parameter_group_name" name:"cache_parameter_group_name" location:"params"`
+	Description             *string `json:"description" name:"description" location:"params"`
 }
 
 func (v *ModifyCacheParameterGroupAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.CacheParameterGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheParameterGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheParameterGroup",
 			ParentName:    "ModifyCacheParameterGroupAttributesInput",
 		}
@@ -1110,10 +1094,10 @@ func (v *ModifyCacheParameterGroupAttributesInput) Validate() error {
 }
 
 type ModifyCacheParameterGroupAttributesOutput struct {
-	Message               string `json:"message" name:"message"`
-	Action                string `json:"action" name:"action" location:"elements"`
-	CacheParameterGroupID string `json:"cache_parameter_group_id" name:"cache_parameter_group_id" location:"elements"`
-	RetCode               int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message               *string `json:"message" name:"message"`
+	Action                *string `json:"action" name:"action" location:"elements"`
+	CacheParameterGroupID *string `json:"cache_parameter_group_id" name:"cache_parameter_group_id" location:"elements"`
+	RetCode               *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/reset_cache_parameters.html
@@ -1143,14 +1127,14 @@ func (s *CacheService) ResetCacheParameters(i *ResetCacheParametersInput) (*Rese
 }
 
 type ResetCacheParametersInput struct {
-	CacheParameterGroup string   `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
-	CacheParameterNames []string `json:"cache_parameter_names" name:"cache_parameter_names" location:"params"`
+	CacheParameterGroup *string   `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
+	CacheParameterNames []*string `json:"cache_parameter_names" name:"cache_parameter_names" location:"params"`
 }
 
 func (v *ResetCacheParametersInput) Validate() error {
 
-	if fmt.Sprint(v.CacheParameterGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheParameterGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheParameterGroup",
 			ParentName:    "ResetCacheParametersInput",
 		}
@@ -1160,9 +1144,9 @@ func (v *ResetCacheParametersInput) Validate() error {
 }
 
 type ResetCacheParametersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/resize_cache.html
@@ -1192,21 +1176,21 @@ func (s *CacheService) ResizeCaches(i *ResizeCachesInput) (*ResizeCachesOutput, 
 }
 
 type ResizeCachesInput struct {
-	CacheSize int      `json:"cache_size" name:"cache_size" location:"params"` // Required
-	Caches    []string `json:"caches" name:"caches" location:"params"`         // Required
+	CacheSize *int      `json:"cache_size" name:"cache_size" location:"params"` // Required
+	Caches    []*string `json:"caches" name:"caches" location:"params"`         // Required
 }
 
 func (v *ResizeCachesInput) Validate() error {
 
-	if fmt.Sprint(v.CacheSize) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheSize == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheSize",
 			ParentName:    "ResizeCachesInput",
 		}
 	}
 
 	if len(v.Caches) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Caches",
 			ParentName:    "ResizeCachesInput",
 		}
@@ -1216,10 +1200,10 @@ func (v *ResizeCachesInput) Validate() error {
 }
 
 type ResizeCachesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/restart_cache_nodes.html
@@ -1249,21 +1233,21 @@ func (s *CacheService) RestartCacheNodes(i *RestartCacheNodesInput) (*RestartCac
 }
 
 type RestartCacheNodesInput struct {
-	Cache      string   `json:"cache" name:"cache" location:"params"`             // Required
-	CacheNodes []string `json:"cache_nodes" name:"cache_nodes" location:"params"` // Required
+	Cache      *string   `json:"cache" name:"cache" location:"params"`             // Required
+	CacheNodes []*string `json:"cache_nodes" name:"cache_nodes" location:"params"` // Required
 }
 
 func (v *RestartCacheNodesInput) Validate() error {
 
-	if fmt.Sprint(v.Cache) == "" {
-		return errs.ParameterRequiredError{
+	if v.Cache == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "RestartCacheNodesInput",
 		}
 	}
 
 	if len(v.CacheNodes) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheNodes",
 			ParentName:    "RestartCacheNodesInput",
 		}
@@ -1273,10 +1257,10 @@ func (v *RestartCacheNodesInput) Validate() error {
 }
 
 type RestartCacheNodesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // RestartCaches: Only available for memcached.
@@ -1307,13 +1291,13 @@ func (s *CacheService) RestartCaches(i *RestartCachesInput) (*RestartCachesOutpu
 }
 
 type RestartCachesInput struct {
-	Caches []string `json:"caches" name:"caches" location:"params"` // Required
+	Caches []*string `json:"caches" name:"caches" location:"params"` // Required
 }
 
 func (v *RestartCachesInput) Validate() error {
 
 	if len(v.Caches) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Caches",
 			ParentName:    "RestartCachesInput",
 		}
@@ -1323,10 +1307,10 @@ func (v *RestartCachesInput) Validate() error {
 }
 
 type RestartCachesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/start_caches.html
@@ -1356,13 +1340,13 @@ func (s *CacheService) StartCaches(i *StartCachesInput) (*StartCachesOutput, err
 }
 
 type StartCachesInput struct {
-	Caches []string `json:"caches" name:"caches" location:"params"` // Required
+	Caches []*string `json:"caches" name:"caches" location:"params"` // Required
 }
 
 func (v *StartCachesInput) Validate() error {
 
 	if len(v.Caches) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Caches",
 			ParentName:    "StartCachesInput",
 		}
@@ -1372,11 +1356,11 @@ func (v *StartCachesInput) Validate() error {
 }
 
 type StartCachesOutput struct {
-	Message  string   `json:"message" name:"message"`
-	Action   string   `json:"action" name:"action" location:"elements"`
-	CacheIDs []string `json:"cache_ids" name:"cache_ids" location:"elements"`
-	JobID    string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode  int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message  *string   `json:"message" name:"message"`
+	Action   *string   `json:"action" name:"action" location:"elements"`
+	CacheIDs []*string `json:"cache_ids" name:"cache_ids" location:"elements"`
+	JobID    *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode  *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/stop_caches.html
@@ -1406,13 +1390,13 @@ func (s *CacheService) StopCaches(i *StopCachesInput) (*StopCachesOutput, error)
 }
 
 type StopCachesInput struct {
-	Caches []string `json:"caches" name:"caches" location:"params"` // Required
+	Caches []*string `json:"caches" name:"caches" location:"params"` // Required
 }
 
 func (v *StopCachesInput) Validate() error {
 
 	if len(v.Caches) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Caches",
 			ParentName:    "StopCachesInput",
 		}
@@ -1422,11 +1406,11 @@ func (v *StopCachesInput) Validate() error {
 }
 
 type StopCachesOutput struct {
-	Message  string   `json:"message" name:"message"`
-	Action   string   `json:"action" name:"action" location:"elements"`
-	CacheIDs []string `json:"cache_ids" name:"cache_ids" location:"elements"`
-	JobID    string   `json:"job_id" name:"job_id" location:"elements"`
-	RetCode  int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message  *string   `json:"message" name:"message"`
+	Action   *string   `json:"action" name:"action" location:"elements"`
+	CacheIDs []*string `json:"cache_ids" name:"cache_ids" location:"elements"`
+	JobID    *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode  *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/update_cache.html
@@ -1456,14 +1440,14 @@ func (s *CacheService) UpdateCache(i *UpdateCacheInput) (*UpdateCacheOutput, err
 }
 
 type UpdateCacheInput struct {
-	Cache      string            `json:"cache" name:"cache" location:"params"` // Required
+	Cache      *string           `json:"cache" name:"cache" location:"params"` // Required
 	PrivateIPs []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
 }
 
 func (v *UpdateCacheInput) Validate() error {
 
-	if fmt.Sprint(v.Cache) == "" {
-		return errs.ParameterRequiredError{
+	if v.Cache == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "UpdateCacheInput",
 		}
@@ -1481,10 +1465,10 @@ func (v *UpdateCacheInput) Validate() error {
 }
 
 type UpdateCacheOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/update_cache_parameters.html
@@ -1514,14 +1498,14 @@ func (s *CacheService) UpdateCacheParameters(i *UpdateCacheParametersInput) (*Up
 }
 
 type UpdateCacheParametersInput struct {
-	CacheParameterGroup string          `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
+	CacheParameterGroup *string         `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
 	Parameters          *CacheParameter `json:"parameters" name:"parameters" location:"params"`                       // Required
 }
 
 func (v *UpdateCacheParametersInput) Validate() error {
 
-	if fmt.Sprint(v.CacheParameterGroup) == "" {
-		return errs.ParameterRequiredError{
+	if v.CacheParameterGroup == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CacheParameterGroup",
 			ParentName:    "UpdateCacheParametersInput",
 		}
@@ -1534,7 +1518,7 @@ func (v *UpdateCacheParametersInput) Validate() error {
 	}
 
 	if v.Parameters == nil {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Parameters",
 			ParentName:    "UpdateCacheParametersInput",
 		}
@@ -1544,7 +1528,7 @@ func (v *UpdateCacheParametersInput) Validate() error {
 }
 
 type UpdateCacheParametersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type MongoService struct {
 
 type MongoServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Mongo(zone string) (*MongoService, error) {
 	properties := &MongoServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &MongoService{Config: s.Config, Properties: properties}, nil
@@ -74,8 +74,8 @@ func (s *MongoService) AddMongoInstances(i *AddMongoInstancesInput) (*AddMongoIn
 }
 
 type AddMongoInstancesInput struct {
-	Mongo      string            `json:"mongo" name:"mongo" location:"params"`
-	NodeCount  int               `json:"node_count" name:"node_count" location:"params"`
+	Mongo      *string           `json:"mongo" name:"mongo" location:"params"`
+	NodeCount  *int              `json:"node_count" name:"node_count" location:"params"`
 	PrivateIPs []*MongoPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
 }
 
@@ -93,12 +93,12 @@ func (v *AddMongoInstancesInput) Validate() error {
 }
 
 type AddMongoInstancesOutput struct {
-	Message   string   `json:"message" name:"message"`
-	Action    string   `json:"action" name:"action" location:"elements"`
-	JobID     string   `json:"job_id" name:"job_id" location:"elements"`
-	Mongo     string   `json:"mongo" name:"mongo" location:"elements"`
-	MongoNode []string `json:"mongo_node" name:"mongo_node" location:"elements"`
-	RetCode   int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message   *string   `json:"message" name:"message"`
+	Action    *string   `json:"action" name:"action" location:"elements"`
+	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
+	Mongo     *string   `json:"mongo" name:"mongo" location:"elements"`
+	MongoNode []*string `json:"mongo_node" name:"mongo_node" location:"elements"`
+	RetCode   *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/change_mongo_vxnet.html
@@ -128,15 +128,15 @@ func (s *MongoService) ChangeMongoVxNet(i *ChangeMongoVxNetInput) (*ChangeMongoV
 }
 
 type ChangeMongoVxNetInput struct {
-	Mongo      string            `json:"mongo" name:"mongo" location:"params"` // Required
+	Mongo      *string           `json:"mongo" name:"mongo" location:"params"` // Required
 	PrivateIPs []*MongoPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	VxNet      string            `json:"vxnet" name:"vxnet" location:"params"` // Required
+	VxNet      *string           `json:"vxnet" name:"vxnet" location:"params"` // Required
 }
 
 func (v *ChangeMongoVxNetInput) Validate() error {
 
-	if fmt.Sprint(v.Mongo) == "" {
-		return errs.ParameterRequiredError{
+	if v.Mongo == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongo",
 			ParentName:    "ChangeMongoVxNetInput",
 		}
@@ -150,8 +150,8 @@ func (v *ChangeMongoVxNetInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.VxNet) == "" {
-		return errs.ParameterRequiredError{
+	if v.VxNet == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "VxNet",
 			ParentName:    "ChangeMongoVxNetInput",
 		}
@@ -161,11 +161,11 @@ func (v *ChangeMongoVxNetInput) Validate() error {
 }
 
 type ChangeMongoVxNetOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	Mongo   string `json:"mongo" name:"mongo" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	Mongo   *string `json:"mongo" name:"mongo" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/create_mongo.html
@@ -195,23 +195,23 @@ func (s *MongoService) CreateMongo(i *CreateMongoInput) (*CreateMongoOutput, err
 }
 
 type CreateMongoInput struct {
-	AutoBackupTime int               `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
-	Description    string            `json:"description" name:"description" location:"params"`
-	MongoName      string            `json:"mongo_name" name:"mongo_name" location:"params"`
-	MongoPassword  string            `json:"mongo_password" name:"mongo_password" location:"params"`
-	MongoType      int               `json:"mongo_type" name:"mongo_type" location:"params"` // Required
-	MongoUsername  string            `json:"mongo_username" name:"mongo_username" location:"params"`
-	MongoVersion   int               `json:"mongo_version" name:"mongo_version" location:"params"`
+	AutoBackupTime *int              `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
+	Description    *string           `json:"description" name:"description" location:"params"`
+	MongoName      *string           `json:"mongo_name" name:"mongo_name" location:"params"`
+	MongoPassword  *string           `json:"mongo_password" name:"mongo_password" location:"params"`
+	MongoType      *int              `json:"mongo_type" name:"mongo_type" location:"params"` // Required
+	MongoUsername  *string           `json:"mongo_username" name:"mongo_username" location:"params"`
+	MongoVersion   *int              `json:"mongo_version" name:"mongo_version" location:"params"`
 	PrivateIPs     []*MongoPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	ResourceClass  int               `json:"resource_class" name:"resource_class" location:"params"`
-	StorageSize    int               `json:"storage_size" name:"storage_size" location:"params"` // Required
-	VxNet          string            `json:"vxnet" name:"vxnet" location:"params"`               // Required
+	ResourceClass  *int              `json:"resource_class" name:"resource_class" location:"params"`
+	StorageSize    *int              `json:"storage_size" name:"storage_size" location:"params"` // Required
+	VxNet          *string           `json:"vxnet" name:"vxnet" location:"params"`               // Required
 }
 
 func (v *CreateMongoInput) Validate() error {
 
-	if fmt.Sprint(v.MongoType) == "" {
-		return errs.ParameterRequiredError{
+	if v.MongoType == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "MongoType",
 			ParentName:    "CreateMongoInput",
 		}
@@ -225,15 +225,15 @@ func (v *CreateMongoInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.StorageSize) == "" {
-		return errs.ParameterRequiredError{
+	if v.StorageSize == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "StorageSize",
 			ParentName:    "CreateMongoInput",
 		}
 	}
 
-	if fmt.Sprint(v.VxNet) == "" {
-		return errs.ParameterRequiredError{
+	if v.VxNet == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "VxNet",
 			ParentName:    "CreateMongoInput",
 		}
@@ -243,11 +243,11 @@ func (v *CreateMongoInput) Validate() error {
 }
 
 type CreateMongoOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	Mongo   string `json:"mongo" name:"mongo" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	Mongo   *string `json:"mongo" name:"mongo" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/create_mongo_from_snapshot.html
@@ -277,14 +277,14 @@ func (s *MongoService) CreateMongoFromSnapshot(i *CreateMongoFromSnapshotInput) 
 }
 
 type CreateMongoFromSnapshotInput struct {
-	AutoBackupTime int    `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
-	MongoName      string `json:"mongo_name" name:"mongo_name" location:"params"`
-	MongoType      int    `json:"mongo_type" name:"mongo_type" location:"params"`
-	MongoVersion   int    `json:"mongo_version" name:"mongo_version" location:"params"`
-	ResourceClass  int    `json:"resource_class" name:"resource_class" location:"params"`
-	Snapshot       string `json:"snapshot" name:"snapshot" location:"params"`
-	StorageSize    int    `json:"storage_size" name:"storage_size" location:"params"`
-	VxNet          string `json:"vxnet" name:"vxnet" location:"params"`
+	AutoBackupTime *int    `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
+	MongoName      *string `json:"mongo_name" name:"mongo_name" location:"params"`
+	MongoType      *int    `json:"mongo_type" name:"mongo_type" location:"params"`
+	MongoVersion   *int    `json:"mongo_version" name:"mongo_version" location:"params"`
+	ResourceClass  *int    `json:"resource_class" name:"resource_class" location:"params"`
+	Snapshot       *string `json:"snapshot" name:"snapshot" location:"params"`
+	StorageSize    *int    `json:"storage_size" name:"storage_size" location:"params"`
+	VxNet          *string `json:"vxnet" name:"vxnet" location:"params"`
 }
 
 func (v *CreateMongoFromSnapshotInput) Validate() error {
@@ -293,11 +293,11 @@ func (v *CreateMongoFromSnapshotInput) Validate() error {
 }
 
 type CreateMongoFromSnapshotOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	Mongo   string `json:"mongo" name:"mongo" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	Mongo   *string `json:"mongo" name:"mongo" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/delete_mongos.html
@@ -327,13 +327,13 @@ func (s *MongoService) DeleteMongos(i *DeleteMongosInput) (*DeleteMongosOutput, 
 }
 
 type DeleteMongosInput struct {
-	Mongos []string `json:"mongos" name:"mongos" location:"params"` // Required
+	Mongos []*string `json:"mongos" name:"mongos" location:"params"` // Required
 }
 
 func (v *DeleteMongosInput) Validate() error {
 
 	if len(v.Mongos) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongos",
 			ParentName:    "DeleteMongosInput",
 		}
@@ -343,11 +343,11 @@ func (v *DeleteMongosInput) Validate() error {
 }
 
 type DeleteMongosOutput struct {
-	Message string   `json:"message" name:"message"`
-	Action  string   `json:"action" name:"action" location:"elements"`
-	JobID   string   `json:"job_id" name:"job_id" location:"elements"`
-	Mongos  []string `json:"mongos" name:"mongos" location:"elements"`
-	RetCode int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string   `json:"message" name:"message"`
+	Action  *string   `json:"action" name:"action" location:"elements"`
+	JobID   *string   `json:"job_id" name:"job_id" location:"elements"`
+	Mongos  []*string `json:"mongos" name:"mongos" location:"elements"`
+	RetCode *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/describe_mongo_nodes.html
@@ -377,16 +377,16 @@ func (s *MongoService) DescribeMongoNodes(i *DescribeMongoNodesInput) (*Describe
 }
 
 type DescribeMongoNodesInput struct {
-	Limit  int      `json:"limit" name:"limit" location:"params"`
-	Mongo  string   `json:"mongo" name:"mongo" location:"params"` // Required
-	Offset int      `json:"offset" name:"offset" location:"params"`
-	Status []string `json:"status" name:"status" location:"params"`
+	Limit  *int      `json:"limit" name:"limit" location:"params"`
+	Mongo  *string   `json:"mongo" name:"mongo" location:"params"` // Required
+	Offset *int      `json:"offset" name:"offset" location:"params"`
+	Status []*string `json:"status" name:"status" location:"params"`
 }
 
 func (v *DescribeMongoNodesInput) Validate() error {
 
-	if fmt.Sprint(v.Mongo) == "" {
-		return errs.ParameterRequiredError{
+	if v.Mongo == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongo",
 			ParentName:    "DescribeMongoNodesInput",
 		}
@@ -396,11 +396,11 @@ func (v *DescribeMongoNodesInput) Validate() error {
 }
 
 type DescribeMongoNodesOutput struct {
-	Message      string       `json:"message" name:"message"`
-	Action       string       `json:"action" name:"action" location:"elements"`
+	Message      *string      `json:"message" name:"message"`
+	Action       *string      `json:"action" name:"action" location:"elements"`
 	MongoNodeSet []*MongoNode `json:"mongo_node_set" name:"mongo_node_set" location:"elements"`
-	RetCode      int          `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   int          `json:"total_count" name:"total_count" location:"elements"`
+	RetCode      *int         `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int         `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/describe_mongo_parameters.html
@@ -430,15 +430,15 @@ func (s *MongoService) DescribeMongoParameters(i *DescribeMongoParametersInput) 
 }
 
 type DescribeMongoParametersInput struct {
-	Limit  int    `json:"limit" name:"limit" default:"20" location:"params"`
-	Mongo  string `json:"mongo" name:"mongo" location:"params"` // Required
-	Offset int    `json:"offset" name:"offset" default:"0" location:"params"`
+	Limit  *int    `json:"limit" name:"limit" default:"20" location:"params"`
+	Mongo  *string `json:"mongo" name:"mongo" location:"params"` // Required
+	Offset *int    `json:"offset" name:"offset" default:"0" location:"params"`
 }
 
 func (v *DescribeMongoParametersInput) Validate() error {
 
-	if fmt.Sprint(v.Mongo) == "" {
-		return errs.ParameterRequiredError{
+	if v.Mongo == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongo",
 			ParentName:    "DescribeMongoParametersInput",
 		}
@@ -448,11 +448,11 @@ func (v *DescribeMongoParametersInput) Validate() error {
 }
 
 type DescribeMongoParametersOutput struct {
-	Message      string            `json:"message" name:"message"`
-	Action       string            `json:"action" name:"action" location:"elements"`
+	Message      *string           `json:"message" name:"message"`
+	Action       *string           `json:"action" name:"action" location:"elements"`
 	ParameterSet []*MongoParameter `json:"parameter_set" name:"parameter_set" location:"elements"`
-	RetCode      int               `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   int               `json:"total_count" name:"total_count" location:"elements"`
+	RetCode      *int              `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int              `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/describe_mongos.html
@@ -482,13 +482,13 @@ func (s *MongoService) DescribeMongos(i *DescribeMongosInput) (*DescribeMongosOu
 }
 
 type DescribeMongosInput struct {
-	Limit     int      `json:"limit" name:"limit" default:"20" location:"params"`
-	MongoName string   `json:"mongo_name" name:"mongo_name" location:"params"`
-	Mongos    []string `json:"mongos" name:"mongos" location:"params"`
-	Offset    int      `json:"offset" name:"offset" default:"0" location:"params"`
-	Status    []string `json:"status" name:"status" location:"params"`
-	Tags      []string `json:"tags" name:"tags" location:"params"`
-	Verbose   int      `json:"verbose" name:"verbose" location:"params"`
+	Limit     *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	MongoName *string   `json:"mongo_name" name:"mongo_name" location:"params"`
+	Mongos    []*string `json:"mongos" name:"mongos" location:"params"`
+	Offset    *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	Status    []*string `json:"status" name:"status" location:"params"`
+	Tags      []*string `json:"tags" name:"tags" location:"params"`
+	Verbose   *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeMongosInput) Validate() error {
@@ -497,11 +497,11 @@ func (v *DescribeMongosInput) Validate() error {
 }
 
 type DescribeMongosOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	MongoSet   []*Mongo `json:"mongo_set" name:"mongo_set" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount int      `json:"total_count" name:"total_count" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int     `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_mongo_monitor.html
@@ -531,44 +531,40 @@ func (s *MongoService) GetMongoMonitor(i *GetMongoMonitorInput) (*GetMongoMonito
 }
 
 type GetMongoMonitorInput struct {
-	EndTime   time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
-	Meters    []string  `json:"meters" name:"meters" location:"params"`                           // Required
-	Resource  string    `json:"resource" name:"resource" location:"params"`                       // Required
-	StartTime time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
+	EndTime   *time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"`     // Required
+	Meters    []*string  `json:"meters" name:"meters" location:"params"`                           // Required
+	Resource  *string    `json:"resource" name:"resource" location:"params"`                       // Required
+	StartTime *time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
 	// Step's available values: 5m, 15m, 2h, 1d
-	Step string `json:"step" name:"step" location:"params"` // Required
+	Step *string `json:"step" name:"step" location:"params"` // Required
 }
 
 func (v *GetMongoMonitorInput) Validate() error {
 
 	if len(v.Meters) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Meters",
 			ParentName:    "GetMongoMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Resource) == "" {
-		return errs.ParameterRequiredError{
+	if v.Resource == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Resource",
 			ParentName:    "GetMongoMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Step) == "" {
-		return errs.ParameterRequiredError{
+	if v.Step == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Step",
 			ParentName:    "GetMongoMonitorInput",
 		}
 	}
 
-	stepParameterValue := fmt.Sprint(v.Step)
-	if stepParameterValue == "0" {
-		stepParameterValue = ""
-	}
-	if stepParameterValue != "" {
+	if v.Step != nil {
 		stepValidValues := []string{"5m", "15m", "2h", "1d"}
-		stepParameterValue := fmt.Sprint(v.Step)
+		stepParameterValue := fmt.Sprint(*v.Step)
 
 		stepIsValid := false
 		for _, value := range stepValidValues {
@@ -578,7 +574,7 @@ func (v *GetMongoMonitorInput) Validate() error {
 		}
 
 		if !stepIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Step",
 				ParameterValue: stepParameterValue,
 				AllowedValues:  stepValidValues,
@@ -590,11 +586,11 @@ func (v *GetMongoMonitorInput) Validate() error {
 }
 
 type GetMongoMonitorOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID string   `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/modify_mongo_attributes.html
@@ -624,16 +620,16 @@ func (s *MongoService) ModifyMongoAttributes(i *ModifyMongoAttributesInput) (*Mo
 }
 
 type ModifyMongoAttributesInput struct {
-	AutoBackupTime int    `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
-	Description    string `json:"description" name:"description" location:"params"`
-	Mongo          string `json:"mongo" name:"mongo" location:"params"` // Required
-	MongoName      string `json:"mongo_name" name:"mongo_name" location:"params"`
+	AutoBackupTime *int    `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
+	Description    *string `json:"description" name:"description" location:"params"`
+	Mongo          *string `json:"mongo" name:"mongo" location:"params"` // Required
+	MongoName      *string `json:"mongo_name" name:"mongo_name" location:"params"`
 }
 
 func (v *ModifyMongoAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.Mongo) == "" {
-		return errs.ParameterRequiredError{
+	if v.Mongo == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongo",
 			ParentName:    "ModifyMongoAttributesInput",
 		}
@@ -643,10 +639,10 @@ func (v *ModifyMongoAttributesInput) Validate() error {
 }
 
 type ModifyMongoAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	Mongo   string `json:"mongo" name:"mongo" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	Mongo   *string `json:"mongo" name:"mongo" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/modify_mongo_instances.html
@@ -676,14 +672,14 @@ func (s *MongoService) ModifyMongoInstances(i *ModifyMongoInstancesInput) (*Modi
 }
 
 type ModifyMongoInstancesInput struct {
-	Mongo      string            `json:"mongo" name:"mongo" location:"params"` // Required
+	Mongo      *string           `json:"mongo" name:"mongo" location:"params"` // Required
 	PrivateIPs []*MongoPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
 }
 
 func (v *ModifyMongoInstancesInput) Validate() error {
 
-	if fmt.Sprint(v.Mongo) == "" {
-		return errs.ParameterRequiredError{
+	if v.Mongo == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongo",
 			ParentName:    "ModifyMongoInstancesInput",
 		}
@@ -701,11 +697,11 @@ func (v *ModifyMongoInstancesInput) Validate() error {
 }
 
 type ModifyMongoInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	Mongo   string `json:"mongo" name:"mongo" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	Mongo   *string `json:"mongo" name:"mongo" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/remove_mongo_instances.html
@@ -735,21 +731,21 @@ func (s *MongoService) RemoveMongoInstances(i *RemoveMongoInstancesInput) (*Remo
 }
 
 type RemoveMongoInstancesInput struct {
-	Mongo          string   `json:"mongo" name:"mongo" location:"params"`                     // Required
-	MongoInstances []string `json:"mongo_instances" name:"mongo_instances" location:"params"` // Required
+	Mongo          *string   `json:"mongo" name:"mongo" location:"params"`                     // Required
+	MongoInstances []*string `json:"mongo_instances" name:"mongo_instances" location:"params"` // Required
 }
 
 func (v *RemoveMongoInstancesInput) Validate() error {
 
-	if fmt.Sprint(v.Mongo) == "" {
-		return errs.ParameterRequiredError{
+	if v.Mongo == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongo",
 			ParentName:    "RemoveMongoInstancesInput",
 		}
 	}
 
 	if len(v.MongoInstances) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "MongoInstances",
 			ParentName:    "RemoveMongoInstancesInput",
 		}
@@ -759,11 +755,11 @@ func (v *RemoveMongoInstancesInput) Validate() error {
 }
 
 type RemoveMongoInstancesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	Mongo   string `json:"mongo" name:"mongo" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	Mongo   *string `json:"mongo" name:"mongo" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/resize_mongos.html
@@ -793,15 +789,15 @@ func (s *MongoService) ResizeMongos(i *ResizeMongosInput) (*ResizeMongosOutput, 
 }
 
 type ResizeMongosInput struct {
-	MongoType   int      `json:"mongo_type" name:"mongo_type" location:"params"`
-	Mongos      []string `json:"mongos" name:"mongos" location:"params"` // Required
-	StorageSize int      `json:"storage_size" name:"storage_size" location:"params"`
+	MongoType   *int      `json:"mongo_type" name:"mongo_type" location:"params"`
+	Mongos      []*string `json:"mongos" name:"mongos" location:"params"` // Required
+	StorageSize *int      `json:"storage_size" name:"storage_size" location:"params"`
 }
 
 func (v *ResizeMongosInput) Validate() error {
 
 	if len(v.Mongos) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongos",
 			ParentName:    "ResizeMongosInput",
 		}
@@ -811,11 +807,11 @@ func (v *ResizeMongosInput) Validate() error {
 }
 
 type ResizeMongosOutput struct {
-	Message string   `json:"message" name:"message"`
-	Action  string   `json:"action" name:"action" location:"elements"`
-	JobID   string   `json:"job_id" name:"job_id" location:"elements"`
-	Mongos  []string `json:"mongos" name:"mongos" location:"elements"`
-	RetCode int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string   `json:"message" name:"message"`
+	Action  *string   `json:"action" name:"action" location:"elements"`
+	JobID   *string   `json:"job_id" name:"job_id" location:"elements"`
+	Mongos  []*string `json:"mongos" name:"mongos" location:"elements"`
+	RetCode *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/start_mongos.html
@@ -845,13 +841,13 @@ func (s *MongoService) StartMongos(i *StartMongosInput) (*StartMongosOutput, err
 }
 
 type StartMongosInput struct {
-	Mongos string `json:"mongos" name:"mongos" location:"params"` // Required
+	Mongos *string `json:"mongos" name:"mongos" location:"params"` // Required
 }
 
 func (v *StartMongosInput) Validate() error {
 
-	if fmt.Sprint(v.Mongos) == "" {
-		return errs.ParameterRequiredError{
+	if v.Mongos == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongos",
 			ParentName:    "StartMongosInput",
 		}
@@ -861,10 +857,10 @@ func (v *StartMongosInput) Validate() error {
 }
 
 type StartMongosOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/stop_mongos.html
@@ -894,13 +890,13 @@ func (s *MongoService) StopMongos(i *StopMongosInput) (*StopMongosOutput, error)
 }
 
 type StopMongosInput struct {
-	Mongos []string `json:"mongos" name:"mongos" location:"params"` // Required
+	Mongos []*string `json:"mongos" name:"mongos" location:"params"` // Required
 }
 
 func (v *StopMongosInput) Validate() error {
 
 	if len(v.Mongos) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Mongos",
 			ParentName:    "StopMongosInput",
 		}
@@ -910,8 +906,8 @@ func (v *StopMongosInput) Validate() error {
 }
 
 type StopMongosOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

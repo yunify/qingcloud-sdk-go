@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type JobService struct {
 
 type JobServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Job(zone string) (*JobService, error) {
 	properties := &JobServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &JobService{Config: s.Config, Properties: properties}, nil
@@ -74,23 +74,19 @@ func (s *JobService) DescribeJobs(i *DescribeJobsInput) (*DescribeJobsOutput, er
 }
 
 type DescribeJobsInput struct {
-	Jobs   []string `json:"jobs" name:"jobs" location:"params"`
-	Limit  int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset int      `json:"offset" name:"offset" default:"0" location:"params"`
-	Status []string `json:"status" name:"status" location:"params"`
+	Jobs   []*string `json:"jobs" name:"jobs" location:"params"`
+	Limit  *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	Status []*string `json:"status" name:"status" location:"params"`
 	// Verbose's available values: 0
-	Verbose int `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
 }
 
 func (v *DescribeJobsInput) Validate() error {
 
-	verboseParameterValue := fmt.Sprint(v.Verbose)
-	if verboseParameterValue == "0" {
-		verboseParameterValue = ""
-	}
-	if verboseParameterValue != "" {
+	if v.Verbose != nil {
 		verboseValidValues := []string{"0"}
-		verboseParameterValue := fmt.Sprint(v.Verbose)
+		verboseParameterValue := fmt.Sprint(*v.Verbose)
 
 		verboseIsValid := false
 		for _, value := range verboseValidValues {
@@ -100,7 +96,7 @@ func (v *DescribeJobsInput) Validate() error {
 		}
 
 		if !verboseIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Verbose",
 				ParameterValue: verboseParameterValue,
 				AllowedValues:  verboseValidValues,
@@ -112,9 +108,9 @@ func (v *DescribeJobsInput) Validate() error {
 }
 
 type DescribeJobsOutput struct {
-	Message    string `json:"message" name:"message"`
-	Action     string `json:"action" name:"action" location:"elements"`
-	JobSet     []*Job `json:"job_set" name:"job_set" location:"elements"`
-	RetCode    int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string `json:"message" name:"message"`
+	Action     *string `json:"action" name:"action" location:"elements"`
+	JobSet     []*Job  `json:"job_set" name:"job_set" location:"elements"`
+	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
 }

@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type ImageService struct {
 
 type ImageServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Image(zone string) (*ImageService, error) {
 	properties := &ImageServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &ImageService{Config: s.Config, Properties: properties}, nil
@@ -74,14 +74,14 @@ func (s *ImageService) CaptureInstance(i *CaptureInstanceInput) (*CaptureInstanc
 }
 
 type CaptureInstanceInput struct {
-	ImageName string `json:"image_name" name:"image_name" location:"params"`
-	Instance  string `json:"instance" name:"instance" location:"params"` // Required
+	ImageName *string `json:"image_name" name:"image_name" location:"params"`
+	Instance  *string `json:"instance" name:"instance" location:"params"` // Required
 }
 
 func (v *CaptureInstanceInput) Validate() error {
 
-	if fmt.Sprint(v.Instance) == "" {
-		return errs.ParameterRequiredError{
+	if v.Instance == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Instance",
 			ParentName:    "CaptureInstanceInput",
 		}
@@ -91,11 +91,11 @@ func (v *CaptureInstanceInput) Validate() error {
 }
 
 type CaptureInstanceOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	ImageID string `json:"image_id" name:"image_id" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	ImageID *string `json:"image_id" name:"image_id" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/delete_images.html
@@ -125,13 +125,13 @@ func (s *ImageService) DeleteImages(i *DeleteImagesInput) (*DeleteImagesOutput, 
 }
 
 type DeleteImagesInput struct {
-	Images []string `json:"images" name:"images" location:"params"` // Required
+	Images []*string `json:"images" name:"images" location:"params"` // Required
 }
 
 func (v *DeleteImagesInput) Validate() error {
 
 	if len(v.Images) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Images",
 			ParentName:    "DeleteImagesInput",
 		}
@@ -141,10 +141,10 @@ func (v *DeleteImagesInput) Validate() error {
 }
 
 type DeleteImagesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/describe-image-users.html
@@ -174,15 +174,15 @@ func (s *ImageService) DescribeImageUsers(i *DescribeImageUsersInput) (*Describe
 }
 
 type DescribeImageUsersInput struct {
-	ImageID string `json:"image_id" name:"image_id" location:"params"` // Required
-	Limit   int    `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset  int    `json:"offset" name:"offset" default:"0" location:"params"`
+	ImageID *string `json:"image_id" name:"image_id" location:"params"` // Required
+	Limit   *int    `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset  *int    `json:"offset" name:"offset" default:"0" location:"params"`
 }
 
 func (v *DescribeImageUsersInput) Validate() error {
 
-	if fmt.Sprint(v.ImageID) == "" {
-		return errs.ParameterRequiredError{
+	if v.ImageID == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "ImageID",
 			ParentName:    "DescribeImageUsersInput",
 		}
@@ -192,11 +192,11 @@ func (v *DescribeImageUsersInput) Validate() error {
 }
 
 type DescribeImageUsersOutput struct {
-	Message      string       `json:"message" name:"message"`
-	Action       string       `json:"action" name:"action" location:"elements"`
+	Message      *string      `json:"message" name:"message"`
+	Action       *string      `json:"action" name:"action" location:"elements"`
 	ImageUserSet []*ImageUser `json:"image_user_set" name:"image_user_set" location:"elements"`
-	RetCode      int          `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   int          `json:"total_count" name:"total_count" location:"elements"`
+	RetCode      *int         `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int         `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/describe_images.html
@@ -226,31 +226,27 @@ func (s *ImageService) DescribeImages(i *DescribeImagesInput) (*DescribeImagesOu
 }
 
 type DescribeImagesInput struct {
-	Images   []string `json:"images" name:"images" location:"params"`
-	Limit    int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset   int      `json:"offset" name:"offset" default:"0" location:"params"`
-	OSFamily string   `json:"os_family" name:"os_family" location:"params"`
+	Images   []*string `json:"images" name:"images" location:"params"`
+	Limit    *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset   *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	OSFamily *string   `json:"os_family" name:"os_family" location:"params"`
 	// ProcessorType's available values: 64bit, 32bit
-	ProcessorType string `json:"processor_type" name:"processor_type" location:"params"`
+	ProcessorType *string `json:"processor_type" name:"processor_type" location:"params"`
 	// Provider's available values: system, self
-	Provider   string   `json:"provider" name:"provider" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
-	Status     []string `json:"status" name:"status" location:"params"`
+	Provider   *string   `json:"provider" name:"provider" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
+	Status     []*string `json:"status" name:"status" location:"params"`
 	// Verbose's available values: 0
-	Verbose int `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
 	// Visibility's available values: public, private
-	Visibility string `json:"visibility" name:"visibility" location:"params"`
+	Visibility *string `json:"visibility" name:"visibility" location:"params"`
 }
 
 func (v *DescribeImagesInput) Validate() error {
 
-	processorTypeParameterValue := fmt.Sprint(v.ProcessorType)
-	if processorTypeParameterValue == "0" {
-		processorTypeParameterValue = ""
-	}
-	if processorTypeParameterValue != "" {
+	if v.ProcessorType != nil {
 		processorTypeValidValues := []string{"64bit", "32bit"}
-		processorTypeParameterValue := fmt.Sprint(v.ProcessorType)
+		processorTypeParameterValue := fmt.Sprint(*v.ProcessorType)
 
 		processorTypeIsValid := false
 		for _, value := range processorTypeValidValues {
@@ -260,7 +256,7 @@ func (v *DescribeImagesInput) Validate() error {
 		}
 
 		if !processorTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "ProcessorType",
 				ParameterValue: processorTypeParameterValue,
 				AllowedValues:  processorTypeValidValues,
@@ -268,13 +264,9 @@ func (v *DescribeImagesInput) Validate() error {
 		}
 	}
 
-	providerParameterValue := fmt.Sprint(v.Provider)
-	if providerParameterValue == "0" {
-		providerParameterValue = ""
-	}
-	if providerParameterValue != "" {
+	if v.Provider != nil {
 		providerValidValues := []string{"system", "self"}
-		providerParameterValue := fmt.Sprint(v.Provider)
+		providerParameterValue := fmt.Sprint(*v.Provider)
 
 		providerIsValid := false
 		for _, value := range providerValidValues {
@@ -284,7 +276,7 @@ func (v *DescribeImagesInput) Validate() error {
 		}
 
 		if !providerIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Provider",
 				ParameterValue: providerParameterValue,
 				AllowedValues:  providerValidValues,
@@ -292,13 +284,9 @@ func (v *DescribeImagesInput) Validate() error {
 		}
 	}
 
-	verboseParameterValue := fmt.Sprint(v.Verbose)
-	if verboseParameterValue == "0" {
-		verboseParameterValue = ""
-	}
-	if verboseParameterValue != "" {
+	if v.Verbose != nil {
 		verboseValidValues := []string{"0"}
-		verboseParameterValue := fmt.Sprint(v.Verbose)
+		verboseParameterValue := fmt.Sprint(*v.Verbose)
 
 		verboseIsValid := false
 		for _, value := range verboseValidValues {
@@ -308,7 +296,7 @@ func (v *DescribeImagesInput) Validate() error {
 		}
 
 		if !verboseIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Verbose",
 				ParameterValue: verboseParameterValue,
 				AllowedValues:  verboseValidValues,
@@ -316,13 +304,9 @@ func (v *DescribeImagesInput) Validate() error {
 		}
 	}
 
-	visibilityParameterValue := fmt.Sprint(v.Visibility)
-	if visibilityParameterValue == "0" {
-		visibilityParameterValue = ""
-	}
-	if visibilityParameterValue != "" {
+	if v.Visibility != nil {
 		visibilityValidValues := []string{"public", "private"}
-		visibilityParameterValue := fmt.Sprint(v.Visibility)
+		visibilityParameterValue := fmt.Sprint(*v.Visibility)
 
 		visibilityIsValid := false
 		for _, value := range visibilityValidValues {
@@ -332,7 +316,7 @@ func (v *DescribeImagesInput) Validate() error {
 		}
 
 		if !visibilityIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Visibility",
 				ParameterValue: visibilityParameterValue,
 				AllowedValues:  visibilityValidValues,
@@ -344,11 +328,11 @@ func (v *DescribeImagesInput) Validate() error {
 }
 
 type DescribeImagesOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	ImageSet   []*Image `json:"image_set" name:"image_set" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount int      `json:"total_count" name:"total_count" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int     `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/grant-image-to-users.html
@@ -378,21 +362,21 @@ func (s *ImageService) GrantImageToUsers(i *GrantImageToUsersInput) (*GrantImage
 }
 
 type GrantImageToUsersInput struct {
-	Image string   `json:"image" name:"image" location:"params"` // Required
-	Users []string `json:"users" name:"users" location:"params"` // Required
+	Image *string   `json:"image" name:"image" location:"params"` // Required
+	Users []*string `json:"users" name:"users" location:"params"` // Required
 }
 
 func (v *GrantImageToUsersInput) Validate() error {
 
-	if fmt.Sprint(v.Image) == "" {
-		return errs.ParameterRequiredError{
+	if v.Image == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Image",
 			ParentName:    "GrantImageToUsersInput",
 		}
 	}
 
 	if len(v.Users) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Users",
 			ParentName:    "GrantImageToUsersInput",
 		}
@@ -402,9 +386,9 @@ func (v *GrantImageToUsersInput) Validate() error {
 }
 
 type GrantImageToUsersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/modify_image_attributes.html
@@ -434,15 +418,15 @@ func (s *ImageService) ModifyImageAttributes(i *ModifyImageAttributesInput) (*Mo
 }
 
 type ModifyImageAttributesInput struct {
-	Description string `json:"description" name:"description" location:"params"`
-	Image       string `json:"image" name:"image" location:"params"` // Required
-	ImageName   string `json:"image_name" name:"image_name" location:"params"`
+	Description *string `json:"description" name:"description" location:"params"`
+	Image       *string `json:"image" name:"image" location:"params"` // Required
+	ImageName   *string `json:"image_name" name:"image_name" location:"params"`
 }
 
 func (v *ModifyImageAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.Image) == "" {
-		return errs.ParameterRequiredError{
+	if v.Image == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Image",
 			ParentName:    "ModifyImageAttributesInput",
 		}
@@ -452,10 +436,10 @@ func (v *ModifyImageAttributesInput) Validate() error {
 }
 
 type ModifyImageAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	ImageID string `json:"image_id" name:"image_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	ImageID *string `json:"image_id" name:"image_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/revoke-image-from-users.html
@@ -485,21 +469,21 @@ func (s *ImageService) RevokeImageFromUsers(i *RevokeImageFromUsersInput) (*Revo
 }
 
 type RevokeImageFromUsersInput struct {
-	Image string   `json:"image" name:"image" location:"params"` // Required
-	Users []string `json:"users" name:"users" location:"params"` // Required
+	Image *string   `json:"image" name:"image" location:"params"` // Required
+	Users []*string `json:"users" name:"users" location:"params"` // Required
 }
 
 func (v *RevokeImageFromUsersInput) Validate() error {
 
-	if fmt.Sprint(v.Image) == "" {
-		return errs.ParameterRequiredError{
+	if v.Image == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Image",
 			ParentName:    "RevokeImageFromUsersInput",
 		}
 	}
 
 	if len(v.Users) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Users",
 			ParentName:    "RevokeImageFromUsersInput",
 		}
@@ -509,7 +493,7 @@ func (v *RevokeImageFromUsersInput) Validate() error {
 }
 
 type RevokeImageFromUsersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

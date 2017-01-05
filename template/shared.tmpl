@@ -1,14 +1,15 @@
 {{define "Type"}}
-	{{- $typeName := . -}}
+	{{- $typeName := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
 
 	{{- if eq $typeName "string" -}}
-		string
+		{{- if not $disablePointer -}}*{{- end -}}string
 	{{- else if eq $typeName "boolean" -}}
-		bool
+		{{- if not $disablePointer -}}*{{- end -}}bool
 	{{- else if eq $typeName "integer" -}}
-		int
+		{{- if not $disablePointer -}}*{{- end -}}int
 	{{- else if eq $typeName "timestamp" -}}
-		time.Time
+		{{- if not $disablePointer -}}*{{- end -}}time.Time
 	{{- else if eq $typeName "binary" -}}
 		io.Reader
 	{{- else if eq $typeName "array" -}}
@@ -25,18 +26,19 @@
 {{end}}
 
 {{define "PropertyType"}}
-	{{- $property := . -}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
 
 	{{- if eq $property.Type "object" -}}
-		{{template "Type" $property.ExtraType}}
+		{{template "Type" passThrough $property.ExtraType $disablePointer}}
 	{{- else if eq $property.Type "array" -}}
-		[]{{template "Type" $property.ExtraType}}
+		[]{{template "Type" passThrough $property.ExtraType $disablePointer}}
 	{{- else if eq $property.Type "map" -}}
-		map[string]{{template "Type" $property.ExtraType}}
+		map[string]{{template "Type" passThrough $property.ExtraType $disablePointer}}
 	{{- else if eq $property.Type "any" -}}
-		{{template "Type" $property.Type}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
 	{{- else -}}
-		{{template "Type" $property.Type}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
 	{{- end -}}
 {{end}}
 
@@ -71,7 +73,7 @@
 			// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
 		{{end -}}
 		{{$property.ID | camelCase | upperFirst}}{{" " -}}
-		{{template "PropertyType" $property}}{{" " -}}
+		{{template "PropertyType" passThrough $property false}}{{" " -}}
 		`{{template "PropertyTags" $property}}{{template "PropertyExtraTags" $PropertyExtraTags}}`{{" " -}}
 		{{if $property.IsRequired -}}
 			// Required
@@ -132,7 +134,7 @@
 	}
 
 	type {{$opID}}Output struct {
-		Message string `json:"message" name:"message"`
+		Message *string `json:"message" name:"message"`
 		{{- if $operation.Response.Elements.Properties | len -}}
 			{{$data := $operation.Response.Elements}}
 			{{template "RenderProperties" passThrough $data `location:"elements"`}}
@@ -141,11 +143,12 @@
 {{end}}
 
 {{define "SubServiceInitParams"}}
-	{{- $customizedType := . -}}
+	{{- $customizedType := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
 
 	{{- range $_, $property := $customizedType.Properties -}}
 		{{$property.ID | camelCase | lowerFirstWord}}{{" " -}}
-		{{template "PropertyType" $property}},
+		{{template "PropertyType" passThrough $property $disablePointer}},
 	{{- end -}}
 {{end}}
 
@@ -157,8 +160,8 @@
 		{{$isContentLength := eq $property.ID "Content-Length"}}
 		{{if and $isNormalType (not $isContentLength) }}
 			{{if $property.IsRequired }}
-				if fmt.Sprint(v.{{$property.ID | camelCase}}) == "" {
-					return errs.ParameterRequiredError{
+				if v.{{$property.ID | camelCase}} == nil {
+					return errors.ParameterRequiredError{
 						ParameterName: "{{$property.ID | camelCase}}",
 						ParentName: "{{$customizedType.ID | camelCase}}",
 					}
@@ -166,15 +169,11 @@
 			{{end}}
 			{{$parameterName := $property.ID | camelCase | lowerFirstWord}}
 			{{if gt ($property.Enum | len) 0}}
-				{{$parameterName}}ParameterValue := fmt.Sprint(v.{{$property.ID | camelCase}})
-				if {{$parameterName}}ParameterValue == "0" {
-					{{$parameterName}}ParameterValue = ""
-				}
-				if {{$parameterName}}ParameterValue != "" {
+				if v.{{$property.ID | camelCase}} != nil {
 					{{$parameterName}}ValidValues := []string{
 						{{- $property.Enum | commaConnectedWithQuote -}}
 					}
-					{{$parameterName}}ParameterValue := fmt.Sprint(v.{{$property.ID | camelCase}})
+					{{$parameterName}}ParameterValue := fmt.Sprint(*v.{{$property.ID | camelCase}})
 
 					{{$parameterName}}IsValid := false
 					for _, value := range {{$parameterName}}ValidValues {
@@ -184,7 +183,7 @@
 					}
 
 					if !{{$parameterName}}IsValid {
-						return errs.ParameterValueNotAllowedError{
+						return errors.ParameterValueNotAllowedError{
 							ParameterName: "{{$property.ID | camelCase}}",
 							ParameterValue: {{$parameterName}}ParameterValue,
 							AllowedValues: {{$parameterName}}ValidValues,
@@ -202,7 +201,7 @@
 			}
 			{{if $property.IsRequired }}
 				if v.{{$property.ID | camelCase}} == nil {
-					return errs.ParameterRequiredError{
+					return errors.ParameterRequiredError{
 						ParameterName: "{{$property.ID | camelCase}}",
 						ParentName: "{{$customizedType.ID | camelCase}}",
 					}
@@ -213,7 +212,7 @@
 		{{if eq $property.Type "array"}}
 			{{if $property.IsRequired}}
 				if len(v.{{$property.ID | camelCase}}) == 0 {
-					return errs.ParameterRequiredError{
+					return errors.ParameterRequiredError{
 						ParameterName: "{{$property.ID | camelCase}}",
 						ParentName: "{{$customizedType.ID | camelCase}}",
 					}

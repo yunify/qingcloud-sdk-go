@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type LoadBalancerService struct {
 
 type LoadBalancerServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) LoadBalancer(zone string) (*LoadBalancerService, error) {
 	properties := &LoadBalancerServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &LoadBalancerService{Config: s.Config, Properties: properties}, nil
@@ -75,13 +75,13 @@ func (s *LoadBalancerService) AddLoadBalancerBackends(i *AddLoadBalancerBackends
 
 type AddLoadBalancerBackendsInput struct {
 	Backends             []*AddLoadBalancerBackendsBackend `json:"backends" name:"backends" location:"params"`                           // Required
-	LoadBalancerListener string                            `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"` // Required
+	LoadBalancerListener *string                           `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"` // Required
 }
 
 func (v *AddLoadBalancerBackendsInput) Validate() error {
 
 	if len(v.Backends) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Backends",
 			ParentName:    "AddLoadBalancerBackendsInput",
 		}
@@ -95,8 +95,8 @@ func (v *AddLoadBalancerBackendsInput) Validate() error {
 		}
 	}
 
-	if fmt.Sprint(v.LoadBalancerListener) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancerListener == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerListener",
 			ParentName:    "AddLoadBalancerBackendsInput",
 		}
@@ -106,10 +106,10 @@ func (v *AddLoadBalancerBackendsInput) Validate() error {
 }
 
 type AddLoadBalancerBackendsOutput struct {
-	Message              string   `json:"message" name:"message"`
-	Action               string   `json:"action" name:"action" location:"elements"`
-	LoadBalancerBackends []string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"elements"`
-	RetCode              int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message              *string   `json:"message" name:"message"`
+	Action               *string   `json:"action" name:"action" location:"elements"`
+	LoadBalancerBackends []*string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"elements"`
+	RetCode              *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/add_loadbalancer_listeners.html
@@ -140,7 +140,7 @@ func (s *LoadBalancerService) AddLoadBalancerListeners(i *AddLoadBalancerListene
 
 type AddLoadBalancerListenersInput struct {
 	Listeners    []*LoadBalancerListener `json:"listeners" name:"listeners" location:"params"`
-	LoadBalancer string                  `json:"loadbalancer" name:"loadbalancer" location:"params"`
+	LoadBalancer *string                 `json:"loadbalancer" name:"loadbalancer" location:"params"`
 }
 
 func (v *AddLoadBalancerListenersInput) Validate() error {
@@ -157,10 +157,10 @@ func (v *AddLoadBalancerListenersInput) Validate() error {
 }
 
 type AddLoadBalancerListenersOutput struct {
-	Message               string   `json:"message" name:"message"`
-	Action                string   `json:"action" name:"action" location:"elements"`
-	LoadBalancerListeners []string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"elements"`
-	RetCode               int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message               *string   `json:"message" name:"message"`
+	Action                *string   `json:"action" name:"action" location:"elements"`
+	LoadBalancerListeners []*string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"elements"`
+	RetCode               *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/add_loadbalancer_policy_rules.html
@@ -190,7 +190,7 @@ func (s *LoadBalancerService) AddLoadBalancerPolicyRules(i *AddLoadBalancerPolic
 }
 
 type AddLoadBalancerPolicyRulesInput struct {
-	LoadBalancerPolicy string                    `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"`
+	LoadBalancerPolicy *string                   `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"`
 	Rules              []*LoadBalancerPolicyRule `json:"rules" name:"rules" location:"params"`
 }
 
@@ -208,10 +208,10 @@ func (v *AddLoadBalancerPolicyRulesInput) Validate() error {
 }
 
 type AddLoadBalancerPolicyRulesOutput struct {
-	Message                 string   `json:"message" name:"message"`
-	Action                  string   `json:"action" name:"action" location:"elements"`
-	LoadBalancerPolicyRules []string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"elements"`
-	RetCode                 int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message                 *string   `json:"message" name:"message"`
+	Action                  *string   `json:"action" name:"action" location:"elements"`
+	LoadBalancerPolicyRules []*string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"elements"`
+	RetCode                 *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/apply_loadbalancer_policy.html
@@ -241,13 +241,13 @@ func (s *LoadBalancerService) ApplyLoadBalancerPolicy(i *ApplyLoadBalancerPolicy
 }
 
 type ApplyLoadBalancerPolicyInput struct {
-	LoadBalancerPolicy string `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"` // Required
+	LoadBalancerPolicy *string `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"` // Required
 }
 
 func (v *ApplyLoadBalancerPolicyInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancerPolicy) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancerPolicy == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerPolicy",
 			ParentName:    "ApplyLoadBalancerPolicyInput",
 		}
@@ -257,10 +257,10 @@ func (v *ApplyLoadBalancerPolicyInput) Validate() error {
 }
 
 type ApplyLoadBalancerPolicyOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/associate_eips_to_loadbalancer.html
@@ -290,21 +290,21 @@ func (s *LoadBalancerService) AssociateEIPsToLoadBalancer(i *AssociateEIPsToLoad
 }
 
 type AssociateEIPsToLoadBalancerInput struct {
-	EIPs         []string `json:"eips" name:"eips" location:"params"`                 // Required
-	LoadBalancer string   `json:"loadbalancer" name:"loadbalancer" location:"params"` // Required
+	EIPs         []*string `json:"eips" name:"eips" location:"params"`                 // Required
+	LoadBalancer *string   `json:"loadbalancer" name:"loadbalancer" location:"params"` // Required
 }
 
 func (v *AssociateEIPsToLoadBalancerInput) Validate() error {
 
 	if len(v.EIPs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "EIPs",
 			ParentName:    "AssociateEIPsToLoadBalancerInput",
 		}
 	}
 
-	if fmt.Sprint(v.LoadBalancer) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancer == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancer",
 			ParentName:    "AssociateEIPsToLoadBalancerInput",
 		}
@@ -314,10 +314,10 @@ func (v *AssociateEIPsToLoadBalancerInput) Validate() error {
 }
 
 type AssociateEIPsToLoadBalancerOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/create_loadbalancer.html
@@ -347,24 +347,20 @@ func (s *LoadBalancerService) CreateLoadBalancer(i *CreateLoadBalancerInput) (*C
 }
 
 type CreateLoadBalancerInput struct {
-	EIPs             []string `json:"eips" name:"eips" location:"params"`
-	LoadBalancerName string   `json:"loadbalancer_name" name:"loadbalancer_name" location:"params"`
+	EIPs             []*string `json:"eips" name:"eips" location:"params"`
+	LoadBalancerName *string   `json:"loadbalancer_name" name:"loadbalancer_name" location:"params"`
 	// LoadBalancerType's available values: 0, 1, 2, 3, 4, 5
-	LoadBalancerType int    `json:"loadbalancer_type" name:"loadbalancer_type" default:"0" location:"params"`
-	PrivateIP        string `json:"private_ip" name:"private_ip" location:"params"`
-	SecurityGroup    string `json:"security_group" name:"security_group" location:"params"`
-	VxNet            string `json:"vxnet" name:"vxnet" location:"params"`
+	LoadBalancerType *int    `json:"loadbalancer_type" name:"loadbalancer_type" default:"0" location:"params"`
+	PrivateIP        *string `json:"private_ip" name:"private_ip" location:"params"`
+	SecurityGroup    *string `json:"security_group" name:"security_group" location:"params"`
+	VxNet            *string `json:"vxnet" name:"vxnet" location:"params"`
 }
 
 func (v *CreateLoadBalancerInput) Validate() error {
 
-	loadBalancerTypeParameterValue := fmt.Sprint(v.LoadBalancerType)
-	if loadBalancerTypeParameterValue == "0" {
-		loadBalancerTypeParameterValue = ""
-	}
-	if loadBalancerTypeParameterValue != "" {
+	if v.LoadBalancerType != nil {
 		loadBalancerTypeValidValues := []string{"0", "1", "2", "3", "4", "5"}
-		loadBalancerTypeParameterValue := fmt.Sprint(v.LoadBalancerType)
+		loadBalancerTypeParameterValue := fmt.Sprint(*v.LoadBalancerType)
 
 		loadBalancerTypeIsValid := false
 		for _, value := range loadBalancerTypeValidValues {
@@ -374,7 +370,7 @@ func (v *CreateLoadBalancerInput) Validate() error {
 		}
 
 		if !loadBalancerTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "LoadBalancerType",
 				ParameterValue: loadBalancerTypeParameterValue,
 				AllowedValues:  loadBalancerTypeValidValues,
@@ -386,11 +382,11 @@ func (v *CreateLoadBalancerInput) Validate() error {
 }
 
 type CreateLoadBalancerOutput struct {
-	Message        string `json:"message" name:"message"`
-	Action         string `json:"action" name:"action" location:"elements"`
-	JobID          string `json:"job_id" name:"job_id" location:"elements"`
-	LoadBalancerID string `json:"loadbalancer_id" name:"loadbalancer_id" location:"elements"`
-	RetCode        int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message        *string `json:"message" name:"message"`
+	Action         *string `json:"action" name:"action" location:"elements"`
+	JobID          *string `json:"job_id" name:"job_id" location:"elements"`
+	LoadBalancerID *string `json:"loadbalancer_id" name:"loadbalancer_id" location:"elements"`
+	RetCode        *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/create_loadbalancer_policy.html
@@ -420,27 +416,23 @@ func (s *LoadBalancerService) CreateLoadBalancerPolicy(i *CreateLoadBalancerPoli
 }
 
 type CreateLoadBalancerPolicyInput struct {
-	LoadBalancerPolicyName string `json:"loadbalancer_policy_name" name:"loadbalancer_policy_name" location:"params"` // Required
+	LoadBalancerPolicyName *string `json:"loadbalancer_policy_name" name:"loadbalancer_policy_name" location:"params"` // Required
 	// Operator's available values: or, and
-	Operator string `json:"operator" name:"operator" default:"or" location:"params"`
+	Operator *string `json:"operator" name:"operator" default:"or" location:"params"`
 }
 
 func (v *CreateLoadBalancerPolicyInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancerPolicyName) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancerPolicyName == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerPolicyName",
 			ParentName:    "CreateLoadBalancerPolicyInput",
 		}
 	}
 
-	operatorParameterValue := fmt.Sprint(v.Operator)
-	if operatorParameterValue == "0" {
-		operatorParameterValue = ""
-	}
-	if operatorParameterValue != "" {
+	if v.Operator != nil {
 		operatorValidValues := []string{"or", "and"}
-		operatorParameterValue := fmt.Sprint(v.Operator)
+		operatorParameterValue := fmt.Sprint(*v.Operator)
 
 		operatorIsValid := false
 		for _, value := range operatorValidValues {
@@ -450,7 +442,7 @@ func (v *CreateLoadBalancerPolicyInput) Validate() error {
 		}
 
 		if !operatorIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Operator",
 				ParameterValue: operatorParameterValue,
 				AllowedValues:  operatorValidValues,
@@ -462,10 +454,10 @@ func (v *CreateLoadBalancerPolicyInput) Validate() error {
 }
 
 type CreateLoadBalancerPolicyOutput struct {
-	Message              string `json:"message" name:"message"`
-	Action               string `json:"action" name:"action" location:"elements"`
-	LoadBalancerPolicyID string `json:"loadbalancer_policy_id" name:"loadbalancer_policy_id" location:"elements"`
-	RetCode              int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message              *string `json:"message" name:"message"`
+	Action               *string `json:"action" name:"action" location:"elements"`
+	LoadBalancerPolicyID *string `json:"loadbalancer_policy_id" name:"loadbalancer_policy_id" location:"elements"`
+	RetCode              *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/create_server_certificate.html
@@ -495,22 +487,22 @@ func (s *LoadBalancerService) CreateServerCertificate(i *CreateServerCertificate
 }
 
 type CreateServerCertificateInput struct {
-	CertificateContent    string `json:"certificate_content" name:"certificate_content" location:"params"` // Required
-	PrivateKey            string `json:"private_key" name:"private_key" location:"params"`                 // Required
-	ServerCertificateName string `json:"server_certificate_name" name:"server_certificate_name" location:"params"`
+	CertificateContent    *string `json:"certificate_content" name:"certificate_content" location:"params"` // Required
+	PrivateKey            *string `json:"private_key" name:"private_key" location:"params"`                 // Required
+	ServerCertificateName *string `json:"server_certificate_name" name:"server_certificate_name" location:"params"`
 }
 
 func (v *CreateServerCertificateInput) Validate() error {
 
-	if fmt.Sprint(v.CertificateContent) == "" {
-		return errs.ParameterRequiredError{
+	if v.CertificateContent == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "CertificateContent",
 			ParentName:    "CreateServerCertificateInput",
 		}
 	}
 
-	if fmt.Sprint(v.PrivateKey) == "" {
-		return errs.ParameterRequiredError{
+	if v.PrivateKey == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "PrivateKey",
 			ParentName:    "CreateServerCertificateInput",
 		}
@@ -520,10 +512,10 @@ func (v *CreateServerCertificateInput) Validate() error {
 }
 
 type CreateServerCertificateOutput struct {
-	Message             string `json:"message" name:"message"`
-	Action              string `json:"action" name:"action" location:"elements"`
-	RetCode             int    `json:"ret_code" name:"ret_code" location:"elements"`
-	ServerCertificateID string `json:"server_certificate_id" name:"server_certificate_id" location:"elements"`
+	Message             *string `json:"message" name:"message"`
+	Action              *string `json:"action" name:"action" location:"elements"`
+	RetCode             *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	ServerCertificateID *string `json:"server_certificate_id" name:"server_certificate_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/delete_loadbalancer_backends.html
@@ -553,13 +545,13 @@ func (s *LoadBalancerService) DeleteLoadBalancerBackends(i *DeleteLoadBalancerBa
 }
 
 type DeleteLoadBalancerBackendsInput struct {
-	LoadBalancerBackends []string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"params"` // Required
+	LoadBalancerBackends []*string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"params"` // Required
 }
 
 func (v *DeleteLoadBalancerBackendsInput) Validate() error {
 
 	if len(v.LoadBalancerBackends) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerBackends",
 			ParentName:    "DeleteLoadBalancerBackendsInput",
 		}
@@ -569,10 +561,10 @@ func (v *DeleteLoadBalancerBackendsInput) Validate() error {
 }
 
 type DeleteLoadBalancerBackendsOutput struct {
-	Message              string `json:"message" name:"message"`
-	Action               string `json:"action" name:"action" location:"elements"`
-	LoadBalancerBackends string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"elements"`
-	RetCode              int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message              *string `json:"message" name:"message"`
+	Action               *string `json:"action" name:"action" location:"elements"`
+	LoadBalancerBackends *string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"elements"`
+	RetCode              *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/delete_loadbalancer_listeners.html
@@ -602,13 +594,13 @@ func (s *LoadBalancerService) DeleteLoadBalancerListeners(i *DeleteLoadBalancerL
 }
 
 type DeleteLoadBalancerListenersInput struct {
-	LoadBalancerListeners []string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"params"` // Required
+	LoadBalancerListeners []*string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"params"` // Required
 }
 
 func (v *DeleteLoadBalancerListenersInput) Validate() error {
 
 	if len(v.LoadBalancerListeners) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerListeners",
 			ParentName:    "DeleteLoadBalancerListenersInput",
 		}
@@ -618,10 +610,10 @@ func (v *DeleteLoadBalancerListenersInput) Validate() error {
 }
 
 type DeleteLoadBalancerListenersOutput struct {
-	Message               string   `json:"message" name:"message"`
-	Action                string   `json:"action" name:"action" location:"elements"`
-	LoadBalancerListeners []string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"elements"`
-	RetCode               int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message               *string   `json:"message" name:"message"`
+	Action                *string   `json:"action" name:"action" location:"elements"`
+	LoadBalancerListeners []*string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"elements"`
+	RetCode               *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/delete_loadbalancer_policies.html
@@ -651,13 +643,13 @@ func (s *LoadBalancerService) DeleteLoadBalancerPolicies(i *DeleteLoadBalancerPo
 }
 
 type DeleteLoadBalancerPoliciesInput struct {
-	LoadBalancerPolicies []string `json:"loadbalancer_policies" name:"loadbalancer_policies" location:"params"` // Required
+	LoadBalancerPolicies []*string `json:"loadbalancer_policies" name:"loadbalancer_policies" location:"params"` // Required
 }
 
 func (v *DeleteLoadBalancerPoliciesInput) Validate() error {
 
 	if len(v.LoadBalancerPolicies) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerPolicies",
 			ParentName:    "DeleteLoadBalancerPoliciesInput",
 		}
@@ -667,10 +659,10 @@ func (v *DeleteLoadBalancerPoliciesInput) Validate() error {
 }
 
 type DeleteLoadBalancerPoliciesOutput struct {
-	Message              string   `json:"message" name:"message"`
-	Action               string   `json:"action" name:"action" location:"elements"`
-	LoadBalancerPolicies []string `json:"loadbalancer_policies" name:"loadbalancer_policies" location:"elements"`
-	RetCode              int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message              *string   `json:"message" name:"message"`
+	Action               *string   `json:"action" name:"action" location:"elements"`
+	LoadBalancerPolicies []*string `json:"loadbalancer_policies" name:"loadbalancer_policies" location:"elements"`
+	RetCode              *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/delete_loadbalancer_policy_rules.html
@@ -700,13 +692,13 @@ func (s *LoadBalancerService) DeleteLoadBalancerPolicyRules(i *DeleteLoadBalance
 }
 
 type DeleteLoadBalancerPolicyRulesInput struct {
-	LoadBalancerPolicyRules []string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"params"` // Required
+	LoadBalancerPolicyRules []*string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"params"` // Required
 }
 
 func (v *DeleteLoadBalancerPolicyRulesInput) Validate() error {
 
 	if len(v.LoadBalancerPolicyRules) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerPolicyRules",
 			ParentName:    "DeleteLoadBalancerPolicyRulesInput",
 		}
@@ -716,10 +708,10 @@ func (v *DeleteLoadBalancerPolicyRulesInput) Validate() error {
 }
 
 type DeleteLoadBalancerPolicyRulesOutput struct {
-	Message                 string   `json:"message" name:"message"`
-	Action                  string   `json:"action" name:"action" location:"elements"`
-	LoadBalancerPolicyRules []string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"elements"`
-	RetCode                 int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message                 *string   `json:"message" name:"message"`
+	Action                  *string   `json:"action" name:"action" location:"elements"`
+	LoadBalancerPolicyRules []*string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"elements"`
+	RetCode                 *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/delete_loadbalancers.html
@@ -749,13 +741,13 @@ func (s *LoadBalancerService) DeleteLoadBalancers(i *DeleteLoadBalancersInput) (
 }
 
 type DeleteLoadBalancersInput struct {
-	LoadBalancers []string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
+	LoadBalancers []*string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
 }
 
 func (v *DeleteLoadBalancersInput) Validate() error {
 
 	if len(v.LoadBalancers) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancers",
 			ParentName:    "DeleteLoadBalancersInput",
 		}
@@ -765,11 +757,11 @@ func (v *DeleteLoadBalancersInput) Validate() error {
 }
 
 type DeleteLoadBalancersOutput struct {
-	Message       string   `json:"message" name:"message"`
-	Action        string   `json:"action" name:"action" location:"elements"`
-	JobID         string   `json:"job_id" name:"job_id" location:"elements"`
-	LoadBalancers []string `json:"loadbalancers" name:"loadbalancers" location:"elements"`
-	RetCode       int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Message       *string   `json:"message" name:"message"`
+	Action        *string   `json:"action" name:"action" location:"elements"`
+	JobID         *string   `json:"job_id" name:"job_id" location:"elements"`
+	LoadBalancers []*string `json:"loadbalancers" name:"loadbalancers" location:"elements"`
+	RetCode       *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/delete_server_certificates.html
@@ -799,13 +791,13 @@ func (s *LoadBalancerService) DeleteServerCertificates(i *DeleteServerCertificat
 }
 
 type DeleteServerCertificatesInput struct {
-	ServerCertificates []string `json:"server_certificates" name:"server_certificates" location:"params"` // Required
+	ServerCertificates []*string `json:"server_certificates" name:"server_certificates" location:"params"` // Required
 }
 
 func (v *DeleteServerCertificatesInput) Validate() error {
 
 	if len(v.ServerCertificates) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "ServerCertificates",
 			ParentName:    "DeleteServerCertificatesInput",
 		}
@@ -815,10 +807,10 @@ func (v *DeleteServerCertificatesInput) Validate() error {
 }
 
 type DeleteServerCertificatesOutput struct {
-	Message            string   `json:"message" name:"message"`
-	Action             string   `json:"action" name:"action" location:"elements"`
-	RetCode            int      `json:"ret_code" name:"ret_code" location:"elements"`
-	ServerCertificates []string `json:"server_certificates" name:"server_certificates" location:"elements"`
+	Message            *string   `json:"message" name:"message"`
+	Action             *string   `json:"action" name:"action" location:"elements"`
+	RetCode            *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	ServerCertificates []*string `json:"server_certificates" name:"server_certificates" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/describe_loadbalancer_backends.html
@@ -848,12 +840,12 @@ func (s *LoadBalancerService) DescribeLoadBalancerBackends(i *DescribeLoadBalanc
 }
 
 type DescribeLoadBalancerBackendsInput struct {
-	Limit                int    `json:"limit" name:"limit" default:"20" location:"params"`
-	LoadBalancer         string `json:"loadbalancer" name:"loadbalancer" location:"params"`
-	LoadBalancerBackends string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"params"`
-	LoadBalancerListener string `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"`
-	Offset               int    `json:"offset" name:"offset" default:"0" location:"params"`
-	Verbose              int    `json:"verbose" name:"verbose" location:"params"`
+	Limit                *int    `json:"limit" name:"limit" default:"20" location:"params"`
+	LoadBalancer         *string `json:"loadbalancer" name:"loadbalancer" location:"params"`
+	LoadBalancerBackends *string `json:"loadbalancer_backends" name:"loadbalancer_backends" location:"params"`
+	LoadBalancerListener *string `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"`
+	Offset               *int    `json:"offset" name:"offset" default:"0" location:"params"`
+	Verbose              *int    `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeLoadBalancerBackendsInput) Validate() error {
@@ -862,10 +854,10 @@ func (v *DescribeLoadBalancerBackendsInput) Validate() error {
 }
 
 type DescribeLoadBalancerBackendsOutput struct {
-	Message                string                 `json:"message" name:"message"`
-	Action                 string                 `json:"action" name:"action" location:"elements"`
+	Message                *string                `json:"message" name:"message"`
+	Action                 *string                `json:"action" name:"action" location:"elements"`
 	LoadBalancerBackendSet []*LoadBalancerBackend `json:"loadbalancer_backend_set" name:"loadbalancer_backend_set" location:"elements"`
-	RetCode                int                    `json:"ret_code" name:"ret_code" location:"elements"`
+	RetCode                *int                   `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/describe_loadbalancer_listeners.html
@@ -895,11 +887,11 @@ func (s *LoadBalancerService) DescribeLoadBalancerListeners(i *DescribeLoadBalan
 }
 
 type DescribeLoadBalancerListenersInput struct {
-	Limit                 int      `json:"limit" name:"limit" default:"20" location:"params"`
-	LoadBalancer          string   `json:"loadbalancer" name:"loadbalancer" location:"params"`
-	LoadBalancerListeners []string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"params"`
-	Offset                int      `json:"offset" name:"offset" default:"0" location:"params"`
-	Verbose               int      `json:"verbose" name:"verbose" location:"params"`
+	Limit                 *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	LoadBalancer          *string   `json:"loadbalancer" name:"loadbalancer" location:"params"`
+	LoadBalancerListeners []*string `json:"loadbalancer_listeners" name:"loadbalancer_listeners" location:"params"`
+	Offset                *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	Verbose               *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeLoadBalancerListenersInput) Validate() error {
@@ -908,11 +900,11 @@ func (v *DescribeLoadBalancerListenersInput) Validate() error {
 }
 
 type DescribeLoadBalancerListenersOutput struct {
-	Message                 string                  `json:"message" name:"message"`
-	Action                  string                  `json:"action" name:"action" location:"elements"`
+	Message                 *string                 `json:"message" name:"message"`
+	Action                  *string                 `json:"action" name:"action" location:"elements"`
 	LoadBalancerListenerSet []*LoadBalancerListener `json:"loadbalancer_listener_set" name:"loadbalancer_listener_set" location:"elements"`
-	RetCode                 int                     `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount              int                     `json:"total_count" name:"total_count" location:"elements"`
+	RetCode                 *int                    `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount              *int                    `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/describe_loadbalancer_policies.html
@@ -942,10 +934,10 @@ func (s *LoadBalancerService) DescribeLoadBalancerPolicies(i *DescribeLoadBalanc
 }
 
 type DescribeLoadBalancerPoliciesInput struct {
-	Limit                int      `json:"limit" name:"limit" default:"20" location:"params"`
-	LoadBalancerPolicies []string `json:"loadbalancer_policies" name:"loadbalancer_policies" location:"params"`
-	Offset               int      `json:"offset" name:"offset" default:"0" location:"params"`
-	Verbose              int      `json:"verbose" name:"verbose" location:"params"`
+	Limit                *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	LoadBalancerPolicies []*string `json:"loadbalancer_policies" name:"loadbalancer_policies" location:"params"`
+	Offset               *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	Verbose              *int      `json:"verbose" name:"verbose" location:"params"`
 }
 
 func (v *DescribeLoadBalancerPoliciesInput) Validate() error {
@@ -954,11 +946,11 @@ func (v *DescribeLoadBalancerPoliciesInput) Validate() error {
 }
 
 type DescribeLoadBalancerPoliciesOutput struct {
-	Message               string                `json:"message" name:"message"`
-	Action                string                `json:"action" name:"action" location:"elements"`
+	Message               *string               `json:"message" name:"message"`
+	Action                *string               `json:"action" name:"action" location:"elements"`
 	LoadBalancerPolicySet []*LoadBalancerPolicy `json:"loadbalancer_policy_set" name:"loadbalancer_policy_set" location:"elements"`
-	RetCode               int                   `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount            int                   `json:"total_count" name:"total_count" location:"elements"`
+	RetCode               *int                  `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount            *int                  `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/describe_loadbalancer_policy_rules.html
@@ -988,10 +980,10 @@ func (s *LoadBalancerService) DescribeLoadBalancerPolicyRules(i *DescribeLoadBal
 }
 
 type DescribeLoadBalancerPolicyRulesInput struct {
-	Limit                   int      `json:"limit" name:"limit" default:"20" location:"params"`
-	LoadBalancerPolicy      string   `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"`
-	LoadBalancerPolicyRules []string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"params"`
-	Offset                  int      `json:"offset" name:"offset" default:"0" location:"params"`
+	Limit                   *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	LoadBalancerPolicy      *string   `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"`
+	LoadBalancerPolicyRules []*string `json:"loadbalancer_policy_rules" name:"loadbalancer_policy_rules" location:"params"`
+	Offset                  *int      `json:"offset" name:"offset" default:"0" location:"params"`
 }
 
 func (v *DescribeLoadBalancerPolicyRulesInput) Validate() error {
@@ -1000,11 +992,11 @@ func (v *DescribeLoadBalancerPolicyRulesInput) Validate() error {
 }
 
 type DescribeLoadBalancerPolicyRulesOutput struct {
-	Message                   string                    `json:"message" name:"message"`
-	Action                    string                    `json:"action" name:"action" location:"elements"`
+	Message                   *string                   `json:"message" name:"message"`
+	Action                    *string                   `json:"action" name:"action" location:"elements"`
 	LoadBalancerPolicyRuleSet []*LoadBalancerPolicyRule `json:"loadbalancer_policy_rule_set" name:"loadbalancer_policy_rule_set" location:"elements"`
-	RetCode                   int                       `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount                int                       `json:"total_count" name:"total_count" location:"elements"`
+	RetCode                   *int                      `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount                *int                      `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/describe_loadbalancers.html
@@ -1034,13 +1026,13 @@ func (s *LoadBalancerService) DescribeLoadBalancers(i *DescribeLoadBalancersInpu
 }
 
 type DescribeLoadBalancersInput struct {
-	Limit         int      `json:"limit" name:"limit" default:"20" location:"params"`
-	LoadBalancers []string `json:"loadbalancers" name:"loadbalancers" location:"params"`
-	Offset        int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord    string   `json:"search_word" name:"search_word" location:"params"`
-	Status        []string `json:"status" name:"status" location:"params"`
-	Tags          []string `json:"tags" name:"tags" location:"params"`
-	Verbose       int      `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Limit         *int      `json:"limit" name:"limit" default:"20" location:"params"`
+	LoadBalancers []*string `json:"loadbalancers" name:"loadbalancers" location:"params"`
+	Offset        *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord    *string   `json:"search_word" name:"search_word" location:"params"`
+	Status        []*string `json:"status" name:"status" location:"params"`
+	Tags          []*string `json:"tags" name:"tags" location:"params"`
+	Verbose       *int      `json:"verbose" name:"verbose" default:"0" location:"params"`
 }
 
 func (v *DescribeLoadBalancersInput) Validate() error {
@@ -1049,10 +1041,10 @@ func (v *DescribeLoadBalancersInput) Validate() error {
 }
 
 type DescribeLoadBalancersOutput struct {
-	Message         string          `json:"message" name:"message"`
-	Action          string          `json:"action" name:"action" location:"elements"`
+	Message         *string         `json:"message" name:"message"`
+	Action          *string         `json:"action" name:"action" location:"elements"`
 	LoadBalancerSet []*LoadBalancer `json:"loadbalancer_set" name:"loadbalancer_set" location:"elements"`
-	RetCode         int             `json:"ret_code" name:"ret_code" location:"elements"`
+	RetCode         *int            `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/describe_server_certificates.html
@@ -1082,11 +1074,11 @@ func (s *LoadBalancerService) DescribeServerCertificates(i *DescribeServerCertif
 }
 
 type DescribeServerCertificatesInput struct {
-	Limit              int    `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset             int    `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord         string `json:"search_word" name:"search_word" location:"params"`
-	ServerCertificates string `json:"server_certificates" name:"server_certificates" location:"params"`
-	Verbose            int    `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Limit              *int    `json:"limit" name:"limit" default:"20" location:"params"`
+	Offset             *int    `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord         *string `json:"search_word" name:"search_word" location:"params"`
+	ServerCertificates *string `json:"server_certificates" name:"server_certificates" location:"params"`
+	Verbose            *int    `json:"verbose" name:"verbose" default:"0" location:"params"`
 }
 
 func (v *DescribeServerCertificatesInput) Validate() error {
@@ -1095,11 +1087,11 @@ func (v *DescribeServerCertificatesInput) Validate() error {
 }
 
 type DescribeServerCertificatesOutput struct {
-	Message              string               `json:"message" name:"message"`
-	Action               string               `json:"action" name:"action" location:"elements"`
-	RetCode              int                  `json:"ret_code" name:"ret_code" location:"elements"`
+	Message              *string              `json:"message" name:"message"`
+	Action               *string              `json:"action" name:"action" location:"elements"`
+	RetCode              *int                 `json:"ret_code" name:"ret_code" location:"elements"`
 	ServerCertificateSet []*ServerCertificate `json:"server_certificate_set" name:"server_certificate_set" location:"elements"`
-	TotalCount           int                  `json:"total_count" name:"total_count" location:"elements"`
+	TotalCount           *int                 `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/dissociate_eips_from_loadbalancer.html
@@ -1129,21 +1121,21 @@ func (s *LoadBalancerService) DissociateEIPsFromLoadBalancer(i *DissociateEIPsFr
 }
 
 type DissociateEIPsFromLoadBalancerInput struct {
-	EIPs         []string `json:"eips" name:"eips" location:"params"`                 // Required
-	LoadBalancer string   `json:"loadbalancer" name:"loadbalancer" location:"params"` // Required
+	EIPs         []*string `json:"eips" name:"eips" location:"params"`                 // Required
+	LoadBalancer *string   `json:"loadbalancer" name:"loadbalancer" location:"params"` // Required
 }
 
 func (v *DissociateEIPsFromLoadBalancerInput) Validate() error {
 
 	if len(v.EIPs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "EIPs",
 			ParentName:    "DissociateEIPsFromLoadBalancerInput",
 		}
 	}
 
-	if fmt.Sprint(v.LoadBalancer) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancer == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancer",
 			ParentName:    "DissociateEIPsFromLoadBalancerInput",
 		}
@@ -1153,10 +1145,10 @@ func (v *DissociateEIPsFromLoadBalancerInput) Validate() error {
 }
 
 type DissociateEIPsFromLoadBalancerOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_loadbalancer_monitor.html
@@ -1186,45 +1178,41 @@ func (s *LoadBalancerService) GetLoadBalancerMonitor(i *GetLoadBalancerMonitorIn
 }
 
 type GetLoadBalancerMonitorInput struct {
-	EndTime      time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"` // Required
-	Meters       []string  `json:"meters" name:"meters" location:"params"`                       // Required
-	Resource     string    `json:"resource" name:"resource" location:"params"`                   // Required
-	ResourceType string    `json:"resource_type" name:"resource_type" default:"loadbalancer" location:"params"`
-	StartTime    time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
+	EndTime      *time.Time `json:"end_time" name:"end_time" format:"ISO 8601" location:"params"` // Required
+	Meters       []*string  `json:"meters" name:"meters" location:"params"`                       // Required
+	Resource     *string    `json:"resource" name:"resource" location:"params"`                   // Required
+	ResourceType *string    `json:"resource_type" name:"resource_type" default:"loadbalancer" location:"params"`
+	StartTime    *time.Time `json:"start_time" name:"start_time" format:"ISO 8601" location:"params"` // Required
 	// Step's available values: 5m, 15m, 2h, 1d
-	Step string `json:"step" name:"step" location:"params"` // Required
+	Step *string `json:"step" name:"step" location:"params"` // Required
 }
 
 func (v *GetLoadBalancerMonitorInput) Validate() error {
 
 	if len(v.Meters) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Meters",
 			ParentName:    "GetLoadBalancerMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Resource) == "" {
-		return errs.ParameterRequiredError{
+	if v.Resource == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Resource",
 			ParentName:    "GetLoadBalancerMonitorInput",
 		}
 	}
 
-	if fmt.Sprint(v.Step) == "" {
-		return errs.ParameterRequiredError{
+	if v.Step == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Step",
 			ParentName:    "GetLoadBalancerMonitorInput",
 		}
 	}
 
-	stepParameterValue := fmt.Sprint(v.Step)
-	if stepParameterValue == "0" {
-		stepParameterValue = ""
-	}
-	if stepParameterValue != "" {
+	if v.Step != nil {
 		stepValidValues := []string{"5m", "15m", "2h", "1d"}
-		stepParameterValue := fmt.Sprint(v.Step)
+		stepParameterValue := fmt.Sprint(*v.Step)
 
 		stepIsValid := false
 		for _, value := range stepValidValues {
@@ -1234,7 +1222,7 @@ func (v *GetLoadBalancerMonitorInput) Validate() error {
 		}
 
 		if !stepIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Step",
 				ParameterValue: stepParameterValue,
 				AllowedValues:  stepValidValues,
@@ -1246,11 +1234,11 @@ func (v *GetLoadBalancerMonitorInput) Validate() error {
 }
 
 type GetLoadBalancerMonitorOutput struct {
-	Message    string   `json:"message" name:"message"`
-	Action     string   `json:"action" name:"action" location:"elements"`
+	Message    *string  `json:"message" name:"message"`
+	Action     *string  `json:"action" name:"action" location:"elements"`
 	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID string   `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    int      `json:"ret_code" name:"ret_code" location:"elements"`
+	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/modify_loadbalancer_attributes.html
@@ -1280,17 +1268,17 @@ func (s *LoadBalancerService) ModifyLoadBalancerAttributes(i *ModifyLoadBalancer
 }
 
 type ModifyLoadBalancerAttributesInput struct {
-	Description      string `json:"description" name:"description" location:"params"`
-	LoadBalancer     string `json:"loadbalancer" name:"loadbalancer" location:"params"` // Required
-	LoadBalancerName string `json:"loadbalancer_name" name:"loadbalancer_name" location:"params"`
-	PrivateIP        string `json:"private_ip" name:"private_ip" location:"params"`
-	SecurityGroup    string `json:"security_group" name:"security_group" location:"params"`
+	Description      *string `json:"description" name:"description" location:"params"`
+	LoadBalancer     *string `json:"loadbalancer" name:"loadbalancer" location:"params"` // Required
+	LoadBalancerName *string `json:"loadbalancer_name" name:"loadbalancer_name" location:"params"`
+	PrivateIP        *string `json:"private_ip" name:"private_ip" location:"params"`
+	SecurityGroup    *string `json:"security_group" name:"security_group" location:"params"`
 }
 
 func (v *ModifyLoadBalancerAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancer) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancer == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancer",
 			ParentName:    "ModifyLoadBalancerAttributesInput",
 		}
@@ -1300,9 +1288,9 @@ func (v *ModifyLoadBalancerAttributesInput) Validate() error {
 }
 
 type ModifyLoadBalancerAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/modify_loadbalancer_backend_attributes.html
@@ -1334,23 +1322,19 @@ func (s *LoadBalancerService) ModifyLoadBalancerBackendAttributes(i *ModifyLoadB
 type ModifyLoadBalancerBackendAttributesInput struct {
 
 	// Disabled's available values: 0, 1
-	Disabled                int    `json:"disabled" name:"disabled" location:"params"`
-	LoadBalancerBackend     string `json:"loadbalancer_backend" name:"loadbalancer_backend" location:"params"`
-	LoadBalancerBackendName string `json:"loadbalancer_backend_name" name:"loadbalancer_backend_name" location:"params"`
-	LoadBalancerPolicyID    string `json:"loadbalancer_policy_id" name:"loadbalancer_policy_id" location:"params"`
-	Port                    string `json:"port" name:"port" location:"params"`
-	Weight                  string `json:"weight" name:"weight" location:"params"`
+	Disabled                *int    `json:"disabled" name:"disabled" location:"params"`
+	LoadBalancerBackend     *string `json:"loadbalancer_backend" name:"loadbalancer_backend" location:"params"`
+	LoadBalancerBackendName *string `json:"loadbalancer_backend_name" name:"loadbalancer_backend_name" location:"params"`
+	LoadBalancerPolicyID    *string `json:"loadbalancer_policy_id" name:"loadbalancer_policy_id" location:"params"`
+	Port                    *string `json:"port" name:"port" location:"params"`
+	Weight                  *string `json:"weight" name:"weight" location:"params"`
 }
 
 func (v *ModifyLoadBalancerBackendAttributesInput) Validate() error {
 
-	disabledParameterValue := fmt.Sprint(v.Disabled)
-	if disabledParameterValue == "0" {
-		disabledParameterValue = ""
-	}
-	if disabledParameterValue != "" {
+	if v.Disabled != nil {
 		disabledValidValues := []string{"0", "1"}
-		disabledParameterValue := fmt.Sprint(v.Disabled)
+		disabledParameterValue := fmt.Sprint(*v.Disabled)
 
 		disabledIsValid := false
 		for _, value := range disabledValidValues {
@@ -1360,7 +1344,7 @@ func (v *ModifyLoadBalancerBackendAttributesInput) Validate() error {
 		}
 
 		if !disabledIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Disabled",
 				ParameterValue: disabledParameterValue,
 				AllowedValues:  disabledValidValues,
@@ -1372,9 +1356,9 @@ func (v *ModifyLoadBalancerBackendAttributesInput) Validate() error {
 }
 
 type ModifyLoadBalancerBackendAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/modify_loadbalancer_listener_attributes.html
@@ -1404,20 +1388,20 @@ func (s *LoadBalancerService) ModifyLoadBalancerListenerAttributes(i *ModifyLoad
 }
 
 type ModifyLoadBalancerListenerAttributesInput struct {
-	BalanceMode              string `json:"balance_mode" name:"balance_mode" location:"params"`
-	Forwardfor               int    `json:"forwardfor" name:"forwardfor" location:"params"`
-	HealthyCheckMethod       string `json:"healthy_check_method" name:"healthy_check_method" location:"params"`
-	HealthyCheckOption       string `json:"healthy_check_option" name:"healthy_check_option" location:"params"`
-	LoadBalancerListener     string `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"` // Required
-	LoadBalancerListenerName string `json:"loadbalancer_listener_name" name:"loadbalancer_listener_name" location:"params"`
-	ServerCertificateID      string `json:"server_certificate_id" name:"server_certificate_id" location:"params"`
-	SessionSticky            string `json:"session_sticky" name:"session_sticky" location:"params"`
+	BalanceMode              *string `json:"balance_mode" name:"balance_mode" location:"params"`
+	Forwardfor               *int    `json:"forwardfor" name:"forwardfor" location:"params"`
+	HealthyCheckMethod       *string `json:"healthy_check_method" name:"healthy_check_method" location:"params"`
+	HealthyCheckOption       *string `json:"healthy_check_option" name:"healthy_check_option" location:"params"`
+	LoadBalancerListener     *string `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"` // Required
+	LoadBalancerListenerName *string `json:"loadbalancer_listener_name" name:"loadbalancer_listener_name" location:"params"`
+	ServerCertificateID      *string `json:"server_certificate_id" name:"server_certificate_id" location:"params"`
+	SessionSticky            *string `json:"session_sticky" name:"session_sticky" location:"params"`
 }
 
 func (v *ModifyLoadBalancerListenerAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancerListener) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancerListener == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerListener",
 			ParentName:    "ModifyLoadBalancerListenerAttributesInput",
 		}
@@ -1427,9 +1411,9 @@ func (v *ModifyLoadBalancerListenerAttributesInput) Validate() error {
 }
 
 type ModifyLoadBalancerListenerAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/modify_loadbalancer_policy_attributes.html
@@ -1459,15 +1443,15 @@ func (s *LoadBalancerService) ModifyLoadBalancerPolicyAttributes(i *ModifyLoadBa
 }
 
 type ModifyLoadBalancerPolicyAttributesInput struct {
-	LoadBalancerPolicy     string `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"` // Required
-	LoadBalancerPolicyName string `json:"loadbalancer_policy_name" name:"loadbalancer_policy_name" location:"params"`
-	Operator               string `json:"operator" name:"operator" location:"params"`
+	LoadBalancerPolicy     *string `json:"loadbalancer_policy" name:"loadbalancer_policy" location:"params"` // Required
+	LoadBalancerPolicyName *string `json:"loadbalancer_policy_name" name:"loadbalancer_policy_name" location:"params"`
+	Operator               *string `json:"operator" name:"operator" location:"params"`
 }
 
 func (v *ModifyLoadBalancerPolicyAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancerPolicy) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancerPolicy == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerPolicy",
 			ParentName:    "ModifyLoadBalancerPolicyAttributesInput",
 		}
@@ -1477,10 +1461,10 @@ func (v *ModifyLoadBalancerPolicyAttributesInput) Validate() error {
 }
 
 type ModifyLoadBalancerPolicyAttributesOutput struct {
-	Message              string `json:"message" name:"message"`
-	Action               string `json:"action" name:"action" location:"elements"`
-	LoadBalancerPolicyID string `json:"loadbalancer_policy_id" name:"loadbalancer_policy_id" location:"elements"`
-	RetCode              int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message              *string `json:"message" name:"message"`
+	Action               *string `json:"action" name:"action" location:"elements"`
+	LoadBalancerPolicyID *string `json:"loadbalancer_policy_id" name:"loadbalancer_policy_id" location:"elements"`
+	RetCode              *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/modify_loadbalancer_policy_rule_attributes.html
@@ -1510,15 +1494,15 @@ func (s *LoadBalancerService) ModifyLoadBalancerPolicyRuleAttributes(i *ModifyLo
 }
 
 type ModifyLoadBalancerPolicyRuleAttributesInput struct {
-	LoadBalancerPolicyRule     string `json:"loadbalancer_policy_rule" name:"loadbalancer_policy_rule" location:"params"` // Required
-	LoadBalancerPolicyRuleName string `json:"loadbalancer_policy_rule_name" name:"loadbalancer_policy_rule_name" location:"params"`
-	Val                        string `json:"val" name:"val" location:"params"`
+	LoadBalancerPolicyRule     *string `json:"loadbalancer_policy_rule" name:"loadbalancer_policy_rule" location:"params"` // Required
+	LoadBalancerPolicyRuleName *string `json:"loadbalancer_policy_rule_name" name:"loadbalancer_policy_rule_name" location:"params"`
+	Val                        *string `json:"val" name:"val" location:"params"`
 }
 
 func (v *ModifyLoadBalancerPolicyRuleAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancerPolicyRule) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancerPolicyRule == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancerPolicyRule",
 			ParentName:    "ModifyLoadBalancerPolicyRuleAttributesInput",
 		}
@@ -1528,10 +1512,10 @@ func (v *ModifyLoadBalancerPolicyRuleAttributesInput) Validate() error {
 }
 
 type ModifyLoadBalancerPolicyRuleAttributesOutput struct {
-	Message                  string `json:"message" name:"message"`
-	Action                   string `json:"action" name:"action" location:"elements"`
-	LoadBalancerPolicyRuleID string `json:"loadbalancer_policy_rule_id" name:"loadbalancer_policy_rule_id" location:"elements"`
-	RetCode                  int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message                  *string `json:"message" name:"message"`
+	Action                   *string `json:"action" name:"action" location:"elements"`
+	LoadBalancerPolicyRuleID *string `json:"loadbalancer_policy_rule_id" name:"loadbalancer_policy_rule_id" location:"elements"`
+	RetCode                  *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/modify_server_certificate_attributes.html
@@ -1561,15 +1545,15 @@ func (s *LoadBalancerService) ModifyServerCertificateAttributes(i *ModifyServerC
 }
 
 type ModifyServerCertificateAttributesInput struct {
-	Description           string `json:"description" name:"description" location:"params"`
-	ServerCertificate     string `json:"server_certificate" name:"server_certificate" location:"params"` // Required
-	ServerCertificateName string `json:"server_certificate_name" name:"server_certificate_name" location:"params"`
+	Description           *string `json:"description" name:"description" location:"params"`
+	ServerCertificate     *string `json:"server_certificate" name:"server_certificate" location:"params"` // Required
+	ServerCertificateName *string `json:"server_certificate_name" name:"server_certificate_name" location:"params"`
 }
 
 func (v *ModifyServerCertificateAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.ServerCertificate) == "" {
-		return errs.ParameterRequiredError{
+	if v.ServerCertificate == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "ServerCertificate",
 			ParentName:    "ModifyServerCertificateAttributesInput",
 		}
@@ -1579,9 +1563,9 @@ func (v *ModifyServerCertificateAttributesInput) Validate() error {
 }
 
 type ModifyServerCertificateAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/resize_loadbalancers.html
@@ -1613,19 +1597,15 @@ func (s *LoadBalancerService) ResizeLoadBalancers(i *ResizeLoadBalancersInput) (
 type ResizeLoadBalancersInput struct {
 
 	// LoadBalancerType's available values: 0, 1, 2, 3, 4, 5
-	LoadBalancerType int      `json:"loadbalancer_type" name:"loadbalancer_type" location:"params"`
-	LoadBalancers    []string `json:"loadbalancers" name:"loadbalancers" location:"params"`
+	LoadBalancerType *int      `json:"loadbalancer_type" name:"loadbalancer_type" location:"params"`
+	LoadBalancers    []*string `json:"loadbalancers" name:"loadbalancers" location:"params"`
 }
 
 func (v *ResizeLoadBalancersInput) Validate() error {
 
-	loadBalancerTypeParameterValue := fmt.Sprint(v.LoadBalancerType)
-	if loadBalancerTypeParameterValue == "0" {
-		loadBalancerTypeParameterValue = ""
-	}
-	if loadBalancerTypeParameterValue != "" {
+	if v.LoadBalancerType != nil {
 		loadBalancerTypeValidValues := []string{"0", "1", "2", "3", "4", "5"}
-		loadBalancerTypeParameterValue := fmt.Sprint(v.LoadBalancerType)
+		loadBalancerTypeParameterValue := fmt.Sprint(*v.LoadBalancerType)
 
 		loadBalancerTypeIsValid := false
 		for _, value := range loadBalancerTypeValidValues {
@@ -1635,7 +1615,7 @@ func (v *ResizeLoadBalancersInput) Validate() error {
 		}
 
 		if !loadBalancerTypeIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "LoadBalancerType",
 				ParameterValue: loadBalancerTypeParameterValue,
 				AllowedValues:  loadBalancerTypeValidValues,
@@ -1647,10 +1627,10 @@ func (v *ResizeLoadBalancersInput) Validate() error {
 }
 
 type ResizeLoadBalancersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/start_loadbalancers.html
@@ -1680,13 +1660,13 @@ func (s *LoadBalancerService) StartLoadBalancers(i *StartLoadBalancersInput) (*S
 }
 
 type StartLoadBalancersInput struct {
-	LoadBalancers []string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
+	LoadBalancers []*string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
 }
 
 func (v *StartLoadBalancersInput) Validate() error {
 
 	if len(v.LoadBalancers) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancers",
 			ParentName:    "StartLoadBalancersInput",
 		}
@@ -1696,10 +1676,10 @@ func (v *StartLoadBalancersInput) Validate() error {
 }
 
 type StartLoadBalancersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/stop_loadbalancers.html
@@ -1729,13 +1709,13 @@ func (s *LoadBalancerService) StopLoadBalancers(i *StopLoadBalancersInput) (*Sto
 }
 
 type StopLoadBalancersInput struct {
-	LoadBalancers string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
+	LoadBalancers *string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
 }
 
 func (v *StopLoadBalancersInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancers) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancers == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancers",
 			ParentName:    "StopLoadBalancersInput",
 		}
@@ -1745,10 +1725,10 @@ func (v *StopLoadBalancersInput) Validate() error {
 }
 
 type StopLoadBalancersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   int    `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *int    `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/lb/update_loadbalancers.html
@@ -1778,13 +1758,13 @@ func (s *LoadBalancerService) UpdateLoadBalancers(i *UpdateLoadBalancersInput) (
 }
 
 type UpdateLoadBalancersInput struct {
-	LoadBalancers string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
+	LoadBalancers *string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
 }
 
 func (v *UpdateLoadBalancersInput) Validate() error {
 
-	if fmt.Sprint(v.LoadBalancers) == "" {
-		return errs.ParameterRequiredError{
+	if v.LoadBalancers == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancers",
 			ParentName:    "UpdateLoadBalancersInput",
 		}
@@ -1794,8 +1774,8 @@ func (v *UpdateLoadBalancersInput) Validate() error {
 }
 
 type UpdateLoadBalancersOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	JobID   int    `json:"job_id" name:"job_id" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *int    `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }

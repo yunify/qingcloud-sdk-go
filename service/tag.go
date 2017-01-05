@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -36,12 +36,12 @@ type TagService struct {
 
 type TagServiceProperties struct {
 	// QingCloud Zone ID
-	Zone string `json:"zone" name:"zone"` // Required
+	Zone *string `json:"zone" name:"zone"` // Required
 }
 
 func (s *QingCloudService) Tag(zone string) (*TagService, error) {
 	properties := &TagServiceProperties{
-		Zone: zone,
+		Zone: &zone,
 	}
 
 	return &TagService{Config: s.Config, Properties: properties}, nil
@@ -80,7 +80,7 @@ type AttachTagsInput struct {
 func (v *AttachTagsInput) Validate() error {
 
 	if len(v.ResourceTagPairs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "ResourceTagPairs",
 			ParentName:    "AttachTagsInput",
 		}
@@ -98,9 +98,9 @@ func (v *AttachTagsInput) Validate() error {
 }
 
 type AttachTagsOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/tag/create_tag.html
@@ -130,8 +130,8 @@ func (s *TagService) CreateTag(i *CreateTagInput) (*CreateTagOutput, error) {
 }
 
 type CreateTagInput struct {
-	Color   string `json:"color" name:"color" location:"params"`
-	TagName string `json:"tag_name" name:"tag_name" location:"params"`
+	Color   *string `json:"color" name:"color" location:"params"`
+	TagName *string `json:"tag_name" name:"tag_name" location:"params"`
 }
 
 func (v *CreateTagInput) Validate() error {
@@ -140,10 +140,10 @@ func (v *CreateTagInput) Validate() error {
 }
 
 type CreateTagOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TagID   string `json:"tag_id" name:"tag_id" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	TagID   *string `json:"tag_id" name:"tag_id" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/tag/delete_tags.html
@@ -173,13 +173,13 @@ func (s *TagService) DeleteTags(i *DeleteTagsInput) (*DeleteTagsOutput, error) {
 }
 
 type DeleteTagsInput struct {
-	Tags []string `json:"tags" name:"tags" location:"params"` // Required
+	Tags []*string `json:"tags" name:"tags" location:"params"` // Required
 }
 
 func (v *DeleteTagsInput) Validate() error {
 
 	if len(v.Tags) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "Tags",
 			ParentName:    "DeleteTagsInput",
 		}
@@ -189,10 +189,10 @@ func (v *DeleteTagsInput) Validate() error {
 }
 
 type DeleteTagsOutput struct {
-	Message string   `json:"message" name:"message"`
-	Action  string   `json:"action" name:"action" location:"elements"`
-	RetCode int      `json:"ret_code" name:"ret_code" location:"elements"`
-	Tags    []string `json:"tags" name:"tags" location:"elements"`
+	Message *string   `json:"message" name:"message"`
+	Action  *string   `json:"action" name:"action" location:"elements"`
+	RetCode *int      `json:"ret_code" name:"ret_code" location:"elements"`
+	Tags    []*string `json:"tags" name:"tags" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/tag/describe_tags.html
@@ -222,23 +222,19 @@ func (s *TagService) DescribeTags(i *DescribeTagsInput) (*DescribeTagsOutput, er
 }
 
 type DescribeTagsInput struct {
-	Limit      int      `json:"limit" name:"limit" default:"0" location:"params"`
-	Offset     int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord string   `json:"search_word" name:"search_word" location:"params"`
-	Tags       []string `json:"tags" name:"tags" location:"params"`
+	Limit      *int      `json:"limit" name:"limit" default:"0" location:"params"`
+	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
+	Tags       []*string `json:"tags" name:"tags" location:"params"`
 	// Verbose's available values: 0, 1
-	Verbose int `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
 }
 
 func (v *DescribeTagsInput) Validate() error {
 
-	verboseParameterValue := fmt.Sprint(v.Verbose)
-	if verboseParameterValue == "0" {
-		verboseParameterValue = ""
-	}
-	if verboseParameterValue != "" {
+	if v.Verbose != nil {
 		verboseValidValues := []string{"0", "1"}
-		verboseParameterValue := fmt.Sprint(v.Verbose)
+		verboseParameterValue := fmt.Sprint(*v.Verbose)
 
 		verboseIsValid := false
 		for _, value := range verboseValidValues {
@@ -248,7 +244,7 @@ func (v *DescribeTagsInput) Validate() error {
 		}
 
 		if !verboseIsValid {
-			return errs.ParameterValueNotAllowedError{
+			return errors.ParameterValueNotAllowedError{
 				ParameterName:  "Verbose",
 				ParameterValue: verboseParameterValue,
 				AllowedValues:  verboseValidValues,
@@ -260,11 +256,11 @@ func (v *DescribeTagsInput) Validate() error {
 }
 
 type DescribeTagsOutput struct {
-	Message    string `json:"message" name:"message"`
-	Action     string `json:"action" name:"action" location:"elements"`
-	RetCode    int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TagSet     []*Tag `json:"tag_set" name:"tag_set" location:"elements"`
-	TotalCount int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string `json:"message" name:"message"`
+	Action     *string `json:"action" name:"action" location:"elements"`
+	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
+	TagSet     []*Tag  `json:"tag_set" name:"tag_set" location:"elements"`
+	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/tag/detach_tags.html
@@ -300,7 +296,7 @@ type DetachTagsInput struct {
 func (v *DetachTagsInput) Validate() error {
 
 	if len(v.ResourceTagPairs) == 0 {
-		return errs.ParameterRequiredError{
+		return errors.ParameterRequiredError{
 			ParameterName: "ResourceTagPairs",
 			ParentName:    "DetachTagsInput",
 		}
@@ -318,9 +314,9 @@ func (v *DetachTagsInput) Validate() error {
 }
 
 type DetachTagsOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/tag/modify_tag_attributes.html
@@ -350,16 +346,16 @@ func (s *TagService) ModifyTagAttributes(i *ModifyTagAttributesInput) (*ModifyTa
 }
 
 type ModifyTagAttributesInput struct {
-	Color       string `json:"color" name:"color" location:"params"`
-	Description string `json:"description" name:"description" location:"params"`
-	Tag         string `json:"tag" name:"tag" location:"params"` // Required
-	TagName     string `json:"tag_name" name:"tag_name" location:"params"`
+	Color       *string `json:"color" name:"color" location:"params"`
+	Description *string `json:"description" name:"description" location:"params"`
+	Tag         *string `json:"tag" name:"tag" location:"params"` // Required
+	TagName     *string `json:"tag_name" name:"tag_name" location:"params"`
 }
 
 func (v *ModifyTagAttributesInput) Validate() error {
 
-	if fmt.Sprint(v.Tag) == "" {
-		return errs.ParameterRequiredError{
+	if v.Tag == nil {
+		return errors.ParameterRequiredError{
 			ParameterName: "Tag",
 			ParentName:    "ModifyTagAttributesInput",
 		}
@@ -369,7 +365,7 @@ func (v *ModifyTagAttributesInput) Validate() error {
 }
 
 type ModifyTagAttributesOutput struct {
-	Message string `json:"message" name:"message"`
-	Action  string `json:"action" name:"action" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
