@@ -14,9 +14,11 @@
 // | limitations under the License.
 // +-------------------------------------------------------------------------
 
-package errs
+package errors
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // QingCloudError stores information of a QingCloud error response.
 type QingCloudError struct {

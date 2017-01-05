@@ -27,7 +27,7 @@ import (
 
 	"github.com/yunify/qingcloud-sdk-go/logger"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	"github.com/yunify/qingcloud-sdk-go/request/errs"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 	"github.com/yunify/qingcloud-sdk-go/utils"
 )
 
@@ -126,7 +126,7 @@ func (u *Unpacker) parseError() error {
 		messageValue.IsValid() && messageValue.Type().String() == "string" &&
 		retCodeValue.Int() != 0 {
 
-		return &errs.QingCloudError{
+		return &errors.QingCloudError{
 			RetCode: int(retCodeValue.Int()),
 			Message: messageValue.String(),
 		}
