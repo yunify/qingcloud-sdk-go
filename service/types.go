@@ -2228,7 +2228,7 @@ func (v *SecurityGroupIPSet) Validate() error {
 type SecurityGroupRule struct {
 	// Action's available values: accept, drop
 	Action              *string `json:"action" name:"action"`
-	Priority            *int    `json:"priority" name:"priority" default:"0"`
+	Priority            *int    `json:"priority" name:"priority"`
 	Protocol            *string `json:"protocol" name:"protocol"`
 	SecurityGroupID     *string `json:"security_group_id" name:"security_group_id"`
 	SecurityGroupRuleID *string `json:"security_group_rule_id" name:"security_group_rule_id"`
