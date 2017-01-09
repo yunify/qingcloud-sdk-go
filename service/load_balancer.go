@@ -74,8 +74,8 @@ func (s *LoadBalancerService) AddLoadBalancerBackends(i *AddLoadBalancerBackends
 }
 
 type AddLoadBalancerBackendsInput struct {
-	Backends             []*AddLoadBalancerBackendsBackend `json:"backends" name:"backends" location:"params"`                           // Required
-	LoadBalancerListener *string                           `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"` // Required
+	Backends             []*LoadBalancerBackend `json:"backends" name:"backends" location:"params"`                           // Required
+	LoadBalancerListener *string                `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"` // Required
 }
 
 func (v *AddLoadBalancerBackendsInput) Validate() error {
