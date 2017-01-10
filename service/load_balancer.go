@@ -1758,12 +1758,12 @@ func (s *LoadBalancerService) UpdateLoadBalancers(i *UpdateLoadBalancersInput) (
 }
 
 type UpdateLoadBalancersInput struct {
-	LoadBalancers *string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
+	LoadBalancers []*string `json:"loadbalancers" name:"loadbalancers" location:"params"` // Required
 }
 
 func (v *UpdateLoadBalancersInput) Validate() error {
 
-	if v.LoadBalancers == nil {
+	if len(v.LoadBalancers) == 0 {
 		return errors.ParameterRequiredError{
 			ParameterName: "LoadBalancers",
 			ParentName:    "UpdateLoadBalancersInput",
