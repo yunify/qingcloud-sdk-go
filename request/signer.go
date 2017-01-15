@@ -120,7 +120,6 @@ func (is *Signer) BuildStringToSign(request *http.Request) (string, error) {
 				value := strings.TrimSpace(strings.Join(values, ""))
 				value = url.QueryEscape(value)
 				value = strings.Replace(value, "+", "%20", -1)
-				value = strings.Replace(value, "%2B", "+", -1)
 				parts = append(parts, key+"="+value)
 			} else {
 				parts = append(parts, key)
