@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to QingCloud SDK for Go will be documented in this file.
 
+## [v2.0.0-alpha.3] - 2017-01-15
+
+### Changed
+
+- Fix request signer.
+
 ## [v2.0.0-alpha.2] - 2017-01-05
 
 ### Changed
@@ -22,4 +28,5 @@ All notable changes to QingCloud SDK for Go will be documented in this file.
 
 - QingCloud SDK for the Go programming language.
 
+[v2.0.0-alpha.3]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.2...v2.0.0-alpha.3
 [v2.0.0-alpha.2]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.1...v2.0.0-alpha.2
