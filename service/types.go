@@ -1168,6 +1168,7 @@ type LoadBalancerListener struct {
 	LoadBalancerID           *string    `json:"loadbalancer_id" name:"loadbalancer_id"`
 	LoadBalancerListenerID   *string    `json:"loadbalancer_listener_id" name:"loadbalancer_listener_id"`
 	LoadBalancerListenerName *string    `json:"loadbalancer_listener_name" name:"loadbalancer_listener_name"`
+	ServerCertificateID      *string    `json:"server_certificate_id" name:"server_certificate_id"`
 	SessionSticky            *string    `json:"session_sticky" name:"session_sticky"`
 }
 
