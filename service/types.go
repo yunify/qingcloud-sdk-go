@@ -1162,7 +1162,7 @@ type LoadBalancerListener struct {
 	Forwardfor               *int       `json:"forwardfor" name:"forwardfor"`
 	HealthyCheckMethod       *string    `json:"healthy_check_method" name:"healthy_check_method"`
 	HealthyCheckOption       *string    `json:"healthy_check_option" name:"healthy_check_option" default:"10|5|2|5"`
-	ListenerOption           []*int     `json:"listener_option" name:"listener_option"`
+	ListenerOption           *int       `json:"listener_option" name:"listener_option"`
 	ListenerPort             *int       `json:"listener_port" name:"listener_port"`
 	ListenerProtocol         *string    `json:"listener_protocol" name:"listener_protocol"`
 	LoadBalancerID           *string    `json:"loadbalancer_id" name:"loadbalancer_id"`
