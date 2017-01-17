@@ -23,6 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
+	"github.com/yunify/qingcloud-sdk-go/logger"
 )
 
 {{if $service.Description}}// {{$service.Name | camelCase}}Service: {{$service.Description}}{{end}}
@@ -37,7 +38,7 @@ type {{$service.Name | camelCase}}ServiceProperties struct {
 
 func Init(c *config.Config) (*{{$service.Name | camelCase}}Service, error) {
 	properties := &{{$service.Name | camelCase}}ServiceProperties{}
-
+    logger.SetLevel(c.LogLevel)
 	return &{{$service.Name | camelCase}}Service{Config: c, Properties: properties}, nil
 }
 

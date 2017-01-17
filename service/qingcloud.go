@@ -19,6 +19,7 @@ package service
 
 import (
 	"github.com/yunify/qingcloud-sdk-go/config"
+	"github.com/yunify/qingcloud-sdk-go/logger"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
 )
@@ -34,7 +35,7 @@ type QingCloudServiceProperties struct {
 
 func Init(c *config.Config) (*QingCloudService, error) {
 	properties := &QingCloudServiceProperties{}
-
+	logger.SetLevel(c.LogLevel)
 	return &QingCloudService{Config: c, Properties: properties}, nil
 }
 
