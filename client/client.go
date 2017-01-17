@@ -10,12 +10,19 @@ import (
 )
 
 const (
-	INSTANCE_STATUS_PENDING    = "pending"
-	INSTANCE_STATUS_RUNNING    = "running"
-	INSTANCE_STATUS_STOPPED    = "stopped"
-	INSTANCE_STATUS_SUSPENDED  = "suspended"
-	INSTANCE_STATUS_TERMINATED = "terminated"
-	INSTANCE_STATUS_CEASED     = "ceased"
+	InstanceStatusPending    = "pending"
+	InstanceStatusRunning    = "running"
+	InstanceStatusStopped    = "stopped"
+	InstanceStatusSuspended  = "suspended"
+	InstanceStatusTerminated = "terminated"
+	InstanceStatusCeased     = "ceased"
+
+	LoadBalancerStatusPending = "pending"
+	LoadBalancerStatusActive = "active"
+	LoadBalancerStatusStopped = "stopped"
+	LoadBalancerStatusSuspended = "suspended"
+	LoadBalancerStatusDeleted = "deleted"
+	LoadBalancerStatusCeased = "ceased"
 
 	defaultOpTimeout = 180*time.Second
 )
@@ -76,7 +83,7 @@ func (c *client) RunInstance(input *service.RunInstancesInput) (*service.Instanc
 		return nil, jobErr
 	}
 	instanceID := *output.Instances[0]
-	_, waitErr := c.WaitInstanceStatus(instanceID, INSTANCE_STATUS_RUNNING)
+	_, waitErr := c.WaitInstanceStatus(instanceID, InstanceStatusRunning)
 	if waitErr != nil {
 		return nil, waitErr
 	}
@@ -110,7 +117,7 @@ func (c *client) StartInstance(instanceID string) error {
 	if waitErr != nil {
 		return waitErr
 	}
-	_, err = c.WaitInstanceStatus(instanceID, INSTANCE_STATUS_RUNNING)
+	_, err = c.WaitInstanceStatus(instanceID, InstanceStatusRunning)
 	return err
 }
 
@@ -131,7 +138,7 @@ func (c *client) StopInstance(instanceID string, force bool) error {
 	if waitErr != nil {
 		return waitErr
 	}
-	_, err = c.WaitInstanceStatus(instanceID, INSTANCE_STATUS_STOPPED)
+	_, err = c.WaitInstanceStatus(instanceID, InstanceStatusStopped)
 	return err
 }
 
@@ -146,7 +153,7 @@ func (c *client) RestartInstance(instanceID string) error {
 	if waitErr != nil {
 		return waitErr
 	}
-	_, err = c.WaitInstanceStatus(instanceID, INSTANCE_STATUS_RUNNING)
+	_, err = c.WaitInstanceStatus(instanceID, InstanceStatusRunning)
 	return err
 }
 
@@ -161,7 +168,7 @@ func (c *client) TerminateInstance(instanceID string) error {
 	if waitErr != nil {
 		return waitErr
 	}
-	_, err = c.WaitInstanceStatus(instanceID, INSTANCE_STATUS_TERMINATED)
+	_, err = c.WaitInstanceStatus(instanceID, InstanceStatusTerminated)
 	return err
 }
 
