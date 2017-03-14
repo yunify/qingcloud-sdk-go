@@ -1951,7 +1951,7 @@ type RouterVxNet struct {
 	CreateTime *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
 	DYNIPEnd   *string    `json:"dyn_ip_end" name:"dyn_ip_end"`
 	DYNIPStart *string    `json:"dyn_ip_start" name:"dyn_ip_start"`
-	Features   *string    `json:"features" name:"features"`
+	Features   *int       `json:"features" name:"features"`
 	IPNetwork  *string    `json:"ip_network" name:"ip_network"`
 	ManagerIP  *string    `json:"manager_ip" name:"manager_ip"`
 	RouterID   *string    `json:"router_id" name:"router_id"`
