@@ -26,8 +26,6 @@ help:
 	@echo "  test              to run service test"
 	@echo "  release           to build and release current version"
 	@echo "  release-source    to pack the source code"
-	@echo "  release-headers   to build and pack the headers source code for go 1.7"
-	@echo "  release-binary    to build the static binary for go 1.7"
 	@echo "  clean             to clean the coverage files"
 
 all: check build unit release
@@ -146,60 +144,18 @@ test:
 	pushd "./test"; go run *.go; popd
 	@echo "ok"
 
-release: release-source release-source-with-vendor release-headers release-binary
+release: release-source release-source-with-vendor
 
 release-source:
 	@echo "pack the source code"
 	mkdir -p "release"
-	zip -FS "release/${PREFIX}-source-v${VERSION}.zip" ${FILES_TO_RELEASE}
+	@zip -FS "release/${PREFIX}-source-v${VERSION}.zip" ${FILES_TO_RELEASE}
 	@echo "ok"
 
 release-source-with-vendor:
 	@echo "pack the source code"
 	mkdir -p "release"
-	zip -FS "release/${PREFIX}-source-with-vendor-v${VERSION}.zip" ${FILES_TO_RELEASE_WITH_VENDOR}
-	@echo "ok"
-
-release-headers: release-headers-go-1.7
-
-release-headers-go-1.7:
-	@echo "build and pack the headers source code for go 1.7"
-	mkdir -p "release"
-	mkdir -p "/tmp/${PREFIX}-headers/"
-	for file in ${FILES_TO_RELEASE}; do \
-		filepath="/tmp/${PREFIX}-headers/$$(dirname $${file})/binary.go"; \
-		mkdir -p "$$(dirname $${filepath})"; \
-		package_line=$$(cat "$${file}" | grep -E "^package"); \
-		echo -ne "//go:binary-only-package\n\n" > "$${filepath}"; \
-		echo -ne "$${package_line}" >> "$${filepath}"; \
-	done
-	pushd "/tmp/${PREFIX}-headers/"; \
-	zip -r "/tmp/${PREFIX}-headers-v${VERSION}-go-1.7.zip" .; \
-	popd
-	cp "/tmp/${PREFIX}-headers-v${VERSION}-go-1.7.zip" "release/"
-	rm -f "/tmp/${PREFIX}-headers-v${VERSION}-go-1.7.zip"
-	rm -rf "/tmp/${PREFIX}-headers"
-	@echo "ok"
-
-release-binary: release-binary-go-1.7
-
-release-binary-go-1.7:
-	@echo "build the static binary for go 1.7"
-	mkdir -p "release"
-	for pkg in ${PKGS_TO_RELEASE}; do \
-		GOOS=linux GOARCH=amd64 go install $${pkg}; \
-		GOOS=darwin GOARCH=amd64 go install $${pkg}; \
-		GOOS=windows GOARCH=amd64 go install $${pkg}; \
-	done
-	cross=(linux_amd64 darwin_amd64 windows_amd64); \
-	for os_arch in $${cross[@]}; do \
-		MAIN_GOPATH=$$(echo "${GOPATH}" | awk '{split($$1,p,":"); print(p[1])}'); \
-		pushd "$${MAIN_GOPATH}/pkg/$${os_arch}/github.com/yunify/qingcloud-sdk-go"; \
-		zip -r "/tmp/${PREFIX}-binary-v${VERSION}-$${os_arch}-go-1.7.zip" .; \
-		popd; \
-		cp "/tmp/${PREFIX}-binary-v${VERSION}-$${os_arch}-go-1.7.zip" "release/"; \
-		rm -f "/tmp/${PREFIX}-binary-v${VERSION}-$${os_arch}-go-1.7.zip"; \
-	done
+	@zip -FS "release/${PREFIX}-source-with-vendor-v${VERSION}.zip" ${FILES_TO_RELEASE_WITH_VENDOR}
 	@echo "ok"
 
 clean:
