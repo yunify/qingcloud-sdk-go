@@ -2,10 +2,10 @@ package client
 
 import (
 	"fmt"
-	"time"
 	"github.com/yunify/qingcloud-sdk-go/logger"
 	"github.com/yunify/qingcloud-sdk-go/service"
 	"github.com/yunify/qingcloud-sdk-go/utils"
+	"time"
 )
 
 // WaitJob wait the job with this jobID finish
@@ -59,7 +59,7 @@ func WaitInstanceStatus(instanceService *service.InstanceService, instanceID str
 		i, err := describeInstance(instanceService, instanceID)
 		if err != nil {
 			logger.Error("DescribeInstance [%s] error : [%s]", instanceID, err.Error())
-			errorTimes ++
+			errorTimes++
 			if errorTimes > 3 {
 				return false, err
 			}
@@ -119,7 +119,7 @@ func WaitLoadBalancerStatus(lbService *service.LoadBalancerService, loadBalancer
 		i, err := describeLoadBalancer(lbService, loadBalancerID)
 		if err != nil {
 			logger.Error("DescribeLoadBalancer [%s] error : [%s]", loadBalancerID, err.Error())
-			errorTimes ++
+			errorTimes++
 			if errorTimes > 3 {
 				return false, err
 			}

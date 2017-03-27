@@ -39,4 +39,3 @@ func WaitForSpecific(f func() bool, timeout time.Duration, waitInterval time.Dur
 func WaitFor(f func() bool) error {
 	return WaitForSpecific(f, 180*time.Second, 3*time.Second)
 }
-
