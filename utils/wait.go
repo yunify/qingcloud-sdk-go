@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// WaitForSpecificOrError wait a function return true or error.
 func WaitForSpecificOrError(f func() (bool, error), timeout time.Duration, waitInterval time.Duration) error {
 	ticker := time.NewTicker(waitInterval)
 	defer ticker.Stop()
@@ -27,12 +28,14 @@ func WaitForSpecificOrError(f func() (bool, error), timeout time.Duration, waitI
 	}
 }
 
+// WaitForSpecific wait a function return true.
 func WaitForSpecific(f func() bool, timeout time.Duration, waitInterval time.Duration) error {
 	return WaitForSpecificOrError(func() (bool, error) {
 		return f(), nil
 	}, timeout, waitInterval)
 }
 
+// WaitFor wait a function return true.
 func WaitFor(f func() bool) error {
 	return WaitForSpecific(f, 180*time.Second, 3*time.Second)
 }
