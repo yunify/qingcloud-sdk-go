@@ -10,36 +10,36 @@ import (
 )
 
 const (
-	// Instance status pending
+	// InstanceStatusPending
 	InstanceStatusPending    = "pending"
-	// Instance status running
+	// InstanceStatusRunning
 	InstanceStatusRunning    = "running"
-	// Instance status stopped
+	// InstanceStatusStopped
 	InstanceStatusStopped    = "stopped"
-	// Instance status suspended
+	// InstanceStatusSuspended
 	InstanceStatusSuspended  = "suspended"
-	// Instance status terminated
+	// InstanceStatusTerminated
 	InstanceStatusTerminated = "terminated"
-	// Instance Status ceased
+	// InstanceStatusCeased
 	InstanceStatusCeased     = "ceased"
 
-	// LoadBalancer status pending
+	// LoadBalancerStatusPending
 	LoadBalancerStatusPending = "pending"
-	// LoadBalancer status active
+	// LoadBalancerStatusActive
 	LoadBalancerStatusActive = "active"
-	// LoadBalancer status stopped
+	// LoadBalancerStatusStopped
 	LoadBalancerStatusStopped = "stopped"
-	// LoadBalancer status suspended
+	// LoadBalancerStatusSuspended
 	LoadBalancerStatusSuspended = "suspended"
-	// LoadBalancer status deleted
+	// LoadBalancerStatusDeleted
 	LoadBalancerStatusDeleted = "deleted"
-	// LoadBalancer status ceased
+	// LoadBalancerStatusCeased
 	LoadBalancerStatusCeased = "ceased"
 
 	defaultOpTimeout = 180*time.Second
 )
 
-// QingCloud IaaS Advanced Client
+// QingCloudClient QingCloud IaaS Advanced Client
 type QingCloudClient interface {
 	RunInstance(arg *service.RunInstancesInput) (*service.Instance, error)
 	DescribeInstance(instanceID string) (*service.Instance, error)
