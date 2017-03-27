@@ -1504,6 +1504,16 @@ func (v *NIC) Validate() error {
 	return nil
 }
 
+type NICIP struct {
+	NICID     *string `json:"nic_id" name:"nic_id"`
+	PrivateIP *string `json:"private_ip" name:"private_ip"`
+}
+
+func (v *NICIP) Validate() error {
+
+	return nil
+}
+
 type RDB struct {
 	// AlarmStatus's available values: ok, alarm, insufficient
 	AlarmStatus         *string    `json:"alarm_status" name:"alarm_status"`
