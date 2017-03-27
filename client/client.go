@@ -11,17 +11,17 @@ import (
 
 const (
 	//InstanceStatusPending pending
-	InstanceStatusPending    = "pending"
+	InstanceStatusPending = "pending"
 	//InstanceStatusRunning running
-	InstanceStatusRunning    = "running"
+	InstanceStatusRunning = "running"
 	//InstanceStatusStopped stopped
-	InstanceStatusStopped    = "stopped"
+	InstanceStatusStopped = "stopped"
 	//InstanceStatusSuspended suspended
-	InstanceStatusSuspended  = "suspended"
+	InstanceStatusSuspended = "suspended"
 	//InstanceStatusTerminated terminated
 	InstanceStatusTerminated = "terminated"
 	//InstanceStatusCeased ceased
-	InstanceStatusCeased     = "ceased"
+	InstanceStatusCeased = "ceased"
 
 	//LoadBalancerStatusPending pending
 	LoadBalancerStatusPending = "pending"
@@ -36,7 +36,8 @@ const (
 	//LoadBalancerStatusCeased ceased
 	LoadBalancerStatusCeased = "ceased"
 
-	defaultOpTimeout = 180*time.Second
+	defaultOpTimeout    = 180 * time.Second
+	defaultWaitInterval = 5 * time.Second
 )
 
 // QingCloudClient QingCloud IaaS Advanced Client
@@ -66,10 +67,11 @@ func NewClient(config *config.Config, zone string) (QingCloudClient, error) {
 	}
 
 	c := &client{
-		InstanceService:      instanceService,
-		JobService:           jobService,
-		OperationTimeout:            defaultOpTimeout,
-		zone:                 zone,
+		InstanceService:  instanceService,
+		JobService:       jobService,
+		OperationTimeout: defaultOpTimeout,
+		WaitInterval:     defaultWaitInterval,
+		zone:             zone,
 	}
 	return c, nil
 }
@@ -78,7 +80,7 @@ type client struct {
 	InstanceService  *service.InstanceService
 	JobService       *service.JobService
 	OperationTimeout time.Duration
-	WaitInterval   time.Duration
+	WaitInterval     time.Duration
 	zone             string
 }
 
