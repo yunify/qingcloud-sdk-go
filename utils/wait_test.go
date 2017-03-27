@@ -13,7 +13,7 @@ func TestWaitForSpecificOrError(t *testing.T){
 	timeout := 1000*time.Millisecond
 	times := 0
 	err := WaitForSpecificOrError(func() (bool, error) {
-		times += 1
+		times ++
 		println("times", times)
 		if times == 3 {
 			return true, nil
@@ -25,7 +25,7 @@ func TestWaitForSpecificOrError(t *testing.T){
 
 	times = 0
 	err = WaitForSpecificOrError(func() (bool, error) {
-		times += 1
+		times ++
 		println("times", times)
 		if times == 3 {
 			return false, errors.New("error")
@@ -37,7 +37,7 @@ func TestWaitForSpecificOrError(t *testing.T){
 
 	times = 0
 	err = WaitForSpecificOrError(func() (bool, error) {
-		times += 1
+		times ++
 		println("times", times)
 		return false, nil
 	}, timeout, waitInterval)

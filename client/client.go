@@ -10,23 +10,36 @@ import (
 )
 
 const (
+	// Instance status pending
 	InstanceStatusPending    = "pending"
+	// Instance status running
 	InstanceStatusRunning    = "running"
+	// Instance status stopped
 	InstanceStatusStopped    = "stopped"
+	// Instance status suspended
 	InstanceStatusSuspended  = "suspended"
+	// Instance status terminated
 	InstanceStatusTerminated = "terminated"
+	// Instance Status ceased
 	InstanceStatusCeased     = "ceased"
 
+	// LoadBalancer status pending
 	LoadBalancerStatusPending = "pending"
+	// LoadBalancer status active
 	LoadBalancerStatusActive = "active"
+	// LoadBalancer status stopped
 	LoadBalancerStatusStopped = "stopped"
+	// LoadBalancer status suspended
 	LoadBalancerStatusSuspended = "suspended"
+	// LoadBalancer status deleted
 	LoadBalancerStatusDeleted = "deleted"
+	// LoadBalancer status ceased
 	LoadBalancerStatusCeased = "ceased"
 
 	defaultOpTimeout = 180*time.Second
 )
 
+// QingCloud IaaS Advanced Client
 type QingCloudClient interface {
 	RunInstance(arg *service.RunInstancesInput) (*service.Instance, error)
 	DescribeInstance(instanceID string) (*service.Instance, error)
@@ -37,6 +50,7 @@ type QingCloudClient interface {
 	WaitInstanceStatus(instanceID string, status string) (*service.Instance, error)
 }
 
+// NewClient return a new QingCloudClient
 func NewClient(config *config.Config, zone string) (QingCloudClient, error) {
 	qcService, err := service.Init(config)
 	if err != nil {
@@ -68,6 +82,7 @@ type client struct {
 	zone             string
 }
 
+// RunInstance
 func (c *client) RunInstance(input *service.RunInstancesInput) (*service.Instance, error) {
 
 	output, err := c.InstanceService.RunInstances(input)
@@ -75,7 +90,7 @@ func (c *client) RunInstance(input *service.RunInstancesInput) (*service.Instanc
 		return nil, err
 	}
 	if len(output.Instances) == 0 {
-		return nil, errors.New("Create instance response error.")
+		return nil, errors.New("Create instance response error")
 	}
 	jobID := output.JobID
 	jobErr := c.waitJob(*jobID)
@@ -94,6 +109,7 @@ func (c *client) RunInstance(input *service.RunInstancesInput) (*service.Instanc
 	return ins, nil
 }
 
+// DescribeInstance
 func (c *client) DescribeInstance(instanceID string) (*service.Instance, error) {
 	input := &service.DescribeInstancesInput{Instances: []*string{&instanceID}}
 	output, err := c.InstanceService.DescribeInstances(input)
@@ -101,11 +117,12 @@ func (c *client) DescribeInstance(instanceID string) (*service.Instance, error) 
 		return nil, err
 	}
 	if len(output.InstanceSet) == 0 {
-		return nil, fmt.Errorf("Instance with id [%s] not exist.", instanceID)
+		return nil, fmt.Errorf("Instance with id [%s] not exist", instanceID)
 	}
 	return output.InstanceSet[0], nil
 }
 
+// StartInstance
 func (c *client) StartInstance(instanceID string) error {
 	input := &service.StartInstancesInput{Instances: []*string{&instanceID}}
 	output, err := c.InstanceService.StartInstances(input)
@@ -121,6 +138,7 @@ func (c *client) StartInstance(instanceID string) error {
 	return err
 }
 
+// StopInstance
 func (c *client) StopInstance(instanceID string, force bool) error {
 	var forceParam int
 	if force {
@@ -142,6 +160,7 @@ func (c *client) StopInstance(instanceID string, force bool) error {
 	return err
 }
 
+// RestartInstance
 func (c *client) RestartInstance(instanceID string) error {
 	input := &service.RestartInstancesInput{Instances: []*string{&instanceID}}
 	output, err := c.InstanceService.RestartInstances(input)
@@ -157,6 +176,7 @@ func (c *client) RestartInstance(instanceID string) error {
 	return err
 }
 
+// TerminateInstance
 func (c *client) TerminateInstance(instanceID string) error {
 	input := &service.TerminateInstancesInput{Instances: []*string{&instanceID}}
 	output, err := c.InstanceService.TerminateInstances(input)
@@ -176,6 +196,7 @@ func (c *client) waitJob(jobID string) error {
 	return WaitJob(c.JobService, jobID, c.OperationTimeout, c.WaitInterval)
 }
 
+// WaitInstanceStatus
 func (c *client) WaitInstanceStatus(instanceID string, status string) (*service.Instance, error) {
 	return WaitInstanceStatus(c.InstanceService, instanceID, status, c.OperationTimeout, c.WaitInterval)
 }

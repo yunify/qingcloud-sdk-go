@@ -8,6 +8,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/utils"
 )
 
+// WaitJob wait the job with this jobID finish
 func WaitJob(jobService *service.JobService, jobID string, timeout time.Duration, waitInterval time.Duration) error {
 	logger.Debug("Waiting for Job [%s] finished", jobID)
 	return utils.WaitForSpecificOrError(func() (bool, error) {
@@ -45,11 +46,12 @@ func describeInstance(instanceService *service.InstanceService, instanceID strin
 		return nil, err
 	}
 	if len(output.InstanceSet) == 0 {
-		return nil, fmt.Errorf("Instance with id [%s] not exist.", instanceID)
+		return nil, fmt.Errorf("Instance with id [%s] not exist", instanceID)
 	}
 	return output.InstanceSet[0], nil
 }
 
+// WaitInstanceStatus wait the instance with this instanceID to expect status
 func WaitInstanceStatus(instanceService *service.InstanceService, instanceID string, status string, timeout time.Duration, waitInterval time.Duration) (ins *service.Instance, err error) {
 	logger.Debug("Waiting for Instance [%s] status [%s] ", instanceID, status)
 	errorTimes := 0
@@ -57,12 +59,11 @@ func WaitInstanceStatus(instanceService *service.InstanceService, instanceID str
 		i, err := describeInstance(instanceService, instanceID)
 		if err != nil {
 			logger.Error("DescribeInstance [%s] error : [%s]", instanceID, err.Error())
-			errorTimes += 1
+			errorTimes ++
 			if errorTimes > 3 {
 				return false, err
-			} else {
-				return false, nil
 			}
+			return false, nil
 		}
 		if i.Status != nil && *i.Status == status {
 			if i.TransitionStatus != nil && *i.TransitionStatus != "" {
@@ -78,6 +79,7 @@ func WaitInstanceStatus(instanceService *service.InstanceService, instanceID str
 	return
 }
 
+// WaitInstanceNetwork wait the instance with this instanceID network become ready
 func WaitInstanceNetwork(instanceService *service.InstanceService, instanceID string, timeout time.Duration, waitInterval time.Duration) (ins *service.Instance, err error) {
 	logger.Debug("Waiting for IP address to be assigned to Instance [%s]", instanceID)
 	err = utils.WaitForSpecificOrError(func() (bool, error) {
@@ -109,6 +111,7 @@ func describeLoadBalancer(lbService *service.LoadBalancerService, loadBalancerID
 	return output.LoadBalancerSet[0], nil
 }
 
+// WaitLoadBalancerStatus wait the loadBalancer with this loadBalancerID to expect status
 func WaitLoadBalancerStatus(lbService *service.LoadBalancerService, loadBalancerID string, status string, timeout time.Duration, waitInterval time.Duration) (lb *service.LoadBalancer, err error) {
 	logger.Debug("Waiting for LoadBalancer [%s] status [%s] ", loadBalancerID, status)
 	errorTimes := 0
@@ -116,12 +119,11 @@ func WaitLoadBalancerStatus(lbService *service.LoadBalancerService, loadBalancer
 		i, err := describeLoadBalancer(lbService, loadBalancerID)
 		if err != nil {
 			logger.Error("DescribeLoadBalancer [%s] error : [%s]", loadBalancerID, err.Error())
-			errorTimes += 1
+			errorTimes ++
 			if errorTimes > 3 {
 				return false, err
-			} else {
-				return false, nil
 			}
+			return false, nil
 		}
 		if i.Status != nil && *i.Status == status {
 			if i.TransitionStatus != nil && *i.TransitionStatus != "" {
