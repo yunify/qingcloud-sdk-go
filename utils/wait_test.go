@@ -1,19 +1,19 @@
 package utils
 
 import (
+	"errors"
+	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
-	"github.com/stretchr/testify/assert"
-	"errors"
 )
 
-func TestWaitForSpecificOrError(t *testing.T){
+func TestWaitForSpecificOrError(t *testing.T) {
 
-	waitInterval := 100*time.Millisecond
-	timeout := 1000*time.Millisecond
+	waitInterval := 100 * time.Millisecond
+	timeout := 10*waitInterval + waitInterval/2
 	times := 0
 	err := WaitForSpecificOrError(func() (bool, error) {
-		times ++
+		times++
 		println("times", times)
 		if times == 3 {
 			return true, nil
@@ -25,7 +25,7 @@ func TestWaitForSpecificOrError(t *testing.T){
 
 	times = 0
 	err = WaitForSpecificOrError(func() (bool, error) {
-		times ++
+		times++
 		println("times", times)
 		if times == 3 {
 			return false, errors.New("error")
@@ -37,7 +37,7 @@ func TestWaitForSpecificOrError(t *testing.T){
 
 	times = 0
 	err = WaitForSpecificOrError(func() (bool, error) {
-		times ++
+		times++
 		println("times", times)
 		return false, nil
 	}, timeout, waitInterval)
