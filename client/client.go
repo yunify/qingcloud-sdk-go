@@ -10,30 +10,30 @@ import (
 )
 
 const (
-	// InstanceStatusPending
+	//InstanceStatusPending pending
 	InstanceStatusPending    = "pending"
-	// InstanceStatusRunning
+	//InstanceStatusRunning running
 	InstanceStatusRunning    = "running"
-	// InstanceStatusStopped
+	//InstanceStatusStopped stopped
 	InstanceStatusStopped    = "stopped"
-	// InstanceStatusSuspended
+	//InstanceStatusSuspended suspended
 	InstanceStatusSuspended  = "suspended"
-	// InstanceStatusTerminated
+	//InstanceStatusTerminated terminated
 	InstanceStatusTerminated = "terminated"
-	// InstanceStatusCeased
+	//InstanceStatusCeased ceased
 	InstanceStatusCeased     = "ceased"
 
-	// LoadBalancerStatusPending
+	//LoadBalancerStatusPending pending
 	LoadBalancerStatusPending = "pending"
-	// LoadBalancerStatusActive
+	//LoadBalancerStatusActive active
 	LoadBalancerStatusActive = "active"
-	// LoadBalancerStatusStopped
+	//LoadBalancerStatusStopped stopped
 	LoadBalancerStatusStopped = "stopped"
-	// LoadBalancerStatusSuspended
+	//LoadBalancerStatusSuspended suspended
 	LoadBalancerStatusSuspended = "suspended"
-	// LoadBalancerStatusDeleted
+	//LoadBalancerStatusDeleted deleted
 	LoadBalancerStatusDeleted = "deleted"
-	// LoadBalancerStatusCeased
+	//LoadBalancerStatusCeased ceased
 	LoadBalancerStatusCeased = "ceased"
 
 	defaultOpTimeout = 180*time.Second
