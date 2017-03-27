@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 	"github.com/stretchr/testify/assert"
-	"github.com/pkg/errors"
+	"errors"
 )
 
 func TestWaitForSpecificOrError(t *testing.T){
