@@ -1466,6 +1466,44 @@ func (v *MongoPrivateIP) Validate() error {
 	return nil
 }
 
+type NIC struct {
+	CreateTime *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
+	InstanceID *string    `json:"instance_id" name:"instance_id"`
+	NICID      *string    `json:"nic_id" name:"nic_id"`
+	NICName    *string    `json:"nic_name" name:"nic_name"`
+	Role       *int       `json:"role" name:"role"`
+	Sequence   *int       `json:"sequence" name:"sequence"`
+	// Status's available values: available, in-use
+	Status     *string    `json:"status" name:"status"`
+	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	VxNetID    *string    `json:"vxnet_id" name:"vxnet_id"`
+}
+
+func (v *NIC) Validate() error {
+
+	if v.Status != nil {
+		statusValidValues := []string{"available", "in-use"}
+		statusParameterValue := fmt.Sprint(*v.Status)
+
+		statusIsValid := false
+		for _, value := range statusValidValues {
+			if value == statusParameterValue {
+				statusIsValid = true
+			}
+		}
+
+		if !statusIsValid {
+			return errors.ParameterValueNotAllowedError{
+				ParameterName:  "Status",
+				ParameterValue: statusParameterValue,
+				AllowedValues:  statusValidValues,
+			}
+		}
+	}
+
+	return nil
+}
+
 type RDB struct {
 	// AlarmStatus's available values: ok, alarm, insufficient
 	AlarmStatus         *string    `json:"alarm_status" name:"alarm_status"`
