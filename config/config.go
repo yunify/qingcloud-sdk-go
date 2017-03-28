@@ -39,6 +39,8 @@ type Config struct {
 
 	LogLevel string `yaml:"log_level"`
 
+	Zone string `yaml:"zone"`
+
 	Connection *http.Client
 }
 
