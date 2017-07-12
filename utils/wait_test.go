@@ -42,5 +42,8 @@ func TestWaitForSpecificOrError(t *testing.T) {
 		return false, nil
 	}, timeout, waitInterval)
 	assert.Error(t, err)
+	tErr, ok := err.(*TimeoutError)
+	assert.True(t, ok)
+	assert.Equal(t, timeout, tErr.timeout)
 	assert.Equal(t, 10, times)
 }

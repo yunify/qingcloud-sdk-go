@@ -15,7 +15,8 @@ func WaitJob(jobService *service.JobService, jobID string, timeout time.Duration
 		input := &service.DescribeJobsInput{Jobs: []*string{&jobID}}
 		output, err := jobService.DescribeJobs(input)
 		if err != nil {
-			return false, err
+			//network or api error, not considered job fail.
+			return false, nil
 		}
 		if len(output.JobSet) == 0 {
 			return false, fmt.Errorf("Can not find job [%s]", jobID)
@@ -37,6 +38,24 @@ func WaitJob(jobService *service.JobService, jobID string, timeout time.Duration
 		logger.Error("Unknow status [%s] for job [%s]", *j.Status, jobID)
 		return false, nil
 	}, timeout, waitInterval)
+}
+
+// CheckJobStatus get job status
+func CheckJobStatus(jobService *service.JobService, jobID string) (string,error) {
+	input := &service.DescribeJobsInput{Jobs: []*string{&jobID}}
+	output, err := jobService.DescribeJobs(input)
+	if err != nil {
+		return JobStatusUnknown, nil
+	}
+	if len(output.JobSet) == 0 {
+		return "", fmt.Errorf("Can not find job [%s]", jobID)
+	}
+	j := output.JobSet[0]
+	if j.Status == nil {
+		logger.Error("Job [%s] status is nil ", jobID)
+		return JobStatusUnknown, nil
+	}
+	return *j.Status, nil
 }
 
 func describeInstance(instanceService *service.InstanceService, instanceID string) (*service.Instance, error) {
