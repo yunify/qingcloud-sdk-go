@@ -5,14 +5,16 @@ import (
 	"time"
 )
 
-// An Error represents a timeout error.
+// TimeoutError An Error represents a timeout error.
 type TimeoutError struct {
 	timeout time.Duration
 }
-
+// Error message
 func (e *TimeoutError) Error() string          { return fmt.Sprintf("Wait timeout [%s] ", e.timeout) }
+// Timeout duration
 func (e *TimeoutError) Timeout() time.Duration { return e.timeout }
 
+// NewTimeoutError create a new TimeoutError
 func NewTimeoutError(timeout time.Duration) *TimeoutError {
 	return &TimeoutError{timeout: timeout}
 }
