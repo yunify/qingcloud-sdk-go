@@ -139,10 +139,13 @@ func (c *Config) LoadConfigFromContent(content []byte) error {
 	logger.SetLevel(c.LogLevel)
 
 	timeout := time.Duration(c.ConnectionTimeout) * time.Second
-	c.Connection.Transport = &http.Transport{
+	transport := &http.Transport{
 		Dial: func (network, addr string) (net.Conn, error) {
 			return net.DialTimeout(network, addr, timeout)
 		},
+	}
+	c.Connection = &http.Client{
+		Transport:transport,
 	}
 
 	return nil
