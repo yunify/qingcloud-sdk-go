@@ -24,6 +24,7 @@ import (
 
 	"github.com/yunify/qingcloud-sdk-go/logger"
 	"github.com/yunify/qingcloud-sdk-go/utils"
+	"time"
 )
 
 // A Config stores a configuration of this sdk.
@@ -36,6 +37,7 @@ type Config struct {
 	Protocol          string `yaml:"protocol"`
 	URI               string `yaml:"uri"`
 	ConnectionRetries int    `yaml:"connection_retries"`
+	ConnectionTimeout int    `yaml:"connection_timeout"`
 
 	LogLevel string `yaml:"log_level"`
 
@@ -66,7 +68,10 @@ func NewDefault() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	config.Connection = &http.Client{}
+	timeout := time.Duration(config.ConnectionTimeout) * time.Second
+	config.Connection = &http.Client{
+		Timeout:timeout,
+	}
 
 	return config, nil
 }
@@ -125,6 +130,6 @@ func (c *Config) LoadConfigFromContent(content []byte) error {
 	}
 
 	logger.SetLevel(c.LogLevel)
-
+	c.Connection.Timeout = time.Duration(c.ConnectionTimeout) * time.Second
 	return nil
 }
