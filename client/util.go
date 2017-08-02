@@ -41,7 +41,7 @@ func WaitJob(jobService *service.JobService, jobID string, timeout time.Duration
 }
 
 // CheckJobStatus get job status
-func CheckJobStatus(jobService *service.JobService, jobID string) (string,error) {
+func CheckJobStatus(jobService *service.JobService, jobID string) (string, error) {
 	input := &service.DescribeJobsInput{Jobs: []*string{&jobID}}
 	output, err := jobService.DescribeJobs(input)
 	if err != nil {

@@ -9,8 +9,10 @@ import (
 type TimeoutError struct {
 	timeout time.Duration
 }
+
 // Error message
-func (e *TimeoutError) Error() string          { return fmt.Sprintf("Wait timeout [%s] ", e.timeout) }
+func (e *TimeoutError) Error() string { return fmt.Sprintf("Wait timeout [%s] ", e.timeout) }
+
 // Timeout duration
 func (e *TimeoutError) Timeout() time.Duration { return e.timeout }
 

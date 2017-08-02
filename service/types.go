@@ -1840,6 +1840,7 @@ type Router struct {
 	// Status's available values: pending, active, poweroffed, suspended, deleted, ceased
 	Status     *string    `json:"status" name:"status"`
 	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	Tags       []*Tag     `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, updating, suspending, resuming, poweroffing, poweroning, deleting
 	TransitionStatus *string  `json:"transition_status" name:"transition_status"`
 	VxNets           []*VxNet `json:"vxnets" name:"vxnets"`
@@ -1909,6 +1910,14 @@ func (v *Router) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
+			}
+		}
+	}
+
+	if len(v.Tags) > 0 {
+		for _, property := range v.Tags {
+			if err := property.Validate(); err != nil {
+				return err
 			}
 		}
 	}
@@ -2200,12 +2209,21 @@ type SecurityGroup struct {
 	Resources         []*Resource `json:"resources" name:"resources"`
 	SecurityGroupID   *string     `json:"security_group_id" name:"security_group_id"`
 	SecurityGroupName *string     `json:"security_group_name" name:"security_group_name"`
+	Tags              []*Tag      `json:"tags" name:"tags"`
 }
 
 func (v *SecurityGroup) Validate() error {
 
 	if len(v.Resources) > 0 {
 		for _, property := range v.Resources {
+			if err := property.Validate(); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(v.Tags) > 0 {
+		for _, property := range v.Tags {
 			if err := property.Validate(); err != nil {
 				return err
 			}
