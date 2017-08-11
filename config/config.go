@@ -24,8 +24,8 @@ import (
 
 	"github.com/yunify/qingcloud-sdk-go/logger"
 	"github.com/yunify/qingcloud-sdk-go/utils"
-	"time"
 	"net"
+	"time"
 )
 
 // A Config stores a configuration of this sdk.
@@ -72,12 +72,12 @@ func NewDefault() (*Config, error) {
 
 	timeout := time.Duration(config.ConnectionTimeout) * time.Second
 	transport := &http.Transport{
-		Dial: func (network, addr string) (net.Conn, error) {
-		return net.DialTimeout(network, addr, timeout)
+		Dial: func(network, addr string) (net.Conn, error) {
+			return net.DialTimeout(network, addr, timeout)
 		},
 	}
 	config.Connection = &http.Client{
-		Transport:transport,
+		Transport: transport,
 	}
 
 	return config, nil
@@ -140,12 +140,12 @@ func (c *Config) LoadConfigFromContent(content []byte) error {
 
 	timeout := time.Duration(c.ConnectionTimeout) * time.Second
 	transport := &http.Transport{
-		Dial: func (network, addr string) (net.Conn, error) {
+		Dial: func(network, addr string) (net.Conn, error) {
 			return net.DialTimeout(network, addr, timeout)
 		},
 	}
 	c.Connection = &http.Client{
-		Transport:transport,
+		Transport: transport,
 	}
 
 	return nil
