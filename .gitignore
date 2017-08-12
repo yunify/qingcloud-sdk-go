@@ -28,3 +28,4 @@ gen
 coverage
 release
 .idea
+glide.lock
