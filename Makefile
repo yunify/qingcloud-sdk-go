@@ -141,7 +141,7 @@ unit-runtime-go-1.5:
 	@echo "ok"
 
 test:
-	pushd "./test"; go run *.go; popd
+	pushd "./test"; go test ; popd
 	@echo "ok"
 
 release: release-source release-source-with-vendor
