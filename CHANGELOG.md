@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to QingCloud SDK for Go will be documented in this file.
 
+## [v2.0.0-alpha.8] - 2017-08-13
+
+### Added
+
+- Add missing parameter for describenic
+- Add vxnet parms for instances
+
 ## [v2.0.0-alpha.7] - 2017-08-02
 
 ### Added
