@@ -1468,15 +1468,20 @@ func (v *MongoPrivateIP) Validate() error {
 }
 
 type NIC struct {
-	CreateTime *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
-	InstanceID *string    `json:"instance_id" name:"instance_id"`
-	NICID      *string    `json:"nic_id" name:"nic_id"`
-	NICName    *string    `json:"nic_name" name:"nic_name"`
-	Role       *int       `json:"role" name:"role"`
-	Sequence   *int       `json:"sequence" name:"sequence"`
+	CreateTime    *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
+	InstanceID    *string    `json:"instance_id" name:"instance_id"`
+	NICID         *string    `json:"nic_id" name:"nic_id"`
+	NICName       *string    `json:"nic_name" name:"nic_name"`
+	Owner         *string    `json:"owner" name:"owner"`
+	PrivateIP     *string    `json:"private_ip" name:"private_ip"`
+	Role          *int       `json:"role" name:"role"`
+	RootUserID    *string    `json:"root_user_id" name:"root_user_id"`
+	SecurityGroup *string    `json:"security_group" name:"security_group"`
+	Sequence      *int       `json:"sequence" name:"sequence"`
 	// Status's available values: available, in-use
 	Status     *string    `json:"status" name:"status"`
 	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	Tags       []*Tag     `json:"tags" name:"tags"`
 	VxNetID    *string    `json:"vxnet_id" name:"vxnet_id"`
 }
 
@@ -1498,6 +1503,14 @@ func (v *NIC) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
+			}
+		}
+	}
+
+	if len(v.Tags) > 0 {
+		for _, property := range v.Tags {
+			if err := property.Validate(); err != nil {
+				return err
 			}
 		}
 	}
