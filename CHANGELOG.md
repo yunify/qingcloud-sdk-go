@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to QingCloud SDK for Go will be documented in this file.
 
-## [v2.0.0-alpha.8] - 2017-08-02
+## [v2.0.0-alpha.8] - 2017-08-13
 
 ### Added
 
