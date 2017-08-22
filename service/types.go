@@ -1253,24 +1253,11 @@ func (v *LoadBalancerPolicyRule) Validate() error {
 }
 
 type Meter struct {
-	Data     *string `json:"data" name:"data"`
-	DataSet  []*Data `json:"data_set" name:"data_set"`
-	MeterID  *string `json:"meter_id" name:"meter_id"`
-	Sequence *int    `json:"sequence" name:"sequence"`
-	VxNetID  *string `json:"vxnet_id" name:"vxnet_id"`
-}
-
-func (v *Meter) Validate() error {
-
-	if len(v.DataSet) > 0 {
-		for _, property := range v.DataSet {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
+	Data     interface{}   `json:"data" name:"data"`
+	DataSet  []interface{} `json:"data_set" name:"data_set"`
+	MeterID  *string       `json:"meter_id" name:"meter_id"`
+	Sequence *int          `json:"sequence" name:"sequence"`
+	VxNetID  *string       `json:"vxnet_id" name:"vxnet_id"`
 }
 
 type Mongo struct {
