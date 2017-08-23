@@ -2728,10 +2728,7 @@ type VxNet struct {
 	CreateTime       *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
 	Description      *string    `json:"description" name:"description"`
 	InstanceIDs      []*string  `json:"instance_ids" name:"instance_ids"`
-	NICID            *string    `json:"nic_id" name:"nic_id"`
 	Owner            *string    `json:"owner" name:"owner"`
-	PrivateIP        *string    `json:"private_ip" name:"private_ip"`
-	Role             *int       `json:"role" name:"role"`
 	Router           *Router    `json:"router" name:"router"`
 	Tags             []*Tag     `json:"tags" name:"tags"`
 	VpcRouterID      *string    `json:"vpc_router_id" name:"vpc_router_id"`
