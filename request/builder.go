@@ -93,7 +93,7 @@ func (b *Builder) parseRequestProperties() error {
 	for i := 0; i < fields.NumField(); i++ {
 		switch value := fields.Field(i).Interface().(type) {
 		case *string:
-			if value != nil {
+			if value != nil && *value != "" {
 				propertiesMap[fields.Type().Field(i).Tag.Get("name")] = *value
 			}
 		case *int:
@@ -135,7 +135,7 @@ func (b *Builder) parseRequestParams() error {
 				if tagDefault != "" {
 					requestParams[tagName] = tagDefault
 				}
-				if value != nil {
+				if value != nil && *value != "" {
 					requestParams[tagName] = *value
 				}
 			case *int:
@@ -195,7 +195,7 @@ func (b *Builder) parseRequestParams() error {
 										requestParams[tagKey] = strconv.Itoa(int(*fieldValue))
 									}
 								case *string:
-									if fieldValue != nil {
+									if fieldValue != nil && *fieldValue != "" {
 										requestParams[tagKey] = *fieldValue
 									}
 								}
