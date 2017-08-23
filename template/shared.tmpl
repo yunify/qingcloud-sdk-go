@@ -20,6 +20,8 @@
 		interface{}
 	{{- else if eq $typeName "any" -}}
 		interface{}
+	{{- else if eq $typeName "" -}}
+		interface{}
 	{{- else -}}
 		*{{$typeName | camelCase}}
 	{{- end -}}
