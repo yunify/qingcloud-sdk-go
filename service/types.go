@@ -798,11 +798,11 @@ type Instance struct {
 	SubCode    *int       `json:"sub_code" name:"sub_code"`
 	Tags       []*Tag     `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, starting, stopping, restarting, suspending, resuming, terminating, recovering, resetting
-	TransitionStatus *string   `json:"transition_status" name:"transition_status"`
-	VCPUsCurrent     *int      `json:"vcpus_current" name:"vcpus_current"`
-	VolumeIDs        []*string `json:"volume_ids" name:"volume_ids"`
-	Volumes          []*Volume `json:"volumes" name:"volumes"`
-	VxNets           []*VxNet  `json:"vxnets" name:"vxnets"`
+	TransitionStatus *string          `json:"transition_status" name:"transition_status"`
+	VCPUsCurrent     *int             `json:"vcpus_current" name:"vcpus_current"`
+	VolumeIDs        []*string        `json:"volume_ids" name:"volume_ids"`
+	Volumes          []*Volume        `json:"volumes" name:"volumes"`
+	VxNets           []*InstanceVxNet `json:"vxnets" name:"vxnets"`
 }
 
 func (v *Instance) Validate() error {
@@ -941,6 +941,41 @@ func (v *InstanceType) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
+			}
+		}
+	}
+
+	return nil
+}
+
+type InstanceVxNet struct {
+	NICID     *string `json:"nic_id" name:"nic_id"`
+	PrivateIP *string `json:"private_ip" name:"private_ip"`
+	Role      *int    `json:"role" name:"role"`
+	VxNetID   *string `json:"vxnet_id" name:"vxnet_id"`
+	VxNetName *string `json:"vxnet_name" name:"vxnet_name"`
+	// VxNetType's available values: 0, 1
+	VxNetType *int `json:"vxnet_type" name:"vxnet_type"`
+}
+
+func (v *InstanceVxNet) Validate() error {
+
+	if v.VxNetType != nil {
+		vxnetTypeValidValues := []string{"0", "1"}
+		vxnetTypeParameterValue := fmt.Sprint(*v.VxNetType)
+
+		vxnetTypeIsValid := false
+		for _, value := range vxnetTypeValidValues {
+			if value == vxnetTypeParameterValue {
+				vxnetTypeIsValid = true
+			}
+		}
+
+		if !vxnetTypeIsValid {
+			return errors.ParameterValueNotAllowedError{
+				ParameterName:  "VxNetType",
+				ParameterValue: vxnetTypeParameterValue,
+				AllowedValues:  vxnetTypeValidValues,
 			}
 		}
 	}
