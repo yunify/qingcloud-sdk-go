@@ -14,6 +14,9 @@
 // | limitations under the License.
 // +-------------------------------------------------------------------------
 
+
+
+
 package service
 
 import (
@@ -36,445 +39,950 @@ type VxNetService struct {
 
 type VxNetServiceProperties struct {
 	// QingCloud Zone ID
-	Zone *string `json:"zone" name:"zone"` // Required
-}
+		Zone *string `json:"zone" name:"zone"` // Required
+	}
 
-func (s *QingCloudService) VxNet(zone string) (*VxNetService, error) {
+func (s *QingCloudService) VxNet(zone string,) (*VxNetService, error) {
 	properties := &VxNetServiceProperties{
 		Zone: &zone,
+		
 	}
 
 	return &VxNetService{Config: s.Config, Properties: properties}, nil
 }
 
-// Documentation URL: https://docs.qingcloud.com/api/vxnet/create_vxnets.html
-func (s *VxNetService) CreateVxNets(i *CreateVxNetsInput) (*CreateVxNetsOutput, error) {
-	if i == nil {
-		i = &CreateVxNetsInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "CreateVxnets",
-		RequestMethod: "GET",
+
+	
+	
+	
+	
+
+	
+
+	
+	// Documentation URL: https://docs.qingcloud.com/api/vxnet/create_vxnets.html
+	func (s *VxNetService) CreateVxNets(i *CreateVxNetsInput) (*CreateVxNetsOutput, error) {
+		if i == nil {
+			i = &CreateVxNetsInput{}
+		}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "CreateVxnets",
+			RequestMethod: "GET",
+		}
+
+		x := &CreateVxNetsOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
+		}
+
+		err = r.Send()
+		if err != nil {
+			return nil, err
+		}
+
+		return x, err
 	}
 
-	x := &CreateVxNetsOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
-	}
-
-	err = r.Send()
-	if err != nil {
-		return nil, err
-	}
-
-	return x, err
-}
-
-type CreateVxNetsInput struct {
-	Count     *int    `json:"count" name:"count" default:"1" location:"params"`
-	VxNetName *string `json:"vxnet_name" name:"vxnet_name" location:"params"`
+	type CreateVxNetsInput struct {
+		
+			Count *int `json:"count" name:"count" default:"1" location:"params"` 
+	VxNetName *string `json:"vxnet_name" name:"vxnet_name" location:"params"` 
 	// VxNetType's available values: 0, 1
-	VxNetType *int `json:"vxnet_type" name:"vxnet_type" location:"params"` // Required
-}
+		VxNetType *int `json:"vxnet_type" name:"vxnet_type" location:"params"` // Required
+	}
 
-func (v *CreateVxNetsInput) Validate() error {
+	func (v *CreateVxNetsInput) Validate() error {
+		
+	
 
-	if v.VxNetType == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "VxNetType",
-			ParentName:    "CreateVxNetsInput",
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+				if v.VxNetType == nil {
+					return errors.ParameterRequiredError{
+						ParameterName: "VxNetType",
+						ParentName: "CreateVxNetsInput",
+					}
+				}
+			
+			
+			
+				if v.VxNetType != nil {
+					vxnetTypeValidValues := []string{"0", "1"}
+					vxnetTypeParameterValue := fmt.Sprint(*v.VxNetType)
+
+					vxnetTypeIsValid := false
+					for _, value := range vxnetTypeValidValues {
+						if value == vxnetTypeParameterValue {
+							vxnetTypeIsValid = true
+						}
+					}
+
+					if !vxnetTypeIsValid {
+						return errors.ParameterValueNotAllowedError{
+							ParameterName: "VxNetType",
+							ParameterValue: vxnetTypeParameterValue,
+							AllowedValues: vxnetTypeValidValues,
+						}
+					}
+				}
+			
+		
+
+		
+
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
+	}
+
+	type CreateVxNetsOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
+	VxNets []*string `json:"vxnets" name:"vxnets" location:"elements"` 
+	}
+
+
+	
+	
+	
+	
+
+	
+
+	
+	// Documentation URL: https://docs.qingcloud.com/api/vxnet/delete_vxnets.html
+	func (s *VxNetService) DeleteVxNets(i *DeleteVxNetsInput) (*DeleteVxNetsOutput, error) {
+		if i == nil {
+			i = &DeleteVxNetsInput{}
 		}
-	}
-
-	if v.VxNetType != nil {
-		vxnetTypeValidValues := []string{"0", "1"}
-		vxnetTypeParameterValue := fmt.Sprint(*v.VxNetType)
-
-		vxnetTypeIsValid := false
-		for _, value := range vxnetTypeValidValues {
-			if value == vxnetTypeParameterValue {
-				vxnetTypeIsValid = true
-			}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "DeleteVxnets",
+			RequestMethod: "GET",
 		}
 
-		if !vxnetTypeIsValid {
-			return errors.ParameterValueNotAllowedError{
-				ParameterName:  "VxNetType",
-				ParameterValue: vxnetTypeParameterValue,
-				AllowedValues:  vxnetTypeValidValues,
-			}
+		x := &DeleteVxNetsOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
 		}
-	}
 
-	return nil
-}
-
-type CreateVxNetsOutput struct {
-	Message *string   `json:"message" name:"message"`
-	Action  *string   `json:"action" name:"action" location:"elements"`
-	RetCode *int      `json:"ret_code" name:"ret_code" location:"elements"`
-	VxNets  []*string `json:"vxnets" name:"vxnets" location:"elements"`
-}
-
-// Documentation URL: https://docs.qingcloud.com/api/vxnet/delete_vxnets.html
-func (s *VxNetService) DeleteVxNets(i *DeleteVxNetsInput) (*DeleteVxNetsOutput, error) {
-	if i == nil {
-		i = &DeleteVxNetsInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "DeleteVxnets",
-		RequestMethod: "GET",
-	}
-
-	x := &DeleteVxNetsOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
-	}
-
-	err = r.Send()
-	if err != nil {
-		return nil, err
-	}
-
-	return x, err
-}
-
-type DeleteVxNetsInput struct {
-	VxNets []*string `json:"vxnets" name:"vxnets" location:"params"` // Required
-}
-
-func (v *DeleteVxNetsInput) Validate() error {
-
-	if len(v.VxNets) == 0 {
-		return errors.ParameterRequiredError{
-			ParameterName: "VxNets",
-			ParentName:    "DeleteVxNetsInput",
+		err = r.Send()
+		if err != nil {
+			return nil, err
 		}
+
+		return x, err
 	}
 
-	return nil
-}
-
-type DeleteVxNetsOutput struct {
-	Message *string   `json:"message" name:"message"`
-	Action  *string   `json:"action" name:"action" location:"elements"`
-	RetCode *int      `json:"ret_code" name:"ret_code" location:"elements"`
-	VxNets  []*string `json:"vxnets" name:"vxnets" location:"elements"`
-}
-
-// Documentation URL: https://docs.qingcloud.com/api/vxnet/describe_vxnet_instances.html
-func (s *VxNetService) DescribeVxNetInstances(i *DescribeVxNetInstancesInput) (*DescribeVxNetInstancesOutput, error) {
-	if i == nil {
-		i = &DescribeVxNetInstancesInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "DescribeVxnetInstances",
-		RequestMethod: "GET",
+	type DeleteVxNetsInput struct {
+		
+			VxNets []*string `json:"vxnets" name:"vxnets" location:"params"` // Required
 	}
 
-	x := &DescribeVxNetInstancesOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
+	func (v *DeleteVxNetsInput) Validate() error {
+		
+	
+
+	
+		
+		
+		
+
+		
+
+		
+			
+				if len(v.VxNets) == 0 {
+					return errors.ParameterRequiredError{
+						ParameterName: "VxNets",
+						ParentName: "DeleteVxNetsInput",
+					}
+				}
+			
+			
+			
+			
+			
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
 	}
 
-	err = r.Send()
-	if err != nil {
-		return nil, err
+	type DeleteVxNetsOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
+	VxNets []*string `json:"vxnets" name:"vxnets" location:"elements"` 
 	}
 
-	return x, err
-}
 
-type DescribeVxNetInstancesInput struct {
-	Image        *string   `json:"image" name:"image" location:"params"`
-	InstanceType *string   `json:"instance_type" name:"instance_type" location:"params"`
-	Instances    []*string `json:"instances" name:"instances" location:"params"`
-	Limit        *int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset       *int      `json:"offset" name:"offset" default:"0" location:"params"`
-	Status       *string   `json:"status" name:"status" location:"params"`
-	VxNet        *string   `json:"vxnet" name:"vxnet" location:"params"` // Required
-}
+	
+	
+	
+	
 
-func (v *DescribeVxNetInstancesInput) Validate() error {
+	
 
-	if v.VxNet == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "VxNet",
-			ParentName:    "DescribeVxNetInstancesInput",
+	
+	// Documentation URL: https://docs.qingcloud.com/api/vxnet/describe_vxnet_instances.html
+	func (s *VxNetService) DescribeVxNetInstances(i *DescribeVxNetInstancesInput) (*DescribeVxNetInstancesOutput, error) {
+		if i == nil {
+			i = &DescribeVxNetInstancesInput{}
 		}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "DescribeVxnetInstances",
+			RequestMethod: "GET",
+		}
+
+		x := &DescribeVxNetInstancesOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
+		}
+
+		err = r.Send()
+		if err != nil {
+			return nil, err
+		}
+
+		return x, err
 	}
 
-	return nil
-}
-
-type DescribeVxNetInstancesOutput struct {
-	Message     *string     `json:"message" name:"message"`
-	Action      *string     `json:"action" name:"action" location:"elements"`
-	InstanceSet []*Instance `json:"instance_set" name:"instance_set" location:"elements"`
-	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
-}
-
-// Documentation URL: https://docs.qingcloud.com/api/vxnet/describe_vxnets.html
-func (s *VxNetService) DescribeVxNets(i *DescribeVxNetsInput) (*DescribeVxNetsOutput, error) {
-	if i == nil {
-		i = &DescribeVxNetsInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "DescribeVxnets",
-		RequestMethod: "GET",
+	type DescribeVxNetInstancesInput struct {
+		
+			Image *string `json:"image" name:"image" location:"params"` 
+	InstanceType *string `json:"instance_type" name:"instance_type" location:"params"` 
+	Instances []*string `json:"instances" name:"instances" location:"params"` 
+	Limit *int `json:"limit" name:"limit" default:"20" location:"params"` 
+	Offset *int `json:"offset" name:"offset" default:"0" location:"params"` 
+	Status *string `json:"status" name:"status" location:"params"` 
+	VxNet *string `json:"vxnet" name:"vxnet" location:"params"` // Required
 	}
 
-	x := &DescribeVxNetsOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
+	func (v *DescribeVxNetInstancesInput) Validate() error {
+		
+	
+
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+
+		
+
+		
+			
+			
+			
+			
+			
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+				if v.VxNet == nil {
+					return errors.ParameterRequiredError{
+						ParameterName: "VxNet",
+						ParentName: "DescribeVxNetInstancesInput",
+					}
+				}
+			
+			
+			
+		
+
+		
+
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
 	}
 
-	err = r.Send()
-	if err != nil {
-		return nil, err
+	type DescribeVxNetInstancesOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	InstanceSet []*Instance `json:"instance_set" name:"instance_set" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
+	TotalCount *int `json:"total_count" name:"total_count" location:"elements"` 
 	}
 
-	return x, err
-}
 
-type DescribeVxNetsInput struct {
-	Limit      *int      `json:"limit" name:"limit" default:"20" location:"params"`
-	Offset     *int      `json:"offset" name:"offset" default:"0" location:"params"`
-	SearchWord *string   `json:"search_word" name:"search_word" location:"params"`
-	Tags       []*string `json:"tags" name:"tags" location:"params"`
+	
+	
+	
+	
+
+	
+
+	
+	// Documentation URL: https://docs.qingcloud.com/api/vxnet/describe_vxnets.html
+	func (s *VxNetService) DescribeVxNets(i *DescribeVxNetsInput) (*DescribeVxNetsOutput, error) {
+		if i == nil {
+			i = &DescribeVxNetsInput{}
+		}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "DescribeVxnets",
+			RequestMethod: "GET",
+		}
+
+		x := &DescribeVxNetsOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
+		}
+
+		err = r.Send()
+		if err != nil {
+			return nil, err
+		}
+
+		return x, err
+	}
+
+	type DescribeVxNetsInput struct {
+		
+			Limit *int `json:"limit" name:"limit" default:"20" location:"params"` 
+	Offset *int `json:"offset" name:"offset" default:"0" location:"params"` 
+	SearchWord *string `json:"search_word" name:"search_word" location:"params"` 
+	Tags []*string `json:"tags" name:"tags" location:"params"` 
 	// Verbose's available values: 0, 1
-	Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
+		Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"` 
 	// VxNetType's available values: 0, 1
-	VxNetType *int      `json:"vxnet_type" name:"vxnet_type" location:"params"`
-	VxNets    []*string `json:"vxnets" name:"vxnets" location:"params"`
-}
+		VxNetType *int `json:"vxnet_type" name:"vxnet_type" location:"params"` 
+	VxNets []*string `json:"vxnets" name:"vxnets" location:"params"` 
+	}
 
-func (v *DescribeVxNetsInput) Validate() error {
+	func (v *DescribeVxNetsInput) Validate() error {
+		
+	
 
-	if v.Verbose != nil {
-		verboseValidValues := []string{"0", "1"}
-		verboseParameterValue := fmt.Sprint(*v.Verbose)
+	
+		
+		
+		
+			
+			
+			
+		
 
-		verboseIsValid := false
-		for _, value := range verboseValidValues {
-			if value == verboseParameterValue {
-				verboseIsValid = true
-			}
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+
+		
+
+		
+			
+			
+			
+			
+			
+		
+	
+		
+		
+		
+			
+			
+			
+				if v.Verbose != nil {
+					verboseValidValues := []string{"0", "1"}
+					verboseParameterValue := fmt.Sprint(*v.Verbose)
+
+					verboseIsValid := false
+					for _, value := range verboseValidValues {
+						if value == verboseParameterValue {
+							verboseIsValid = true
+						}
+					}
+
+					if !verboseIsValid {
+						return errors.ParameterValueNotAllowedError{
+							ParameterName: "Verbose",
+							ParameterValue: verboseParameterValue,
+							AllowedValues: verboseValidValues,
+						}
+					}
+				}
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+				if v.VxNetType != nil {
+					vxnetTypeValidValues := []string{"0", "1"}
+					vxnetTypeParameterValue := fmt.Sprint(*v.VxNetType)
+
+					vxnetTypeIsValid := false
+					for _, value := range vxnetTypeValidValues {
+						if value == vxnetTypeParameterValue {
+							vxnetTypeIsValid = true
+						}
+					}
+
+					if !vxnetTypeIsValid {
+						return errors.ParameterValueNotAllowedError{
+							ParameterName: "VxNetType",
+							ParameterValue: vxnetTypeParameterValue,
+							AllowedValues: vxnetTypeValidValues,
+						}
+					}
+				}
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+
+		
+
+		
+			
+			
+			
+			
+			
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
+	}
+
+	type DescribeVxNetsOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
+	TotalCount *int `json:"total_count" name:"total_count" location:"elements"` 
+	VxNetSet []*VxNet `json:"vxnet_set" name:"vxnet_set" location:"elements"` 
+	}
+
+
+	
+	
+	
+	
+
+	
+
+	
+	// Documentation URL: https://docs.qingcloud.com/api/vxnet/join_vxnet.html
+	func (s *VxNetService) JoinVxNet(i *JoinVxNetInput) (*JoinVxNetOutput, error) {
+		if i == nil {
+			i = &JoinVxNetInput{}
+		}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "JoinVxnet",
+			RequestMethod: "GET",
 		}
 
-		if !verboseIsValid {
-			return errors.ParameterValueNotAllowedError{
-				ParameterName:  "Verbose",
-				ParameterValue: verboseParameterValue,
-				AllowedValues:  verboseValidValues,
-			}
-		}
-	}
-
-	if v.VxNetType != nil {
-		vxnetTypeValidValues := []string{"0", "1"}
-		vxnetTypeParameterValue := fmt.Sprint(*v.VxNetType)
-
-		vxnetTypeIsValid := false
-		for _, value := range vxnetTypeValidValues {
-			if value == vxnetTypeParameterValue {
-				vxnetTypeIsValid = true
-			}
+		x := &JoinVxNetOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
 		}
 
-		if !vxnetTypeIsValid {
-			return errors.ParameterValueNotAllowedError{
-				ParameterName:  "VxNetType",
-				ParameterValue: vxnetTypeParameterValue,
-				AllowedValues:  vxnetTypeValidValues,
-			}
+		err = r.Send()
+		if err != nil {
+			return nil, err
 		}
+
+		return x, err
 	}
 
-	return nil
-}
-
-type DescribeVxNetsOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int     `json:"total_count" name:"total_count" location:"elements"`
-	VxNetSet   []*VxNet `json:"vxnet_set" name:"vxnet_set" location:"elements"`
-}
-
-// Documentation URL: https://docs.qingcloud.com/api/vxnet/join_vxnet.html
-func (s *VxNetService) JoinVxNet(i *JoinVxNetInput) (*JoinVxNetOutput, error) {
-	if i == nil {
-		i = &JoinVxNetInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "JoinVxnet",
-		RequestMethod: "GET",
+	type JoinVxNetInput struct {
+		
+			Instances []*string `json:"instances" name:"instances" location:"params"` // Required
+	VxNet *string `json:"vxnet" name:"vxnet" location:"params"` // Required
 	}
 
-	x := &JoinVxNetOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
+	func (v *JoinVxNetInput) Validate() error {
+		
+	
+
+	
+		
+		
+		
+
+		
+
+		
+			
+				if len(v.Instances) == 0 {
+					return errors.ParameterRequiredError{
+						ParameterName: "Instances",
+						ParentName: "JoinVxNetInput",
+					}
+				}
+			
+			
+			
+			
+			
+		
+	
+		
+		
+		
+			
+				if v.VxNet == nil {
+					return errors.ParameterRequiredError{
+						ParameterName: "VxNet",
+						ParentName: "JoinVxNetInput",
+					}
+				}
+			
+			
+			
+		
+
+		
+
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
 	}
 
-	err = r.Send()
-	if err != nil {
-		return nil, err
+	type JoinVxNetOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	JobID *string `json:"job_id" name:"job_id" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
 	}
 
-	return x, err
-}
 
-type JoinVxNetInput struct {
-	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
-	VxNet     *string   `json:"vxnet" name:"vxnet" location:"params"`         // Required
-}
+	
+	
+	
+	
 
-func (v *JoinVxNetInput) Validate() error {
+	
 
-	if len(v.Instances) == 0 {
-		return errors.ParameterRequiredError{
-			ParameterName: "Instances",
-			ParentName:    "JoinVxNetInput",
+	
+	// Documentation URL: https://docs.qingcloud.com/api/vxnet/leave_vxnet.html
+	func (s *VxNetService) LeaveVxNet(i *LeaveVxNetInput) (*LeaveVxNetOutput, error) {
+		if i == nil {
+			i = &LeaveVxNetInput{}
 		}
-	}
-
-	if v.VxNet == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "VxNet",
-			ParentName:    "JoinVxNetInput",
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "LeaveVxnet",
+			RequestMethod: "GET",
 		}
-	}
 
-	return nil
-}
-
-type JoinVxNetOutput struct {
-	Message *string `json:"message" name:"message"`
-	Action  *string `json:"action" name:"action" location:"elements"`
-	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
-}
-
-// Documentation URL: https://docs.qingcloud.com/api/vxnet/leave_vxnet.html
-func (s *VxNetService) LeaveVxNet(i *LeaveVxNetInput) (*LeaveVxNetOutput, error) {
-	if i == nil {
-		i = &LeaveVxNetInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "LeaveVxnet",
-		RequestMethod: "GET",
-	}
-
-	x := &LeaveVxNetOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
-	}
-
-	err = r.Send()
-	if err != nil {
-		return nil, err
-	}
-
-	return x, err
-}
-
-type LeaveVxNetInput struct {
-	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
-	VxNet     *string   `json:"vxnet" name:"vxnet" location:"params"`         // Required
-}
-
-func (v *LeaveVxNetInput) Validate() error {
-
-	if len(v.Instances) == 0 {
-		return errors.ParameterRequiredError{
-			ParameterName: "Instances",
-			ParentName:    "LeaveVxNetInput",
+		x := &LeaveVxNetOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
 		}
-	}
 
-	if v.VxNet == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "VxNet",
-			ParentName:    "LeaveVxNetInput",
+		err = r.Send()
+		if err != nil {
+			return nil, err
 		}
+
+		return x, err
 	}
 
-	return nil
-}
-
-type LeaveVxNetOutput struct {
-	Message *string `json:"message" name:"message"`
-	Action  *string `json:"action" name:"action" location:"elements"`
-	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
-	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
-}
-
-// Documentation URL: https://docs.qingcloud.com/api/vxnet/modify_vxnet_attributes.html
-func (s *VxNetService) ModifyVxNetAttributes(i *ModifyVxNetAttributesInput) (*ModifyVxNetAttributesOutput, error) {
-	if i == nil {
-		i = &ModifyVxNetAttributesInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "ModifyVxnetAttributes",
-		RequestMethod: "GET",
+	type LeaveVxNetInput struct {
+		
+			Instances []*string `json:"instances" name:"instances" location:"params"` // Required
+	VxNet *string `json:"vxnet" name:"vxnet" location:"params"` // Required
 	}
 
-	x := &ModifyVxNetAttributesOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
+	func (v *LeaveVxNetInput) Validate() error {
+		
+	
+
+	
+		
+		
+		
+
+		
+
+		
+			
+				if len(v.Instances) == 0 {
+					return errors.ParameterRequiredError{
+						ParameterName: "Instances",
+						ParentName: "LeaveVxNetInput",
+					}
+				}
+			
+			
+			
+			
+			
+		
+	
+		
+		
+		
+			
+				if v.VxNet == nil {
+					return errors.ParameterRequiredError{
+						ParameterName: "VxNet",
+						ParentName: "LeaveVxNetInput",
+					}
+				}
+			
+			
+			
+		
+
+		
+
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
 	}
 
-	err = r.Send()
-	if err != nil {
-		return nil, err
+	type LeaveVxNetOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	JobID *string `json:"job_id" name:"job_id" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
 	}
 
-	return x, err
-}
 
-type ModifyVxNetAttributesInput struct {
-	Description *string `json:"description" name:"description" location:"params"`
-	VxNet       *string `json:"vxnet" name:"vxnet" location:"params"` // Required
-	VxNetName   *string `json:"vxnet_name" name:"vxnet_name" location:"params"`
-}
+	
+	
+	
+	
 
-func (v *ModifyVxNetAttributesInput) Validate() error {
+	
 
-	if v.VxNet == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "VxNet",
-			ParentName:    "ModifyVxNetAttributesInput",
+	
+	// Documentation URL: https://docs.qingcloud.com/api/vxnet/modify_vxnet_attributes.html
+	func (s *VxNetService) ModifyVxNetAttributes(i *ModifyVxNetAttributesInput) (*ModifyVxNetAttributesOutput, error) {
+		if i == nil {
+			i = &ModifyVxNetAttributesInput{}
 		}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "ModifyVxnetAttributes",
+			RequestMethod: "GET",
+		}
+
+		x := &ModifyVxNetAttributesOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
+		}
+
+		err = r.Send()
+		if err != nil {
+			return nil, err
+		}
+
+		return x, err
 	}
 
-	return nil
-}
+	type ModifyVxNetAttributesInput struct {
+		
+			Description *string `json:"description" name:"description" location:"params"` 
+	VxNet *string `json:"vxnet" name:"vxnet" location:"params"` // Required
+	VxNetName *string `json:"vxnet_name" name:"vxnet_name" location:"params"` 
+	}
 
-type ModifyVxNetAttributesOutput struct {
-	Message *string `json:"message" name:"message"`
-	Action  *string `json:"action" name:"action" location:"elements"`
-	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
-}
+	func (v *ModifyVxNetAttributesInput) Validate() error {
+		
+	
+
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+				if v.VxNet == nil {
+					return errors.ParameterRequiredError{
+						ParameterName: "VxNet",
+						ParentName: "ModifyVxNetAttributesInput",
+					}
+				}
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
+	}
+
+	type ModifyVxNetAttributesOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

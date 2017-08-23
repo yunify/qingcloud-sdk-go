@@ -14,14 +14,16 @@
 // | limitations under the License.
 // +-------------------------------------------------------------------------
 
+
+
 // Package service provides QingCloud Service API (API Version 2013-08-30)
 package service
 
 import (
 	"github.com/yunify/qingcloud-sdk-go/config"
-	"github.com/yunify/qingcloud-sdk-go/logger"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
+	"github.com/yunify/qingcloud-sdk-go/logger"
 )
 
 // QingCloudService: QingCloud provides a platform which can make the delivery of computing resources more simple, efficient and reliable, even more environmental.
@@ -31,54 +33,125 @@ type QingCloudService struct {
 }
 
 type QingCloudServiceProperties struct {
+	
 }
 
 func Init(c *config.Config) (*QingCloudService, error) {
 	properties := &QingCloudServiceProperties{}
-	logger.SetLevel(c.LogLevel)
+    logger.SetLevel(c.LogLevel)
 	return &QingCloudService{Config: c, Properties: properties}, nil
 }
 
-// Documentation URL: https://docs.qingcloud.com/api/zone/describe_zones.html
-func (s *QingCloudService) DescribeZones(i *DescribeZonesInput) (*DescribeZonesOutput, error) {
-	if i == nil {
-		i = &DescribeZonesInput{}
+
+	
+	
+	
+	
+
+	
+
+	
+	// Documentation URL: https://docs.qingcloud.com/api/zone/describe_zones.html
+	func (s *QingCloudService) DescribeZones(i *DescribeZonesInput) (*DescribeZonesOutput, error) {
+		if i == nil {
+			i = &DescribeZonesInput{}
+		}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "DescribeZones",
+			RequestMethod: "GET",
+		}
+
+		x := &DescribeZonesOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
+		}
+
+		err = r.Send()
+		if err != nil {
+			return nil, err
+		}
+
+		return x, err
 	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "DescribeZones",
-		RequestMethod: "GET",
+
+	type DescribeZonesInput struct {
+		
+			Status []*string `json:"status" name:"status" location:"params"` 
+	Zones []*string `json:"zones" name:"zones" location:"params"` 
 	}
 
-	x := &DescribeZonesOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
+	func (v *DescribeZonesInput) Validate() error {
+		
+	
+
+	
+		
+		
+		
+
+		
+
+		
+			
+			
+			
+			
+			
+		
+	
+		
+		
+		
+
+		
+
+		
+			
+			
+			
+			
+			
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
 	}
 
-	err = r.Send()
-	if err != nil {
-		return nil, err
+	type DescribeZonesOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
+	TotalCount *int `json:"total_count" name:"total_count" location:"elements"` 
+	ZoneSet []*Zone `json:"zone_set" name:"zone_set" location:"elements"` 
 	}
 
-	return x, err
-}
 
-type DescribeZonesInput struct {
-	Status []*string `json:"status" name:"status" location:"params"`
-	Zones  []*string `json:"zones" name:"zones" location:"params"`
-}
 
-func (v *DescribeZonesInput) Validate() error {
 
-	return nil
-}
 
-type DescribeZonesOutput struct {
-	Message    *string `json:"message" name:"message"`
-	Action     *string `json:"action" name:"action" location:"elements"`
-	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
-	ZoneSet    []*Zone `json:"zone_set" name:"zone_set" location:"elements"`
-}
+
+
+
+
+
+
+
+
+
+
+
+

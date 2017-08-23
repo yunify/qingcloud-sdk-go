@@ -14,6 +14,9 @@
 // | limitations under the License.
 // +-------------------------------------------------------------------------
 
+
+
+
 package service
 
 import (
@@ -36,63 +39,130 @@ type UserDataService struct {
 
 type UserDataServiceProperties struct {
 	// QingCloud Zone ID
-	Zone *string `json:"zone" name:"zone"` // Required
-}
+		Zone *string `json:"zone" name:"zone"` // Required
+	}
 
-func (s *QingCloudService) UserData(zone string) (*UserDataService, error) {
+func (s *QingCloudService) UserData(zone string,) (*UserDataService, error) {
 	properties := &UserDataServiceProperties{
 		Zone: &zone,
+		
 	}
 
 	return &UserDataService{Config: s.Config, Properties: properties}, nil
 }
 
-// Documentation URL: https://docs.qingcloud.com/api/userdata/upload_userdata_attachment.html
-func (s *UserDataService) UploadUserDataAttachment(i *UploadUserDataAttachmentInput) (*UploadUserDataAttachmentOutput, error) {
-	if i == nil {
-		i = &UploadUserDataAttachmentInput{}
-	}
-	o := &data.Operation{
-		Config:        s.Config,
-		Properties:    s.Properties,
-		APIName:       "UploadUserDataAttachment",
-		RequestMethod: "POST",
-	}
 
-	x := &UploadUserDataAttachmentOutput{}
-	r, err := request.New(o, i, x)
-	if err != nil {
-		return nil, err
-	}
+	
+	
+	
+	
 
-	err = r.Send()
-	if err != nil {
-		return nil, err
-	}
+	
 
-	return x, err
-}
-
-type UploadUserDataAttachmentInput struct {
-	AttachmentContent *string `json:"attachment_content" name:"attachment_content" location:"params"` // Required
-	AttachmentName    *string `json:"attachment_name" name:"attachment_name" location:"params"`
-}
-
-func (v *UploadUserDataAttachmentInput) Validate() error {
-
-	if v.AttachmentContent == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "AttachmentContent",
-			ParentName:    "UploadUserDataAttachmentInput",
+	
+	// Documentation URL: https://docs.qingcloud.com/api/userdata/upload_userdata_attachment.html
+	func (s *UserDataService) UploadUserDataAttachment(i *UploadUserDataAttachmentInput) (*UploadUserDataAttachmentOutput, error) {
+		if i == nil {
+			i = &UploadUserDataAttachmentInput{}
 		}
+		o := &data.Operation{
+			Config:        s.Config,
+			Properties:    s.Properties,
+			APIName:       "UploadUserDataAttachment",
+			RequestMethod: "POST",
+		}
+
+		x := &UploadUserDataAttachmentOutput{}
+		r, err := request.New(o, i, x)
+		if err != nil {
+			return nil, err
+		}
+
+		err = r.Send()
+		if err != nil {
+			return nil, err
+		}
+
+		return x, err
 	}
 
-	return nil
-}
+	type UploadUserDataAttachmentInput struct {
+		
+			AttachmentContent *string `json:"attachment_content" name:"attachment_content" location:"params"` // Required
+	AttachmentName *string `json:"attachment_name" name:"attachment_name" location:"params"` 
+	}
 
-type UploadUserDataAttachmentOutput struct {
-	Message      *string `json:"message" name:"message"`
-	Action       *string `json:"action" name:"action" location:"elements"`
-	AttachmentID *string `json:"attachment_id" name:"attachment_id" location:"elements"`
-	RetCode      *int    `json:"ret_code" name:"ret_code" location:"elements"`
-}
+	func (v *UploadUserDataAttachmentInput) Validate() error {
+		
+	
+
+	
+		
+		
+		
+			
+				if v.AttachmentContent == nil {
+					return errors.ParameterRequiredError{
+						ParameterName: "AttachmentContent",
+						ParentName: "UploadUserDataAttachmentInput",
+					}
+				}
+			
+			
+			
+		
+
+		
+
+		
+	
+		
+		
+		
+			
+			
+			
+		
+
+		
+
+		
+	
+
+		
+	
+
+	
+
+		
+	
+
+	
+
+
+		return nil
+	}
+
+	type UploadUserDataAttachmentOutput struct {
+		Message *string `json:"message" name:"message"`
+			Action *string `json:"action" name:"action" location:"elements"` 
+	AttachmentID *string `json:"attachment_id" name:"attachment_id" location:"elements"` 
+	RetCode *int `json:"ret_code" name:"ret_code" location:"elements"` 
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
