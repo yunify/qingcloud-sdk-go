@@ -154,9 +154,7 @@ func (r *Request) send() error {
 	if err != nil {
 		return err
 	}
-
 	r.HTTPResponse = response
-
 	return nil
 }
 

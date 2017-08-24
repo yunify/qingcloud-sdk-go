@@ -261,17 +261,17 @@ func (s *CacheService) CreateCache(i *CreateCacheInput) (*CreateCacheOutput, err
 type CreateCacheInput struct {
 	AutoBackupTime *int `json:"auto_backup_time" name:"auto_backup_time" default:"-1" location:"params"`
 	// CacheClass's available values: 0, 1
-	CacheClass          *int              `json:"cache_class" name:"cache_class" location:"params"`
-	CacheName           *string           `json:"cache_name" name:"cache_name" location:"params"`
-	CacheParameterGroup *string           `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
-	CacheSize           *int              `json:"cache_size" name:"cache_size" location:"params"` // Required
-	CacheType           *string           `json:"cache_type" name:"cache_type" location:"params"` // Required
-	MasterCount         *int              `json:"master_count" name:"master_count" location:"params"`
-	NetworkType         *int              `json:"network_type" name:"network_type" location:"params"`
-	NodeCount           *int              `json:"node_count" name:"node_count" default:"1" location:"params"`
-	PrivateIPs          []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	ReplicateCount      *int              `json:"replicate_count" name:"replicate_count" location:"params"`
-	VxNet               *string           `json:"vxnet" name:"vxnet" location:"params"` // Required
+	CacheClass          *int    `json:"cache_class" name:"cache_class" location:"params"`
+	CacheName           *string `json:"cache_name" name:"cache_name" location:"params"`
+	CacheParameterGroup *string `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
+	CacheSize           *int    `json:"cache_size" name:"cache_size" location:"params"` // Required
+	CacheType           *string `json:"cache_type" name:"cache_type" location:"params"` // Required
+	MasterCount         *int    `json:"master_count" name:"master_count" location:"params"`
+	NetworkType         *int    `json:"network_type" name:"network_type" location:"params"`
+	// NodeCount           *int              `json:"node_count" name:"node_count" default:"1" location:"params"`
+	PrivateIPs     []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
+	ReplicateCount *int              `json:"replicate_count" name:"replicate_count" location:"params"`
+	VxNet          *string           `json:"vxnet" name:"vxnet" location:"params"` // Required
 }
 
 func (v *CreateCacheInput) Validate() error {
@@ -476,7 +476,7 @@ func (v *CreateCacheParameterGroupInput) Validate() error {
 	}
 
 	if v.CacheType != nil {
-		cacheTypeValidValues := []string{"redis2.8.17", "memcached1.4.13"}
+		cacheTypeValidValues := []string{"redis2.8.17", "redis3.0.5", "memcached1.4.13"}
 		cacheTypeParameterValue := fmt.Sprint(*v.CacheType)
 
 		cacheTypeIsValid := false
@@ -1498,8 +1498,8 @@ func (s *CacheService) UpdateCacheParameters(i *UpdateCacheParametersInput) (*Up
 }
 
 type UpdateCacheParametersInput struct {
-	CacheParameterGroup *string         `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
-	Parameters          *CacheParameter `json:"parameters" name:"parameters" location:"params"`                       // Required
+	CacheParameterGroup *string           `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
+	Parameters          []*CacheParameter `json:"parameters" name:"parameters" location:"params"`                       // Required
 }
 
 func (v *UpdateCacheParametersInput) Validate() error {
@@ -1511,18 +1511,18 @@ func (v *UpdateCacheParametersInput) Validate() error {
 		}
 	}
 
-	if v.Parameters != nil {
-		if err := v.Parameters.Validate(); err != nil {
-			return err
-		}
-	}
+	// if v.Parameters != nil {
+	// 	if err := v.Parameters.Validate(); err != nil {
+	// 		return err
+	// 	}
+	// }
 
-	if v.Parameters == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "Parameters",
-			ParentName:    "UpdateCacheParametersInput",
-		}
-	}
+	// if v.Parameters == nil {
+	// 	return errors.ParameterRequiredError{
+	// 		ParameterName: "Parameters",
+	// 		ParentName:    "UpdateCacheParametersInput",
+	// 	}
+	// }
 
 	return nil
 }

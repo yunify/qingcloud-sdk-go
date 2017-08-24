@@ -1253,22 +1253,22 @@ func (v *LoadBalancerPolicyRule) Validate() error {
 }
 
 type Meter struct {
-	Data     *string `json:"data" name:"data"`
-	DataSet  []*Data `json:"data_set" name:"data_set"`
-	MeterID  *string `json:"meter_id" name:"meter_id"`
-	Sequence *int    `json:"sequence" name:"sequence"`
-	VxNetID  *string `json:"vxnet_id" name:"vxnet_id"`
+	Data     []interface{} `json:"data" name:"data"`
+	DataSet  []interface{} `json:"data_set" name:"data_set"`
+	MeterID  *string       `json:"meter_id" name:"meter_id"`
+	Sequence *int          `json:"sequence" name:"sequence"`
+	VxNetID  *string       `json:"vxnet_id" name:"vxnet_id"`
 }
 
 func (v *Meter) Validate() error {
 
-	if len(v.DataSet) > 0 {
-		for _, property := range v.DataSet {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
+	// if len(v.DataSet) > 0 {
+	// 	for _, property := range v.DataSet {
+	// 		if err := property.Validate(); err != nil {
+	// 			return err
+	// 		}
+	// 	}
+	// }
 
 	return nil
 }
@@ -1280,11 +1280,11 @@ type Mongo struct {
 	AutoMinorVerUpgrade *int       `json:"auto_minor_ver_upgrade" name:"auto_minor_ver_upgrade"`
 	CreateTime          *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
 	Description         *string    `json:"description" name:"description"`
-	LatestSnapshotTime  *time.Time `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
-	MongoID             *string    `json:"mongo_id" name:"mongo_id"`
-	MongoName           *string    `json:"mongo_name" name:"mongo_name"`
-	MongoType           *int       `json:"mongo_type" name:"mongo_type"`
-	MongoVersion        *string    `json:"mongo_version" name:"mongo_version"`
+	// LatestSnapshotTime  *time.Time `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
+	MongoID      *string `json:"mongo_id" name:"mongo_id"`
+	MongoName    *string `json:"mongo_name" name:"mongo_name"`
+	MongoType    *int    `json:"mongo_type" name:"mongo_type"`
+	MongoVersion *string `json:"mongo_version" name:"mongo_version"`
 	// Status's available values: pending, active, stopped, deleted, suspended, ceased
 	Status      *string    `json:"status" name:"status"`
 	StatusTime  *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
@@ -1369,7 +1369,7 @@ type MongoNode struct {
 	IP          *string `json:"ip" name:"ip"`
 	MongoID     *string `json:"mongo_id" name:"mongo_id"`
 	MongoNodeID *string `json:"mongo_node_id" name:"mongo_node_id"`
-	Primary     *int    `json:"primary" name:"primary"`
+	Primary     *bool   `json:"primary" name:"primary"`
 	Status      *string `json:"status" name:"status"`
 	VxNetID     *string `json:"vxnet_id" name:"vxnet_id"`
 }
@@ -1385,11 +1385,24 @@ type MongoParameter struct {
 	// IsStatic's available values: 0, 1
 	IsStatic      *int    `json:"is_static" name:"is_static"`
 	OPTName       *string `json:"opt_name" name:"opt_name"`
-	ParameterName *string `json:"parameter_name" name:"parameter_name"`
-	// ParameterType's available values: string, int, bool
+	ParameterName *string `json:"parameter_name" name:"parameter_name"` // Required
+	// ParameterType's available values: string, """"int"""", bool
 	ParameterType  *string `json:"parameter_type" name:"parameter_type"`
-	ParameterValue *string `json:"parameter_value" name:"parameter_value"`
+	ParameterValue *string `json:"parameter_value" name:"parameter_value"` // Required
 	ResourceType   *string `json:"resource_type" name:"resource_type"`
+}
+
+type MongoParameterResponse struct {
+	// IsReadonly's available values: 0, 1
+	IsReadonly *int `json:"is_readonly" name:"is_readonly"`
+	// IsStatic's available values: 0, 1
+	IsStatic      *int    `json:"is_static" name:"is_static"`
+	OPTName       *string `json:"opt_name" name:"opt_name"`
+	ParameterName *string `json:"parameter_name" name:"parameter_name"` // Required
+	// ParameterType's available values: string, """"int"""", bool
+	ParameterType  *string     `json:"parameter_type" name:"parameter_type"`
+	ParameterValue interface{} `json:"parameter_value" name:"parameter_value"` // Required
+	ResourceType   *string     `json:"resource_type" name:"resource_type"`
 }
 
 func (v *MongoParameter) Validate() error {
@@ -1517,18 +1530,19 @@ func (v *NICIP) Validate() error {
 
 type RDB struct {
 	// AlarmStatus's available values: ok, alarm, insufficient
-	AlarmStatus         *string    `json:"alarm_status" name:"alarm_status"`
-	AutoBackupTime      *int       `json:"auto_backup_time" name:"auto_backup_time"`
-	AutoMinorVerUpgrade *int       `json:"auto_minor_ver_upgrade" name:"auto_minor_ver_upgrade"`
-	CreateTime          *string    `json:"create_time" name:"create_time"`
-	Description         *string    `json:"description" name:"description"`
-	EngineVersion       *string    `json:"engine_version" name:"engine_version"`
-	LatestSnapshotTime  *time.Time `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
-	MasterIP            *string    `json:"master_ip" name:"master_ip"`
-	RDBEngine           *string    `json:"rdb_engine" name:"rdb_engine"`
-	RDBID               *string    `json:"rdb_id" name:"rdb_id"`
-	RDBName             *string    `json:"rdb_name" name:"rdb_name"`
-	RDBType             *int       `json:"rdb_type" name:"rdb_type"`
+	AlarmStatus         *string        `json:"alarm_status" name:"alarm_status"`
+	AutoBackupTime      *int           `json:"auto_backup_time" name:"auto_backup_time"`
+	AutoMinorVerUpgrade *int           `json:"auto_minor_ver_upgrade" name:"auto_minor_ver_upgrade"`
+	CreateTime          *string        `json:"create_time" name:"create_time"`
+	Description         *string        `json:"description" name:"description"`
+	EngineVersion       *string        `json:"engine_version" name:"engine_version"`
+	LatestSnapshotTime  *time.Time     `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
+	MasterIP            *string        `json:"master_ip" name:"master_ip"`
+	RDBEngine           *string        `json:"rdb_engine" name:"rdb_engine"`
+	RDBID               *string        `json:"rdb_id" name:"rdb_id"`
+	RDBInstances        []*RDBInstance `json:"rdb_instances" name:"rdb_instances"`
+	RDBName             *string        `json:"rdb_name" name:"rdb_name"`
+	RDBType             *int           `json:"rdb_type" name:"rdb_type"`
 	// Status's available values: pending, active, stopped, deleted, suspended, ceased
 	Status      *string `json:"status" name:"status"`
 	StatusTime  *string `json:"status_time" name:"status_time"`
@@ -1537,6 +1551,29 @@ type RDB struct {
 	// TransitionStatus's available values: creating, stopping, starting, deleting, backup-creating, temp-creating, configuring, switching, invalid-tackling, resizing, suspending, ceasing, instance-ceasing, vxnet-leaving, vxnet-joining
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
+}
+
+type RDBInstance struct {
+	Status           *string       `json:"status" name:"status"`
+	RDBID            *string       `json:"rdb_id" name:"rdb_id"`
+	EIPID            *string       `json:"eip_id" name:"eip_id"`
+	VxNetID          **string      `json:"vxnet_id" name:"vxnet_id"`
+	IP               *string       `json:"ip" name:"ip"`
+	TransitionStatus *string       `json:"transition_status" name:"transition_status"`
+	ServerID         *string       `json:"server_id" name:"server_id"`
+	StorageEngine    *string       `json:"storage_engine" name:"storage_engine"`
+	RDBInstanceID    *string       `json:"rdb_instance_id" name:"rdb_instance_id"`
+	PSQLInstanceID   *string       `json:"psql_instance_id" name:"psql_instance_id"`
+	CreateTime       *time.Time    `json:"create_time" name:"create_time"`
+	PGID             *string       `json:"pg_id" name:"pg_id"`
+	PrivateIP        *string       `json:"private_ip" name:"private_ip"`
+	RDBInstanceRole  *string       `json:"rdb_instance_role" name:"rdb_instance_role"`
+	StatusTime       *time.Time    `json:"status_time" name:"status_time"`
+	REPL             *string       `json:"repl" name:"repl"`
+	RDBInstanceType  *int          `json:"rdb_inst_type" name:"rdb_inst_type"`
+	UserName         *string       `json:"user_name" name:"user_name"`
+	Issues           []interface{} `json:"issues" name:"issues"`
+	PSQLRole         *string       `json:"psql_role" name:"psql_role"`
 }
 
 func (v *RDB) Validate() error {
@@ -1666,6 +1703,21 @@ type RDBParameter struct {
 	VarName     *string `json:"var_name" name:"var_name"`
 	VarType     *string `json:"var_type" name:"var_type"`
 	VarValue    *string `json:"var_value" name:"var_value"`
+}
+
+type RDBParameterResponse struct {
+	Family *string `json:"family" name:"family"`
+	// IsReadonly's available values: 0, 1
+	IsReadonly *int `json:"is_readonly" name:"is_readonly"`
+	// IsStatic's available values: 0, 1
+	IsStatic    *int    `json:"is_static" name:"is_static"`
+	MaxValue    *int    `json:"max_value" name:"max_value"`
+	MinValue    *int    `json:"min_value" name:"min_value"`
+	OPTName     *string `json:"opt_name" name:"opt_name"`
+	SectionName *string `json:"section_name" name:"section_name"`
+	VarName     *string `json:"var_name" name:"var_name"`
+	VarType     *string `json:"var_type" name:"var_type"`
+	VarValue    interface{} `json:"var_value" name:"var_value"`
 }
 
 func (v *RDBParameter) Validate() error {

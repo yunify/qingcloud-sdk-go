@@ -241,7 +241,7 @@ func (s *RDBService) CreateRDB(i *CreateRDBInput) (*CreateRDBOutput, error) {
 type CreateRDBInput struct {
 	AutoBackupTime *int    `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
 	Description    *string `json:"description" name:"description" location:"params"`
-	// EngineVersion's available values: mysql,5.5, mysql,5.6, mysql,5.7, psql,9.3, psql,9.4
+	// EngineVersion's available values: 5.5, 5.6, 5.7, 9.3, 9.4
 	EngineVersion *string         `json:"engine_version" name:"engine_version" default:"mysql,5.7" location:"params"`
 	NodeCount     *int            `json:"node_count" name:"node_count" location:"params"`
 	PrivateIPs    []*RDBPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
@@ -261,7 +261,7 @@ type CreateRDBInput struct {
 func (v *CreateRDBInput) Validate() error {
 
 	if v.EngineVersion != nil {
-		engineVersionValidValues := []string{"mysql,5.5", "mysql,5.6", "mysql,5.7", "psql,9.3", "psql,9.4"}
+		engineVersionValidValues := []string{"5.5", "5.6", "5.7", "9.3", "9.4"}
 		engineVersionParameterValue := fmt.Sprint(*v.EngineVersion)
 
 		engineVersionIsValid := false
@@ -674,11 +674,11 @@ func (v *DescribeRDBParametersInput) Validate() error {
 }
 
 type DescribeRDBParametersOutput struct {
-	Message      *string         `json:"message" name:"message"`
-	Action       *string         `json:"action" name:"action" location:"elements"`
-	ParameterSet []*RDBParameter `json:"parameter_set" name:"parameter_set" location:"elements"`
-	RetCode      *int            `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   *int            `json:"total_count" name:"total_count" location:"elements"`
+	Message      *string                 `json:"message" name:"message"`
+	Action       *string                 `json:"action" name:"action" location:"elements"`
+	ParameterSet []*RDBParameterResponse `json:"parameter_set" name:"parameter_set" location:"elements"`
+	RetCode      *int                    `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int                    `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/rdb/describe_rdbs.html
@@ -886,6 +886,57 @@ type GetRDBMonitorOutput struct {
 	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
 	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
 	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// Documentation URL: https://docs.qingcloud.com/api/cache/modify_cache_attributes.html
+func (s *RDBService) ModifyRDBAttributes(i *ModifyRDBAttributesInput) (*ModifyRDBAttributesOutput, error) {
+	if i == nil {
+		i = &ModifyRDBAttributesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ModifyRDBAttributes",
+		RequestMethod: "GET",
+	}
+
+	x := &ModifyRDBAttributesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ModifyRDBAttributesInput struct {
+	AutoBackupTime *int    `json:"auto_backup_time" name:"auto_backup_time" default:"99" location:"params"`
+	RDB            *string `json:"rdb" name:"rdb" location:"params"` // Required
+	RDBName        *string `json:"rdb_name" name:"rdb_name" location:"params"`
+	Description    *string `json:"description" name:"description" location:"params"`
+}
+
+func (v *ModifyRDBAttributesInput) Validate() error {
+
+	if v.RDB == nil {
+		return errors.ParameterRequiredError{
+			ParameterName: "RDB",
+			ParentName:    "ModifyRDBAttributesInput",
+		}
+	}
+
+	return nil
+}
+
+type ModifyRDBAttributesOutput struct {
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/rdb/modify_rdb_parameters.html

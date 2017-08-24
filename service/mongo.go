@@ -201,7 +201,7 @@ type CreateMongoInput struct {
 	MongoPassword  *string           `json:"mongo_password" name:"mongo_password" location:"params"`
 	MongoType      *int              `json:"mongo_type" name:"mongo_type" location:"params"` // Required
 	MongoUsername  *string           `json:"mongo_username" name:"mongo_username" location:"params"`
-	MongoVersion   *int              `json:"mongo_version" name:"mongo_version" location:"params"`
+	MongoVersion   *string           `json:"mongo_version" name:"mongo_version" location:"params"`
 	PrivateIPs     []*MongoPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
 	ResourceClass  *int              `json:"resource_class" name:"resource_class" location:"params"`
 	StorageSize    *int              `json:"storage_size" name:"storage_size" location:"params"` // Required
@@ -448,11 +448,72 @@ func (v *DescribeMongoParametersInput) Validate() error {
 }
 
 type DescribeMongoParametersOutput struct {
-	Message      *string           `json:"message" name:"message"`
-	Action       *string           `json:"action" name:"action" location:"elements"`
-	ParameterSet []*MongoParameter `json:"parameter_set" name:"parameter_set" location:"elements"`
-	RetCode      *int              `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   *int              `json:"total_count" name:"total_count" location:"elements"`
+	Message      *string                   `json:"message" name:"message"`
+	Action       *string                   `json:"action" name:"action" location:"elements"`
+	ParameterSet []*MongoParameterResponse `json:"parameter_set" name:"parameter_set" location:"elements"`
+	RetCode      *int                      `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int                      `json:"total_count" name:"total_count" location:"elements"`
+}
+
+func (s *MongoService) ModifyMongoParameters(i *ModifyMongoParametersInput) (*ModifyMongoParametersOutput, error) {
+	if i == nil {
+		i = &ModifyMongoParametersInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ModifyMongoParameters",
+		RequestMethod: "GET",
+	}
+
+	x := &ModifyMongoParametersOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ModifyMongoParametersInput struct {
+	Mongo      *string           `json:"mongo" name:"mongo" location:"params"`           // Required
+	Parameters []*MongoParameter `json:"parameters" name:"parameters" location:"params"` // Required
+}
+
+func (v *ModifyMongoParametersInput) Validate() error {
+
+	if v.Mongo == nil {
+		return errors.ParameterRequiredError{
+			ParameterName: "Mongo",
+			ParentName:    "ModifyMongoParametersInput",
+		}
+	}
+
+	// if v.Parameters != nil {
+	// 	if err := v.Parameters.Validate(); err != nil {
+	// 		return err
+	// 	}
+	// }
+
+	// if v.Parameters == nil {
+	// 	return errors.ParameterRequiredError{
+	// 		ParameterName: "Parameters",
+	// 		ParentName:    "UpdateCacheParametersInput",
+	// 	}
+	// }
+
+	return nil
+}
+
+type ModifyMongoParametersOutput struct {
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/mongo/describe_mongos.html
@@ -841,7 +902,7 @@ func (s *MongoService) StartMongos(i *StartMongosInput) (*StartMongosOutput, err
 }
 
 type StartMongosInput struct {
-	Mongos *string `json:"mongos" name:"mongos" location:"params"` // Required
+	Mongos []*string `json:"mongos" name:"mongos" location:"params"` // Required
 }
 
 func (v *StartMongosInput) Validate() error {

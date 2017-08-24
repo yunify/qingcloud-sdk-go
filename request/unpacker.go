@@ -22,7 +22,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"reflect"
-	"regexp"
+	// "regexp"
 	"strings"
 
 	"github.com/yunify/qingcloud-sdk-go/logger"
@@ -41,6 +41,7 @@ type Unpacker struct {
 
 // UnpackHTTPRequest unpack the http response with an operation, http response and an output.
 func (u *Unpacker) UnpackHTTPRequest(o *data.Operation, r *http.Response, x *reflect.Value) error {
+
 	u.operation = o
 	u.httpResponse = r
 	u.output = x
@@ -78,19 +79,18 @@ func (u *Unpacker) preProcessMonitor(r *http.Response) error {
 
 	responseString := buffer.String()
 
-	for {
-		dataString := regexp.MustCompile(`"data":\[\[[^}]+`).FindString(responseString)
-		if dataString == "" {
-			break
-		}
+	// for {
+	// 	dataString := regexp.MustCompile(`"data":\[\[[^}]+`).FindString(responseString)
+	// 	if dataString == "" {
+	// 		break
+	// 	}
 
-		dataValueString := regexp.MustCompile(`\[\[.+]`).FindString(dataString)
-		dataValueStringAfter := "\"" + strings.Replace(dataValueString, "\"", "\\\"", -1) + "\""
-		dataStringAfter := strings.Replace(dataString, dataValueString, dataValueStringAfter, -1)
+	// 	dataValueString := regexp.MustCompile(`\[\[.+]`).FindString(dataString)
+	// 	dataValueStringAfter := "\"" + strings.Replace(dataValueString, "\"", "\\\"", -1) + "\""
+	// 	dataStringAfter := strings.Replace(dataString, dataValueString, dataValueStringAfter, -1)
 
-		responseString = strings.Replace(responseString, dataString, dataStringAfter, -1)
-	}
-
+	// 	responseString = strings.Replace(responseString, dataString, dataStringAfter, -1)
+	// }
 	r.Body = ioutil.NopCloser(bytes.NewReader([]byte(responseString)))
 
 	return nil
