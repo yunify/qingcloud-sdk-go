@@ -82,59 +82,28 @@ unit-race:
 
 unit-runtime: unit-runtime-go-1.5 unit-runtime-go-1.6 unit-runtime-go-1.7
 
-export define DOCKERFILE_GO_1_7
-FROM golang:1.7
-
-ADD . /go/src/github.com/yunify/qingcloud-sdk-go
-WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
-
-CMD ["make", "build", "unit"]
-endef
 
 unit-runtime-go-1.7:
 	@echo "run test in go 1.7"
-	echo "$${DOCKERFILE_GO_1_7}" > "dockerfile_go_1.7"
-	docker build -f "./dockerfile_go_1.7" -t "${PREFIX}:go-1.7" .
-	rm -f "./dockerfile_go_1.7"
+	docker build -f "./build/dockerfile-go-1_7/dockerfile" -t "${PREFIX}:go-1.7" .
 	docker run --name "${PREFIX}-go-1.7-unit" -t "${PREFIX}:go-1.7"
 	docker rm "${PREFIX}-go-1.7-unit"
 	docker rmi "${PREFIX}:go-1.7"
 	@echo "ok"
 
-export define DOCKERFILE_GO_1_6
-FROM golang:1.6
-
-ADD . /go/src/github.com/yunify/qingcloud-sdk-go
-WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
-
-CMD ["make", "build", "unit"]
-endef
 
 unit-runtime-go-1.6:
 	@echo "run test in go 1.6"
-	echo "$${DOCKERFILE_GO_1_6}" > "dockerfile_go_1.6"
-	docker build -f "./dockerfile_go_1.6" -t "${PREFIX}:go-1.6" .
-	rm -f "./dockerfile_go_1.6"
+	docker build -f "./build/dockerfile-go-1_6/dockerfile" -t "${PREFIX}:go-1.6" .
 	docker run --name "${PREFIX}-go-1.6-unit" -t "${PREFIX}:go-1.6"
 	docker rm "${PREFIX}-go-1.6-unit"
 	docker rmi "${PREFIX}:go-1.6"
 	@echo "ok"
 
-export define DOCKERFILE_GO_1_5
-FROM golang:1.5
-ENV GO15VENDOREXPERIMENT="1"
-
-ADD . /go/src/github.com/yunify/qingcloud-sdk-go
-WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
-
-CMD ["make", "build", "unit"]
-endef
 
 unit-runtime-go-1.5:
 	@echo "run test in go 1.5"
-	echo "$${DOCKERFILE_GO_1_5}" > "dockerfile_go_1.5"
-	docker build -f "./dockerfile_go_1.5" -t "${PREFIX}:go-1.5" .
-	rm -f "./dockerfile_go_1.5"
+	docker build -f "./build/dockerfile-go-1_5/dockerfile" -t "${PREFIX}:go-1.5" .
 	docker run --name "${PREFIX}-go-1.5-unit" -t "${PREFIX}:go-1.5"
 	docker rm "${PREFIX}-go-1.5-unit"
 	docker rmi "${PREFIX}:go-1.5"
