@@ -1339,6 +1339,7 @@ type Mongo struct {
 	Status      *string    `json:"status" name:"status"`
 	StatusTime  *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
 	StorageSize *int       `json:"storage_size" name:"storage_size"`
+	Tags        []*Tag     `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, stopping, starting, deleting, resizing, suspending, vxnet-changing, snapshot-creating, instances-adding, instances-removing, pg-applying
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
@@ -1382,6 +1383,14 @@ func (v *Mongo) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
+			}
+		}
+	}
+
+	if len(v.Tags) > 0 {
+		for _, property := range v.Tags {
+			if err := property.Validate(); err != nil {
+				return err
 			}
 		}
 	}
@@ -2112,6 +2121,7 @@ type S2Server struct {
 	// Status's available values: pending, active, poweroffed, suspended, deleted, ceased
 	Status     *string    `json:"status" name:"status"`
 	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	Tags       []*Tag     `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, updating, suspending, resuming, poweroffing
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
@@ -2195,6 +2205,14 @@ func (v *S2Server) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
+			}
+		}
+	}
+
+	if len(v.Tags) > 0 {
+		for _, property := range v.Tags {
+			if err := property.Validate(); err != nil {
+				return err
 			}
 		}
 	}
