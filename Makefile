@@ -16,6 +16,7 @@ help:
 	@echo "Please use \`make <target>\` where <target> is one of"
 	@echo "  all               to check, build, test and release this SDK"
 	@echo "  check             to vet and lint the SDK"
+	@echo "  generate          to generate service code"
 	@echo "  build             to build the SDK"
 	@echo "  unit              to run all sort of unit tests except runtime"
 	@echo "  unit-test         to run unit test"
@@ -44,12 +45,30 @@ lint:
 	 if [[ -n $${lint} ]]; then echo "$${lint}"; exit 1; fi
 	@echo "ok"
 
+generate: snips-v0.0.9.exe ../qingcloud-api-specs/package.json
+	./snips-v0.0.9.exe \
+		-s=${shell go env GOPATH}/src/github.com/yunify \
+		-m=qingcloud-api-specs \
+		-n=2013-08-30 \
+		-t=./template \
+		-o=./service
+	go fmt ./service/...
+	@echo "ok"
+
+snips-v0.0.9.exe:
+	go run build/get-snips-v0.0.9.go
+
+../qingcloud-api-specs/package.json:
+	-go get -d github.com/yunify/qingcloud-api-specs
+	file %@
+
 build:
 	@echo "build the SDK"
 	GOOS=linux GOARCH=amd64 go build ${PKGS_TO_CHECK}
 	GOOS=darwin GOARCH=amd64 go build ${PKGS_TO_CHECK}
 	GOOS=windows GOARCH=amd64 go build ${PKGS_TO_CHECK}
 	@echo "ok"
+
 
 unit: unit-test unit-benchmark unit-coverage unit-race
 
