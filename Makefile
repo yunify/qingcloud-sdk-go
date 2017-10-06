@@ -78,11 +78,12 @@ generate-dev:
 	@if [[ ! -f "../qingcloud-api-specs/package.json" ]]; then \
 		-go get -d github.com/yunify/qingcloud-api-specs; \
 	fi
+	@snips -v
 	snips \
 		-f=../qingcloud-api-specs/2013-08-30/swagger/api_v2.0.json \
 		-t=./template \
 		-o=./service
-	go fmt ./service/...
+	-go fmt ./service/...
 	@echo "ok"
 
 snips:
