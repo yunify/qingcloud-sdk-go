@@ -55,6 +55,20 @@ generate: snips ../qingcloud-api-specs/package.json
 	go fmt ./service/...
 	@echo "ok"
 
+generate-dev:
+	@if [[ ! -f "$$(which snips)" ]]; then \
+		go get -u github.com/yunify/snips; \
+	fi
+	@if [[ ! -f "../qingcloud-api-specs/package.json" ]]; then \
+		-go get -d github.com/yunify/qingcloud-api-specs; \
+	fi
+	snips \
+		-f=../qingcloud-api-specs/2013-08-30/swagger/api_v2.0.json \
+		-t=./template \
+		-o=./service
+	go fmt ./service/...
+	@echo "ok"
+
 snips:
 	curl -L https://github.com/yunify/snips/releases/download/v0.0.9/snips-v0.0.9-${shell go env GOOS}_amd64.tar.gz | tar zx
 
