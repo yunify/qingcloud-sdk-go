@@ -150,10 +150,10 @@ func (v *CreateNicsInput) Validate() error {
 }
 
 type CreateNicsOutput struct {
-	Message *string  `json:"message" name:"message"`
-	Action  *string  `json:"action" name:"action" location:"elements"`
-	Nics    []*NICIP `json:"nics" name:"nics" location:"elements"`
-	RetCode *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string       `json:"message" name:"message"`
+	Action  *string       `json:"action" name:"action" location:"elements"`
+	Nics    []interface{} `json:"nics" name:"nics" location:"elements"`
+	RetCode *int          `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/nic/delete_nics.html
@@ -289,11 +289,11 @@ func (v *DescribeNicsInput) Validate() error {
 }
 
 type DescribeNicsOutput struct {
-	Message    *string `json:"message" name:"message"`
-	Action     *string `json:"action" name:"action" location:"elements"`
-	NICSet     []*NIC  `json:"nic_set" name:"nic_set" location:"elements"`
-	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	NICSet     []interface{} `json:"nic_set" name:"nic_set" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/nic/detach_nics.html

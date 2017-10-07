@@ -74,8 +74,8 @@ func (s *SecurityGroupService) AddSecurityGroupRules(i *AddSecurityGroupRulesInp
 }
 
 type AddSecurityGroupRulesInput struct {
-	Rules         []*SecurityGroupRule `json:"rules" name:"rules" location:"params"`                   // Required
-	SecurityGroup *string              `json:"security_group" name:"security_group" location:"params"` // Required
+	Rules         []interface{} `json:"rules" name:"rules" location:"params"`                   // Required
+	SecurityGroup *string       `json:"security_group" name:"security_group" location:"params"` // Required
 }
 
 func (v *AddSecurityGroupRulesInput) Validate() error {
@@ -84,14 +84,6 @@ func (v *AddSecurityGroupRulesInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "Rules",
 			ParentName:    "AddSecurityGroupRulesInput",
-		}
-	}
-
-	if len(v.Rules) > 0 {
-		for _, property := range v.Rules {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -595,11 +587,11 @@ func (v *DescribeSecurityGroupIPSetsInput) Validate() error {
 }
 
 type DescribeSecurityGroupIPSetsOutput struct {
-	Message               *string               `json:"message" name:"message"`
-	Action                *string               `json:"action" name:"action" location:"elements"`
-	RetCode               *int                  `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupIPSetSet []*SecurityGroupIPSet `json:"security_group_ipset_set" name:"security_group_ipset_set" location:"elements"`
-	TotalCount            *int                  `json:"total_count" name:"total_count" location:"elements"`
+	Message               *string       `json:"message" name:"message"`
+	Action                *string       `json:"action" name:"action" location:"elements"`
+	RetCode               *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupIPSetSet []interface{} `json:"security_group_ipset_set" name:"security_group_ipset_set" location:"elements"`
+	TotalCount            *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/describe_security_group_rules.html
@@ -671,11 +663,11 @@ func (v *DescribeSecurityGroupRulesInput) Validate() error {
 }
 
 type DescribeSecurityGroupRulesOutput struct {
-	Message              *string              `json:"message" name:"message"`
-	Action               *string              `json:"action" name:"action" location:"elements"`
-	RetCode              *int                 `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupRuleSet []*SecurityGroupRule `json:"security_group_rule_set" name:"security_group_rule_set" location:"elements"`
-	TotalCount           *int                 `json:"total_count" name:"total_count" location:"elements"`
+	Message              *string       `json:"message" name:"message"`
+	Action               *string       `json:"action" name:"action" location:"elements"`
+	RetCode              *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupRuleSet []interface{} `json:"security_group_rule_set" name:"security_group_rule_set" location:"elements"`
+	TotalCount           *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/describe_security_group_snapshots.html
@@ -725,11 +717,11 @@ func (v *DescribeSecurityGroupSnapshotsInput) Validate() error {
 }
 
 type DescribeSecurityGroupSnapshotsOutput struct {
-	Message                  *string                  `json:"message" name:"message"`
-	Action                   *string                  `json:"action" name:"action" location:"elements"`
-	RetCode                  *int                     `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupSnapshotSet []*SecurityGroupSnapshot `json:"security_group_snapshot_set" name:"security_group_snapshot_set" location:"elements"`
-	TotalCount               *int                     `json:"total_count" name:"total_count" location:"elements"`
+	Message                  *string       `json:"message" name:"message"`
+	Action                   *string       `json:"action" name:"action" location:"elements"`
+	RetCode                  *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupSnapshotSet []interface{} `json:"security_group_snapshot_set" name:"security_group_snapshot_set" location:"elements"`
+	TotalCount               *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/describe_security_groups.html
@@ -773,11 +765,11 @@ func (v *DescribeSecurityGroupsInput) Validate() error {
 }
 
 type DescribeSecurityGroupsOutput struct {
-	Message          *string          `json:"message" name:"message"`
-	Action           *string          `json:"action" name:"action" location:"elements"`
-	RetCode          *int             `json:"ret_code" name:"ret_code" location:"elements"`
-	SecurityGroupSet []*SecurityGroup `json:"security_group_set" name:"security_group_set" location:"elements"`
-	TotalCount       *int             `json:"total_count" name:"total_count" location:"elements"`
+	Message          *string       `json:"message" name:"message"`
+	Action           *string       `json:"action" name:"action" location:"elements"`
+	RetCode          *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	SecurityGroupSet []interface{} `json:"security_group_set" name:"security_group_set" location:"elements"`
+	TotalCount       *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/sg/modify_security_group_attributes.html

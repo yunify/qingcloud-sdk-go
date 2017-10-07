@@ -108,9 +108,9 @@ func (v *DescribeJobsInput) Validate() error {
 }
 
 type DescribeJobsOutput struct {
-	Message    *string `json:"message" name:"message"`
-	Action     *string `json:"action" name:"action" location:"elements"`
-	JobSet     []*Job  `json:"job_set" name:"job_set" location:"elements"`
-	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	JobSet     []interface{} `json:"job_set" name:"job_set" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }

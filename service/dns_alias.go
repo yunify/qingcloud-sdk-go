@@ -146,11 +146,11 @@ func (v *DescribeDNSAliasesInput) Validate() error {
 }
 
 type DescribeDNSAliasesOutput struct {
-	Message     *string     `json:"message" name:"message"`
-	Action      *string     `json:"action" name:"action" location:"elements"`
-	DNSAliasSet []*DNSAlias `json:"dns_alias_set" name:"dns_alias_set" location:"elements"`
-	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
+	Message     *string       `json:"message" name:"message"`
+	Action      *string       `json:"action" name:"action" location:"elements"`
+	DNSAliasSet []interface{} `json:"dns_alias_set" name:"dns_alias_set" location:"elements"`
+	RetCode     *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount  *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/dns_alias/dissociate_dns_aliases.html

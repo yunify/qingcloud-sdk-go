@@ -307,11 +307,11 @@ func (v *DescribeKeyPairsInput) Validate() error {
 }
 
 type DescribeKeyPairsOutput struct {
-	Message    *string    `json:"message" name:"message"`
-	Action     *string    `json:"action" name:"action" location:"elements"`
-	KeyPairSet []*KeyPair `json:"keypair_set" name:"keypair_set" location:"elements"`
-	RetCode    *int       `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int       `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	KeyPairSet []interface{} `json:"keypair_set" name:"keypair_set" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/keypair/detach_key_pairs.html

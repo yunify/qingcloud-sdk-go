@@ -38,21 +38,21 @@ type Cache struct {
 	CreateTime   *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
 	Description  *string    `json:"description" name:"description"`
 	// IsApplied's available values: 0, 1
-	IsApplied       *int         `json:"is_applied" name:"is_applied"`
-	MasterCount     *int         `json:"master_count" name:"master_count"`
-	MaxMemory       *int         `json:"max_memory" name:"max_memory"`
-	NodeCount       *int         `json:"node_count" name:"node_count"`
-	Nodes           []*CacheNode `json:"nodes" name:"nodes"`
-	ReplicateCount  *int         `json:"replicate_count" name:"replicate_count"`
-	SecurityGroupID *string      `json:"security_group_id" name:"security_group_id"`
+	IsApplied       *int          `json:"is_applied" name:"is_applied"`
+	MasterCount     *int          `json:"master_count" name:"master_count"`
+	MaxMemory       *int          `json:"max_memory" name:"max_memory"`
+	NodeCount       *int          `json:"node_count" name:"node_count"`
+	Nodes           []interface{} `json:"nodes" name:"nodes"`
+	ReplicateCount  *int          `json:"replicate_count" name:"replicate_count"`
+	SecurityGroupID *string       `json:"security_group_id" name:"security_group_id"`
 	// Status's available values: pending, active, stopped, suspended, deleted, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	SubCode    *int       `json:"sub_code" name:"sub_code"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	SubCode    *int          `json:"sub_code" name:"sub_code"`
+	Tags       []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, starting, stopping, updating, suspending, resuming, deleting
-	TransitionStatus *string `json:"transition_status" name:"transition_status"`
-	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
+	TransitionStatus *string     `json:"transition_status" name:"transition_status"`
+	VxNet            interface{} `json:"vxnet" name:"vxnet"`
 }
 
 func (v *Cache) Validate() error {
@@ -117,14 +117,6 @@ func (v *Cache) Validate() error {
 		}
 	}
 
-	if len(v.Nodes) > 0 {
-		for _, property := range v.Nodes {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	if v.Status != nil {
 		statusValidValues := []string{"pending", "active", "stopped", "suspended", "deleted", "ceased"}
 		statusParameterValue := fmt.Sprint(*v.Status)
@@ -141,14 +133,6 @@ func (v *Cache) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
-			}
-		}
-	}
-
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -170,12 +154,6 @@ func (v *Cache) Validate() error {
 				ParameterValue: transitionStatusParameterValue,
 				AllowedValues:  transitionStatusValidValues,
 			}
-		}
-	}
-
-	if v.VxNet != nil {
-		if err := v.VxNet.Validate(); err != nil {
-			return err
 		}
 	}
 
@@ -325,9 +303,9 @@ type CacheParameterGroup struct {
 	CreateTime              *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
 	Description             *string    `json:"description" name:"description"`
 	// IsApplied's available values: 0, 1
-	IsApplied *int        `json:"is_applied" name:"is_applied"`
-	IsDefault *int        `json:"is_default" name:"is_default"`
-	Resources []*Resource `json:"resources" name:"resources"`
+	IsApplied *int          `json:"is_applied" name:"is_applied"`
+	IsDefault *int          `json:"is_default" name:"is_default"`
+	Resources []interface{} `json:"resources" name:"resources"`
 }
 
 func (v *CacheParameterGroup) Validate() error {
@@ -348,14 +326,6 @@ func (v *CacheParameterGroup) Validate() error {
 				ParameterName:  "IsApplied",
 				ParameterValue: isAppliedParameterValue,
 				AllowedValues:  isAppliedValidValues,
-			}
-		}
-	}
-
-	if len(v.Resources) > 0 {
-		for _, property := range v.Resources {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -391,6 +361,97 @@ func (v *CachePrivateIP) Validate() error {
 			}
 		}
 	}
+
+	return nil
+}
+
+type Cluster struct {
+	AppID                      *string     `json:"app_id" name:"app_id"`
+	AppVersion                 *string     `json:"app_version" name:"app_version"`
+	AutoBackupTime             *int        `json:"auto_backup_time" name:"auto_backup_time"`
+	CfgmgmtID                  *string     `json:"cfgmgmt_id" name:"cfgmgmt_id"`
+	ClusterID                  *string     `json:"cluster_id" name:"cluster_id"`
+	ClusterType                *int        `json:"cluster_type" name:"cluster_type"`
+	ConsoleID                  *string     `json:"console_id" name:"console_id"`
+	Controller                 *string     `json:"controller" name:"controller"`
+	CreateTime                 *time.Time  `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Debug                      *int        `json:"debug" name:"debug"`
+	Description                *string     `json:"description" name:"description"`
+	GlobalUuid                 *string     `json:"global_uuid" name:"global_uuid"`
+	IncrementalBackupSupported *int        `json:"incremental_backup_supported" name:"incremental_backup_supported"`
+	LatestSnapshotTime         *string     `json:"latest_snapshot_time" name:"latest_snapshot_time"`
+	MetadataRootAccess         *int        `json:"metadata_root_access" name:"metadata_root_access"`
+	Name                       *string     `json:"name" name:"name"`
+	NodeCount                  *int        `json:"node_count" name:"node_count"`
+	Owner                      *string     `json:"owner" name:"owner"`
+	PartnerAccess              *int        `json:"partner_access" name:"partner_access"`
+	ReuseHyper                 *int        `json:"reuse_hyper" name:"reuse_hyper"`
+	Roles                      []*string   `json:"roles" name:"roles"`
+	RootUserID                 *string     `json:"root_user_id" name:"root_user_id"`
+	Status                     *string     `json:"status" name:"status"`
+	StatusTime                 *time.Time  `json:"status_time" name:"status_time" format:"ISO 8601"`
+	SubCode                    *int        `json:"sub_code" name:"sub_code"`
+	TransitionStatus           *string     `json:"transition_status" name:"transition_status"`
+	UpgradeStatus              *string     `json:"upgrade_status" name:"upgrade_status"`
+	UpgradeTime                *time.Time  `json:"upgrade_time" name:"upgrade_time" format:"ISO 8601"`
+	VxNet                      interface{} `json:"vxnet" name:"vxnet"`
+}
+
+func (v *Cluster) Validate() error {
+
+	return nil
+}
+
+type ClusterNode struct {
+	AgentInstalled             *int       `json:"agent_installed" name:"agent_installed"`
+	AlarmStatus                *string    `json:"alarm_status" name:"alarm_status"`
+	AppID                      *string    `json:"app_id" name:"app_id"`
+	AppVersion                 *string    `json:"app_version" name:"app_version"`
+	AutoBackup                 *int       `json:"auto_backup" name:"auto_backup"`
+	ClusterID                  *string    `json:"cluster_id" name:"cluster_id"`
+	ConsoleID                  *string    `json:"console_id" name:"console_id"`
+	Controller                 *string    `json:"controller" name:"controller"`
+	CPU                        *int       `json:"cpu" name:"cpu"`
+	CreateTime                 *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
+	CustomService              *string    `json:"custom_service" name:"custom_service"`
+	Debug                      *int       `json:"debug" name:"debug"`
+	GlobalServerID             *int       `json:"global_server_id" name:"global_server_id"`
+	GroupID                    *int       `json:"group_id" name:"group_id"`
+	HealthCheck                *string    `json:"health_check" name:"health_check"`
+	HealthStatus               *string    `json:"health_status" name:"health_status"`
+	Hypervisor                 *string    `json:"hypervisor" name:"hypervisor"`
+	ImageID                    *string    `json:"image_id" name:"image_id"`
+	IncrementalBackupSupported *int       `json:"incremental_backup_supported" name:"incremental_backup_supported"`
+	InitService                *string    `json:"init_service" name:"init_service"`
+	InstanceID                 *string    `json:"instance_id" name:"instance_id"`
+	IsBackup                   *int       `json:"is_backup" name:"is_backup"`
+	Memory                     *int       `json:"memory" name:"memory"`
+	Monitor                    *string    `json:"monitor" name:"monitor"`
+	Name                       *string    `json:"name" name:"name"`
+	NodeID                     *string    `json:"node_id" name:"node_id"`
+	Owner                      *string    `json:"owner" name:"owner"`
+	PrivateIP                  *string    `json:"private_ip" name:"private_ip"`
+	Repl                       *string    `json:"repl" name:"repl"`
+	RestartService             *string    `json:"restart_service" name:"restart_service"`
+	Role                       *string    `json:"role" name:"role"`
+	RootUserID                 *string    `json:"root_user_id" name:"root_user_id"`
+	ScaleInService             *string    `json:"scale_in_service" name:"scale_in_service"`
+	ScaleOutService            *string    `json:"scale_out_service" name:"scale_out_service"`
+	ServerID                   *int       `json:"server_id" name:"server_id"`
+	SingleNodeRepl             *string    `json:"single_node_repl" name:"single_node_repl"`
+	StartService               *string    `json:"start_service" name:"start_service"`
+	Status                     *string    `json:"status" name:"status"`
+	StatusTime                 *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	StopService                *string    `json:"stop_service" name:"stop_service"`
+	StorageSize                *int       `json:"storage_size" name:"storage_size"`
+	TransitionStatus           *string    `json:"transition_status" name:"transition_status"`
+	UserAccess                 *string    `json:"user_access" name:"user_access"`
+	VerticalScalingPolicy      *string    `json:"vertical_scaling_policy" name:"vertical_scaling_policy"`
+	VolumeIDs                  *string    `json:"volume_ids" name:"volume_ids"`
+	VxNetID                    *string    `json:"vxnet_id" name:"vxnet_id"`
+}
+
+func (v *ClusterNode) Validate() error {
 
 	return nil
 }
@@ -435,21 +496,21 @@ type EIP struct {
 	AssociateMode *int    `json:"associate_mode" name:"associate_mode"`
 	Bandwidth     *int    `json:"bandwidth" name:"bandwidth"`
 	// BillingMode's available values: bandwidth, traffic
-	BillingMode *string      `json:"billing_mode" name:"billing_mode"`
-	CreateTime  *time.Time   `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description *string      `json:"description" name:"description"`
-	EIPAddr     *string      `json:"eip_addr" name:"eip_addr"`
-	EIPGroup    *EIPGroup    `json:"eip_group" name:"eip_group"`
-	EIPID       *string      `json:"eip_id" name:"eip_id"`
-	EIPName     *string      `json:"eip_name" name:"eip_name"`
-	ICPCodes    *string      `json:"icp_codes" name:"icp_codes"`
-	NeedICP     *int         `json:"need_icp" name:"need_icp"`
-	Resource    *EIPResource `json:"resource" name:"resource"`
+	BillingMode *string     `json:"billing_mode" name:"billing_mode"`
+	CreateTime  *time.Time  `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description *string     `json:"description" name:"description"`
+	EIPAddr     *string     `json:"eip_addr" name:"eip_addr"`
+	EIPGroup    interface{} `json:"eip_group" name:"eip_group"`
+	EIPID       *string     `json:"eip_id" name:"eip_id"`
+	EIPName     *string     `json:"eip_name" name:"eip_name"`
+	ICPCodes    *string     `json:"icp_codes" name:"icp_codes"`
+	NeedICP     *int        `json:"need_icp" name:"need_icp"`
+	Resource    interface{} `json:"resource" name:"resource"`
 	// Status's available values: pending, available, associated, suspended, released, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	SubCode    *int       `json:"sub_code" name:"sub_code"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	SubCode    *int          `json:"sub_code" name:"sub_code"`
+	Tags       []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: associating, dissociating, suspending, resuming, releasing
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 }
@@ -476,18 +537,6 @@ func (v *EIP) Validate() error {
 		}
 	}
 
-	if v.EIPGroup != nil {
-		if err := v.EIPGroup.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if v.Resource != nil {
-		if err := v.Resource.Validate(); err != nil {
-			return err
-		}
-	}
-
 	if v.Status != nil {
 		statusValidValues := []string{"pending", "available", "associated", "suspended", "released", "ceased"}
 		statusParameterValue := fmt.Sprint(*v.Status)
@@ -504,14 +553,6 @@ func (v *EIP) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
-			}
-		}
-	}
-
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -754,96 +795,52 @@ func (v *Image) Validate() error {
 }
 
 type ImageUser struct {
-	CreateTime *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
-	ImageID    *string    `json:"image_id" name:"image_id"`
-	User       *User      `json:"user" name:"user"`
+	CreateTime *time.Time  `json:"create_time" name:"create_time" format:"ISO 8601"`
+	ImageID    *string     `json:"image_id" name:"image_id"`
+	User       interface{} `json:"user" name:"user"`
 }
 
 func (v *ImageUser) Validate() error {
-
-	if v.User != nil {
-		if err := v.User.Validate(); err != nil {
-			return err
-		}
-	}
 
 	return nil
 }
 
 type Instance struct {
-	AlarmStatus      *string        `json:"alarm_status" name:"alarm_status"`
-	CPUTopology      *string        `json:"cpu_topology" name:"cpu_topology"`
-	CreateTime       *time.Time     `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description      *string        `json:"description" name:"description"`
-	Device           *string        `json:"device" name:"device"`
-	DHCPOptions      *DHCPOption    `json:"dhcp_options" name:"dhcp_options"`
-	DNSAliases       []*DNSAlias    `json:"dns_aliases" name:"dns_aliases"`
-	EIP              *EIP           `json:"eip" name:"eip"`
-	Extra            *Extra         `json:"extra" name:"extra"`
-	GraphicsPasswd   *string        `json:"graphics_passwd" name:"graphics_passwd"`
-	GraphicsProtocol *string        `json:"graphics_protocol" name:"graphics_protocol"`
-	Image            *Image         `json:"image" name:"image"`
-	ImageID          *string        `json:"image_id" name:"image_id"`
-	InstanceClass    *int           `json:"instance_class" name:"instance_class"`
-	InstanceID       *string        `json:"instance_id" name:"instance_id"`
-	InstanceName     *string        `json:"instance_name" name:"instance_name"`
-	InstanceType     *string        `json:"instance_type" name:"instance_type"`
-	KeyPairIDs       []*string      `json:"keypair_ids" name:"keypair_ids"`
-	MemoryCurrent    *int           `json:"memory_current" name:"memory_current"`
-	PrivateIP        *string        `json:"private_ip" name:"private_ip"`
-	SecurityGroup    *SecurityGroup `json:"security_group" name:"security_group"`
+	AlarmStatus      *string       `json:"alarm_status" name:"alarm_status"`
+	CPUTopology      *string       `json:"cpu_topology" name:"cpu_topology"`
+	CreateTime       *time.Time    `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description      *string       `json:"description" name:"description"`
+	Device           *string       `json:"device" name:"device"`
+	DHCPOptions      interface{}   `json:"dhcp_options" name:"dhcp_options"`
+	DNSAliases       []interface{} `json:"dns_aliases" name:"dns_aliases"`
+	EIP              interface{}   `json:"eip" name:"eip"`
+	Extra            interface{}   `json:"extra" name:"extra"`
+	GraphicsPasswd   *string       `json:"graphics_passwd" name:"graphics_passwd"`
+	GraphicsProtocol *string       `json:"graphics_protocol" name:"graphics_protocol"`
+	Image            interface{}   `json:"image" name:"image"`
+	ImageID          *string       `json:"image_id" name:"image_id"`
+	InstanceClass    *int          `json:"instance_class" name:"instance_class"`
+	InstanceID       *string       `json:"instance_id" name:"instance_id"`
+	InstanceName     *string       `json:"instance_name" name:"instance_name"`
+	InstanceType     *string       `json:"instance_type" name:"instance_type"`
+	KeyPairIDs       []*string     `json:"keypair_ids" name:"keypair_ids"`
+	MemoryCurrent    *int          `json:"memory_current" name:"memory_current"`
+	PrivateIP        *string       `json:"private_ip" name:"private_ip"`
+	SecurityGroup    interface{}   `json:"security_group" name:"security_group"`
 	// Status's available values: pending, running, stopped, suspended, terminated, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	SubCode    *int       `json:"sub_code" name:"sub_code"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	SubCode    *int          `json:"sub_code" name:"sub_code"`
+	Tags       []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, starting, stopping, restarting, suspending, resuming, terminating, recovering, resetting
-	TransitionStatus *string          `json:"transition_status" name:"transition_status"`
-	VCPUsCurrent     *int             `json:"vcpus_current" name:"vcpus_current"`
-	VolumeIDs        []*string        `json:"volume_ids" name:"volume_ids"`
-	Volumes          []*Volume        `json:"volumes" name:"volumes"`
-	VxNets           []*InstanceVxNet `json:"vxnets" name:"vxnets"`
+	TransitionStatus *string       `json:"transition_status" name:"transition_status"`
+	VCPUsCurrent     *int          `json:"vcpus_current" name:"vcpus_current"`
+	VolumeIDs        []*string     `json:"volume_ids" name:"volume_ids"`
+	Volumes          []interface{} `json:"volumes" name:"volumes"`
+	VxNets           []interface{} `json:"vxnets" name:"vxnets"`
 }
 
 func (v *Instance) Validate() error {
-
-	if v.DHCPOptions != nil {
-		if err := v.DHCPOptions.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if len(v.DNSAliases) > 0 {
-		for _, property := range v.DNSAliases {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if v.EIP != nil {
-		if err := v.EIP.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if v.Extra != nil {
-		if err := v.Extra.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if v.Image != nil {
-		if err := v.Image.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if v.SecurityGroup != nil {
-		if err := v.SecurityGroup.Validate(); err != nil {
-			return err
-		}
-	}
 
 	if v.Status != nil {
 		statusValidValues := []string{"pending", "running", "stopped", "suspended", "terminated", "ceased"}
@@ -865,14 +862,6 @@ func (v *Instance) Validate() error {
 		}
 	}
 
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	if v.TransitionStatus != nil {
 		transitionStatusValidValues := []string{"creating", "starting", "stopping", "restarting", "suspending", "resuming", "terminating", "recovering", "resetting"}
 		transitionStatusParameterValue := fmt.Sprint(*v.TransitionStatus)
@@ -889,22 +878,6 @@ func (v *Instance) Validate() error {
 				ParameterName:  "TransitionStatus",
 				ParameterValue: transitionStatusParameterValue,
 				AllowedValues:  transitionStatusValidValues,
-			}
-		}
-	}
-
-	if len(v.Volumes) > 0 {
-		for _, property := range v.Volumes {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(v.VxNets) > 0 {
-		for _, property := range v.VxNets {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -1022,12 +995,12 @@ func (v *Job) Validate() error {
 type KeyPair struct {
 	Description *string `json:"description" name:"description"`
 	// EncryptMethod's available values: ssh-rsa, ssh-dss
-	EncryptMethod *string   `json:"encrypt_method" name:"encrypt_method"`
-	InstanceIDs   []*string `json:"instance_ids" name:"instance_ids"`
-	KeyPairID     *string   `json:"keypair_id" name:"keypair_id"`
-	KeyPairName   *string   `json:"keypair_name" name:"keypair_name"`
-	PubKey        *string   `json:"pub_key" name:"pub_key"`
-	Tags          []*Tag    `json:"tags" name:"tags"`
+	EncryptMethod *string       `json:"encrypt_method" name:"encrypt_method"`
+	InstanceIDs   []*string     `json:"instance_ids" name:"instance_ids"`
+	KeyPairID     *string       `json:"keypair_id" name:"keypair_id"`
+	KeyPairName   *string       `json:"keypair_name" name:"keypair_name"`
+	PubKey        *string       `json:"pub_key" name:"pub_key"`
+	Tags          []interface{} `json:"tags" name:"tags"`
 }
 
 func (v *KeyPair) Validate() error {
@@ -1052,48 +1025,32 @@ func (v *KeyPair) Validate() error {
 		}
 	}
 
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	return nil
 }
 
 type LoadBalancer struct {
-	Cluster     []*EIP     `json:"cluster" name:"cluster"`
-	CreateTime  *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description *string    `json:"description" name:"description"`
+	Cluster     []interface{} `json:"cluster" name:"cluster"`
+	CreateTime  *time.Time    `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description *string       `json:"description" name:"description"`
 	// IsApplied's available values: 0, 1
-	IsApplied        *int                    `json:"is_applied" name:"is_applied"`
-	Listeners        []*LoadBalancerListener `json:"listeners" name:"listeners"`
-	LoadBalancerID   *string                 `json:"loadbalancer_id" name:"loadbalancer_id"`
-	LoadBalancerName *string                 `json:"loadbalancer_name" name:"loadbalancer_name"`
+	IsApplied        *int          `json:"is_applied" name:"is_applied"`
+	Listeners        []interface{} `json:"listeners" name:"listeners"`
+	LoadBalancerID   *string       `json:"loadbalancer_id" name:"loadbalancer_id"`
+	LoadBalancerName *string       `json:"loadbalancer_name" name:"loadbalancer_name"`
 	// LoadBalancerType's available values: 0, 1, 2, 3, 4, 5
 	LoadBalancerType *int      `json:"loadbalancer_type" name:"loadbalancer_type"`
 	PrivateIPs       []*string `json:"private_ips" name:"private_ips"`
 	SecurityGroupID  *string   `json:"security_group_id" name:"security_group_id"`
 	// Status's available values: pending, active, stopped, suspended, deleted, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	Tags       []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, starting, stopping, updating, suspending, resuming, deleting
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 	VxNetID          *string `json:"vxnet_id" name:"vxnet_id"`
 }
 
 func (v *LoadBalancer) Validate() error {
-
-	if len(v.Cluster) > 0 {
-		for _, property := range v.Cluster {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	if v.IsApplied != nil {
 		isAppliedValidValues := []string{"0", "1"}
@@ -1111,14 +1068,6 @@ func (v *LoadBalancer) Validate() error {
 				ParameterName:  "IsApplied",
 				ParameterValue: isAppliedParameterValue,
 				AllowedValues:  isAppliedValidValues,
-			}
-		}
-	}
-
-	if len(v.Listeners) > 0 {
-		for _, property := range v.Listeners {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -1159,14 +1108,6 @@ func (v *LoadBalancer) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
-			}
-		}
-	}
-
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -1213,8 +1154,8 @@ func (v *LoadBalancerBackend) Validate() error {
 }
 
 type LoadBalancerListener struct {
-	BackendProtocol *string                `json:"backend_protocol" name:"backend_protocol"`
-	Backends        []*LoadBalancerBackend `json:"backends" name:"backends"`
+	BackendProtocol *string       `json:"backend_protocol" name:"backend_protocol"`
+	Backends        []interface{} `json:"backends" name:"backends"`
 	// BalanceMode's available values: roundrobin, leastconn, source
 	BalanceMode              *string    `json:"balance_mode" name:"balance_mode"`
 	CreateTime               *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
@@ -1232,14 +1173,6 @@ type LoadBalancerListener struct {
 }
 
 func (v *LoadBalancerListener) Validate() error {
-
-	if len(v.Backends) > 0 {
-		for _, property := range v.Backends {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	if v.BalanceMode != nil {
 		balanceModeValidValues := []string{"roundrobin", "leastconn", "source"}
@@ -1336,13 +1269,13 @@ type Mongo struct {
 	MongoType           *int       `json:"mongo_type" name:"mongo_type"`
 	MongoVersion        *string    `json:"mongo_version" name:"mongo_version"`
 	// Status's available values: pending, active, stopped, deleted, suspended, ceased
-	Status      *string    `json:"status" name:"status"`
-	StatusTime  *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	StorageSize *int       `json:"storage_size" name:"storage_size"`
-	Tags        []*Tag     `json:"tags" name:"tags"`
+	Status      *string       `json:"status" name:"status"`
+	StatusTime  *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	StorageSize *int          `json:"storage_size" name:"storage_size"`
+	Tags        []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, stopping, starting, deleting, resizing, suspending, vxnet-changing, snapshot-creating, instances-adding, instances-removing, pg-applying
-	TransitionStatus *string `json:"transition_status" name:"transition_status"`
-	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
+	TransitionStatus *string     `json:"transition_status" name:"transition_status"`
+	VxNet            interface{} `json:"vxnet" name:"vxnet"`
 }
 
 func (v *Mongo) Validate() error {
@@ -1387,14 +1320,6 @@ func (v *Mongo) Validate() error {
 		}
 	}
 
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	if v.TransitionStatus != nil {
 		transitionStatusValidValues := []string{"creating", "stopping", "starting", "deleting", "resizing", "suspending", "vxnet-changing", "snapshot-creating", "instances-adding", "instances-removing", "pg-applying"}
 		transitionStatusParameterValue := fmt.Sprint(*v.TransitionStatus)
@@ -1412,12 +1337,6 @@ func (v *Mongo) Validate() error {
 				ParameterValue: transitionStatusParameterValue,
 				AllowedValues:  transitionStatusValidValues,
 			}
-		}
-	}
-
-	if v.VxNet != nil {
-		if err := v.VxNet.Validate(); err != nil {
-			return err
 		}
 	}
 
@@ -1538,10 +1457,10 @@ type NIC struct {
 	SecurityGroup *string    `json:"security_group" name:"security_group"`
 	Sequence      *int       `json:"sequence" name:"sequence"`
 	// Status's available values: available, in-use
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
-	VxNetID    *string    `json:"vxnet_id" name:"vxnet_id"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	Tags       []interface{} `json:"tags" name:"tags"`
+	VxNetID    *string       `json:"vxnet_id" name:"vxnet_id"`
 }
 
 func (v *NIC) Validate() error {
@@ -1562,14 +1481,6 @@ func (v *NIC) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
-			}
-		}
-	}
-
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -1602,13 +1513,13 @@ type RDB struct {
 	RDBName             *string    `json:"rdb_name" name:"rdb_name"`
 	RDBType             *int       `json:"rdb_type" name:"rdb_type"`
 	// Status's available values: pending, active, stopped, deleted, suspended, ceased
-	Status      *string `json:"status" name:"status"`
-	StatusTime  *string `json:"status_time" name:"status_time"`
-	StorageSize *int    `json:"storage_size" name:"storage_size"`
-	Tags        []*Tag  `json:"tags" name:"tags"`
+	Status      *string       `json:"status" name:"status"`
+	StatusTime  *string       `json:"status_time" name:"status_time"`
+	StorageSize *int          `json:"storage_size" name:"storage_size"`
+	Tags        []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, stopping, starting, deleting, backup-creating, temp-creating, configuring, switching, invalid-tackling, resizing, suspending, ceasing, instance-ceasing, vxnet-leaving, vxnet-joining
-	TransitionStatus *string `json:"transition_status" name:"transition_status"`
-	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
+	TransitionStatus *string     `json:"transition_status" name:"transition_status"`
+	VxNet            interface{} `json:"vxnet" name:"vxnet"`
 }
 
 func (v *RDB) Validate() error {
@@ -1653,14 +1564,6 @@ func (v *RDB) Validate() error {
 		}
 	}
 
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	if v.TransitionStatus != nil {
 		transitionStatusValidValues := []string{"creating", "stopping", "starting", "deleting", "backup-creating", "temp-creating", "configuring", "switching", "invalid-tackling", "resizing", "suspending", "ceasing", "instance-ceasing", "vxnet-leaving", "vxnet-joining"}
 		transitionStatusParameterValue := fmt.Sprint(*v.TransitionStatus)
@@ -1681,46 +1584,16 @@ func (v *RDB) Validate() error {
 		}
 	}
 
-	if v.VxNet != nil {
-		if err := v.VxNet.Validate(); err != nil {
-			return err
-		}
-	}
-
 	return nil
 }
 
 type RDBFile struct {
-	BinaryLog []*File `json:"binary_log" name:"binary_log"`
-	ErrorLog  []*File `json:"error_log" name:"error_log"`
-	SlowLog   []*File `json:"slow_log" name:"slow_log"`
+	BinaryLog []interface{} `json:"binary_log" name:"binary_log"`
+	ErrorLog  []interface{} `json:"error_log" name:"error_log"`
+	SlowLog   []interface{} `json:"slow_log" name:"slow_log"`
 }
 
 func (v *RDBFile) Validate() error {
-
-	if len(v.BinaryLog) > 0 {
-		for _, property := range v.BinaryLog {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(v.ErrorLog) > 0 {
-		for _, property := range v.ErrorLog {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(v.SlowLog) > 0 {
-		for _, property := range v.SlowLog {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	return nil
 }
@@ -1893,12 +1766,12 @@ func (v *ResourceTypeCount) Validate() error {
 }
 
 type Router struct {
-	CreateTime  *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description *string    `json:"description" name:"description"`
-	DYNIPEnd    *string    `json:"dyn_ip_end" name:"dyn_ip_end"`
-	DYNIPStart  *string    `json:"dyn_ip_start" name:"dyn_ip_start"`
-	EIP         *EIP       `json:"eip" name:"eip"`
-	IPNetwork   *string    `json:"ip_network" name:"ip_network"`
+	CreateTime  *time.Time  `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description *string     `json:"description" name:"description"`
+	DYNIPEnd    *string     `json:"dyn_ip_end" name:"dyn_ip_end"`
+	DYNIPStart  *string     `json:"dyn_ip_start" name:"dyn_ip_start"`
+	EIP         interface{} `json:"eip" name:"eip"`
+	IPNetwork   *string     `json:"ip_network" name:"ip_network"`
 	// IsApplied's available values: 0, 1
 	IsApplied  *int    `json:"is_applied" name:"is_applied"`
 	ManagerIP  *string `json:"manager_ip" name:"manager_ip"`
@@ -1910,21 +1783,15 @@ type Router struct {
 	RouterType      *int    `json:"router_type" name:"router_type"`
 	SecurityGroupID *string `json:"security_group_id" name:"security_group_id"`
 	// Status's available values: pending, active, poweroffed, suspended, deleted, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	Tags       []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, updating, suspending, resuming, poweroffing, poweroning, deleting
-	TransitionStatus *string  `json:"transition_status" name:"transition_status"`
-	VxNets           []*VxNet `json:"vxnets" name:"vxnets"`
+	TransitionStatus *string       `json:"transition_status" name:"transition_status"`
+	VxNets           []interface{} `json:"vxnets" name:"vxnets"`
 }
 
 func (v *Router) Validate() error {
-
-	if v.EIP != nil {
-		if err := v.EIP.Validate(); err != nil {
-			return err
-		}
-	}
 
 	if v.IsApplied != nil {
 		isAppliedValidValues := []string{"0", "1"}
@@ -1986,14 +1853,6 @@ func (v *Router) Validate() error {
 		}
 	}
 
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	if v.TransitionStatus != nil {
 		transitionStatusValidValues := []string{"creating", "updating", "suspending", "resuming", "poweroffing", "poweroning", "deleting"}
 		transitionStatusParameterValue := fmt.Sprint(*v.TransitionStatus)
@@ -2010,14 +1869,6 @@ func (v *Router) Validate() error {
 				ParameterName:  "TransitionStatus",
 				ParameterValue: transitionStatusParameterValue,
 				AllowedValues:  transitionStatusValidValues,
-			}
-		}
-	}
-
-	if len(v.VxNets) > 0 {
-		for _, property := range v.VxNets {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -2119,12 +1970,12 @@ type S2Server struct {
 	// ServiceType's available values: vsan
 	ServiceType *string `json:"service_type" name:"service_type"`
 	// Status's available values: pending, active, poweroffed, suspended, deleted, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	Tags       []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, updating, suspending, resuming, poweroffing
-	TransitionStatus *string `json:"transition_status" name:"transition_status"`
-	VxNet            *VxNet  `json:"vxnet" name:"vxnet"`
+	TransitionStatus *string     `json:"transition_status" name:"transition_status"`
+	VxNet            interface{} `json:"vxnet" name:"vxnet"`
 }
 
 func (v *S2Server) Validate() error {
@@ -2209,14 +2060,6 @@ func (v *S2Server) Validate() error {
 		}
 	}
 
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	if v.TransitionStatus != nil {
 		transitionStatusValidValues := []string{"creating", "updating", "suspending", "resuming", "poweroffing"}
 		transitionStatusParameterValue := fmt.Sprint(*v.TransitionStatus)
@@ -2234,12 +2077,6 @@ func (v *S2Server) Validate() error {
 				ParameterValue: transitionStatusParameterValue,
 				AllowedValues:  transitionStatusValidValues,
 			}
-		}
-	}
-
-	if v.VxNet != nil {
-		if err := v.VxNet.Validate(); err != nil {
-			return err
 		}
 	}
 
@@ -2283,33 +2120,17 @@ func (v *S2SharedTarget) Validate() error {
 }
 
 type SecurityGroup struct {
-	CreateTime        *time.Time  `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description       *string     `json:"description" name:"description"`
-	IsApplied         *int        `json:"is_applied" name:"is_applied"`
-	IsDefault         *int        `json:"is_default" name:"is_default"`
-	Resources         []*Resource `json:"resources" name:"resources"`
-	SecurityGroupID   *string     `json:"security_group_id" name:"security_group_id"`
-	SecurityGroupName *string     `json:"security_group_name" name:"security_group_name"`
-	Tags              []*Tag      `json:"tags" name:"tags"`
+	CreateTime        *time.Time    `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description       *string       `json:"description" name:"description"`
+	IsApplied         *int          `json:"is_applied" name:"is_applied"`
+	IsDefault         *int          `json:"is_default" name:"is_default"`
+	Resources         []interface{} `json:"resources" name:"resources"`
+	SecurityGroupID   *string       `json:"security_group_id" name:"security_group_id"`
+	SecurityGroupName *string       `json:"security_group_name" name:"security_group_name"`
+	Tags              []interface{} `json:"tags" name:"tags"`
 }
 
 func (v *SecurityGroup) Validate() error {
-
-	if len(v.Resources) > 0 {
-		for _, property := range v.Resources {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	return nil
 }
@@ -2387,20 +2208,12 @@ func (v *SecurityGroupRule) Validate() error {
 }
 
 type SecurityGroupSnapshot struct {
-	GroupID                 *string              `json:"group_id" name:"group_id"`
-	Rules                   []*SecurityGroupRule `json:"rules" name:"rules"`
-	SecurityGroupSnapshotID *string              `json:"security_group_snapshot_id" name:"security_group_snapshot_id"`
+	GroupID                 *string       `json:"group_id" name:"group_id"`
+	Rules                   []interface{} `json:"rules" name:"rules"`
+	SecurityGroupSnapshotID *string       `json:"security_group_snapshot_id" name:"security_group_snapshot_id"`
 }
 
 func (v *SecurityGroupSnapshot) Validate() error {
-
-	if len(v.Rules) > 0 {
-		for _, property := range v.Rules {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	return nil
 }
@@ -2426,26 +2239,26 @@ type Snapshot struct {
 	// IsHead's available values: 0, 1
 	IsHead *int `json:"is_head" name:"is_head"`
 	// IsTaken's available values: 0, 1
-	IsTaken            *int              `json:"is_taken" name:"is_taken"`
-	LatestSnapshotTime *time.Time        `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
-	ParentID           *string           `json:"parent_id" name:"parent_id"`
-	Provider           *string           `json:"provider" name:"provider"`
-	Resource           *Resource         `json:"resource" name:"resource"`
-	RootID             *string           `json:"root_id" name:"root_id"`
-	Size               *int              `json:"size" name:"size"`
-	SnapshotID         *string           `json:"snapshot_id" name:"snapshot_id"`
-	SnapshotName       *string           `json:"snapshot_name" name:"snapshot_name"`
-	SnapshotResource   *SnapshotResource `json:"snapshot_resource" name:"snapshot_resource"`
-	SnapshotTime       *time.Time        `json:"snapshot_time" name:"snapshot_time" format:"ISO 8601"`
+	IsTaken            *int        `json:"is_taken" name:"is_taken"`
+	LatestSnapshotTime *time.Time  `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
+	ParentID           *string     `json:"parent_id" name:"parent_id"`
+	Provider           *string     `json:"provider" name:"provider"`
+	Resource           interface{} `json:"resource" name:"resource"`
+	RootID             *string     `json:"root_id" name:"root_id"`
+	Size               *int        `json:"size" name:"size"`
+	SnapshotID         *string     `json:"snapshot_id" name:"snapshot_id"`
+	SnapshotName       *string     `json:"snapshot_name" name:"snapshot_name"`
+	SnapshotResource   interface{} `json:"snapshot_resource" name:"snapshot_resource"`
+	SnapshotTime       *time.Time  `json:"snapshot_time" name:"snapshot_time" format:"ISO 8601"`
 	// SnapshotType's available values: 0, 1
 	SnapshotType *string `json:"snapshot_type" name:"snapshot_type"`
 	// Status's available values: pending, available, suspended, deleted, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	SubCode    *int       `json:"sub_code" name:"sub_code"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
-	TotalCount *int       `json:"total_count" name:"total_count"`
-	TotalSize  *int       `json:"total_size" name:"total_size"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	SubCode    *int          `json:"sub_code" name:"sub_code"`
+	Tags       []interface{} `json:"tags" name:"tags"`
+	TotalCount *int          `json:"total_count" name:"total_count"`
+	TotalSize  *int          `json:"total_size" name:"total_size"`
 	// TransitionStatus's available values: creating, suspending, resuming, deleting, recovering
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 	VirtualSize      *int    `json:"virtual_size" name:"virtual_size"`
@@ -2494,18 +2307,6 @@ func (v *Snapshot) Validate() error {
 		}
 	}
 
-	if v.Resource != nil {
-		if err := v.Resource.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if v.SnapshotResource != nil {
-		if err := v.SnapshotResource.Validate(); err != nil {
-			return err
-		}
-	}
-
 	if v.SnapshotType != nil {
 		snapshotTypeValidValues := []string{"0", "1"}
 		snapshotTypeParameterValue := fmt.Sprint(*v.SnapshotType)
@@ -2546,14 +2347,6 @@ func (v *Snapshot) Validate() error {
 		}
 	}
 
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
 	if v.TransitionStatus != nil {
 		transitionStatusValidValues := []string{"creating", "suspending", "resuming", "deleting", "recovering"}
 		transitionStatusParameterValue := fmt.Sprint(*v.TransitionStatus)
@@ -2588,35 +2381,19 @@ func (v *SnapshotResource) Validate() error {
 }
 
 type Tag struct {
-	Color             *string              `json:"color" name:"color"`
-	CreateTime        *time.Time           `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description       *string              `json:"description" name:"description"`
-	Owner             *string              `json:"owner" name:"owner"`
-	ResourceCount     *int                 `json:"resource_count" name:"resource_count"`
-	ResourceTagPairs  []*ResourceTagPair   `json:"resource_tag_pairs" name:"resource_tag_pairs"`
-	ResourceTypeCount []*ResourceTypeCount `json:"resource_type_count" name:"resource_type_count"`
-	TagID             *string              `json:"tag_id" name:"tag_id"`
-	TagKey            *string              `json:"tag_key" name:"tag_key"`
-	TagName           *string              `json:"tag_name" name:"tag_name"`
+	Color             *string       `json:"color" name:"color"`
+	CreateTime        *time.Time    `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description       *string       `json:"description" name:"description"`
+	Owner             *string       `json:"owner" name:"owner"`
+	ResourceCount     *int          `json:"resource_count" name:"resource_count"`
+	ResourceTagPairs  []interface{} `json:"resource_tag_pairs" name:"resource_tag_pairs"`
+	ResourceTypeCount []interface{} `json:"resource_type_count" name:"resource_type_count"`
+	TagID             *string       `json:"tag_id" name:"tag_id"`
+	TagKey            *string       `json:"tag_key" name:"tag_key"`
+	TagName           *string       `json:"tag_name" name:"tag_name"`
 }
 
 func (v *Tag) Validate() error {
-
-	if len(v.ResourceTagPairs) > 0 {
-		for _, property := range v.ResourceTagPairs {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(v.ResourceTypeCount) > 0 {
-		for _, property := range v.ResourceTypeCount {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	return nil
 }
@@ -2632,20 +2409,20 @@ func (v *User) Validate() error {
 }
 
 type Volume struct {
-	CreateTime         *time.Time  `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description        *string     `json:"description" name:"description"`
-	Device             *string     `json:"device" name:"device"`
-	Instance           *Instance   `json:"instance" name:"instance"`
-	Instances          []*Instance `json:"instances" name:"instances"`
-	LatestSnapshotTime *time.Time  `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
-	Owner              *string     `json:"owner" name:"owner"`
-	PlaceGroupID       *string     `json:"place_group_id" name:"place_group_id"`
-	Size               *int        `json:"size" name:"size"`
+	CreateTime         *time.Time    `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description        *string       `json:"description" name:"description"`
+	Device             *string       `json:"device" name:"device"`
+	Instance           interface{}   `json:"instance" name:"instance"`
+	Instances          []interface{} `json:"instances" name:"instances"`
+	LatestSnapshotTime *time.Time    `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
+	Owner              *string       `json:"owner" name:"owner"`
+	PlaceGroupID       *string       `json:"place_group_id" name:"place_group_id"`
+	Size               *int          `json:"size" name:"size"`
 	// Status's available values: pending, available, in-use, suspended, deleted, ceased
-	Status     *string    `json:"status" name:"status"`
-	StatusTime *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	SubCode    *int       `json:"sub_code" name:"sub_code"`
-	Tags       []*Tag     `json:"tags" name:"tags"`
+	Status     *string       `json:"status" name:"status"`
+	StatusTime *time.Time    `json:"status_time" name:"status_time" format:"ISO 8601"`
+	SubCode    *int          `json:"sub_code" name:"sub_code"`
+	Tags       []interface{} `json:"tags" name:"tags"`
 	// TransitionStatus's available values: creating, attaching, detaching, suspending, resuming, deleting, recovering
 	TransitionStatus *string `json:"transition_status" name:"transition_status"`
 	VolumeID         *string `json:"volume_id" name:"volume_id"`
@@ -2655,20 +2432,6 @@ type Volume struct {
 }
 
 func (v *Volume) Validate() error {
-
-	if v.Instance != nil {
-		if err := v.Instance.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if len(v.Instances) > 0 {
-		for _, property := range v.Instances {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	if v.Status != nil {
 		statusValidValues := []string{"pending", "available", "in-use", "suspended", "deleted", "ceased"}
@@ -2686,14 +2449,6 @@ func (v *Volume) Validate() error {
 				ParameterName:  "Status",
 				ParameterValue: statusParameterValue,
 				AllowedValues:  statusValidValues,
-			}
-		}
-	}
-
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -2742,35 +2497,21 @@ func (v *Volume) Validate() error {
 }
 
 type VxNet struct {
-	AvailableIPCount *int       `json:"available_ip_count" name:"available_ip_count"`
-	CreateTime       *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
-	Description      *string    `json:"description" name:"description"`
-	InstanceIDs      []*string  `json:"instance_ids" name:"instance_ids"`
-	Owner            *string    `json:"owner" name:"owner"`
-	Router           *Router    `json:"router" name:"router"`
-	Tags             []*Tag     `json:"tags" name:"tags"`
-	VpcRouterID      *string    `json:"vpc_router_id" name:"vpc_router_id"`
-	VxNetID          *string    `json:"vxnet_id" name:"vxnet_id"`
-	VxNetName        *string    `json:"vxnet_name" name:"vxnet_name"`
+	AvailableIPCount *int          `json:"available_ip_count" name:"available_ip_count"`
+	CreateTime       *time.Time    `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description      *string       `json:"description" name:"description"`
+	InstanceIDs      []*string     `json:"instance_ids" name:"instance_ids"`
+	Owner            *string       `json:"owner" name:"owner"`
+	Router           interface{}   `json:"router" name:"router"`
+	Tags             []interface{} `json:"tags" name:"tags"`
+	VpcRouterID      *string       `json:"vpc_router_id" name:"vpc_router_id"`
+	VxNetID          *string       `json:"vxnet_id" name:"vxnet_id"`
+	VxNetName        *string       `json:"vxnet_name" name:"vxnet_name"`
 	// VxNetType's available values: 0, 1
 	VxNetType *int `json:"vxnet_type" name:"vxnet_type"`
 }
 
 func (v *VxNet) Validate() error {
-
-	if v.Router != nil {
-		if err := v.Router.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if len(v.Tags) > 0 {
-		for _, property := range v.Tags {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	if v.VxNetType != nil {
 		vxnetTypeValidValues := []string{"0", "1"}

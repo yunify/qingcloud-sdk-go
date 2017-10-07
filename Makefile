@@ -1,3 +1,19 @@
+# +-------------------------------------------------------------------------
+# | Copyright (C) 2017 Yunify, Inc.
+# +-------------------------------------------------------------------------
+# | Licensed under the Apache License, Version 2.0 (the "License");
+# | you may not use this work except in compliance with the License.
+# | You may obtain a copy of the License in the LICENSE file, or at:
+# |
+# | http://www.apache.org/licenses/LICENSE-2.0
+# |
+# | Unless required by applicable law or agreed to in writing, software
+# | distributed under the License is distributed on an "AS IS" BASIS,
+# | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# | See the License for the specific language governing permissions and
+# | limitations under the License.
+# +-------------------------------------------------------------------------
+
 SHELL := /bin/bash
 
 .PHONY: all check vet lint update generate build unit test release clean
@@ -53,6 +69,21 @@ generate: snips ../qingcloud-api-specs/package.json
 		-t=./template \
 		-o=./service
 	go fmt ./service/...
+	@echo "ok"
+
+generate-dev:
+	@if [[ ! -f "$$(which snips)" ]]; then \
+		go get -u github.com/yunify/snips; \
+	fi
+	@if [[ ! -f "../qingcloud-api-specs/package.json" ]]; then \
+		-go get -d github.com/yunify/qingcloud-api-specs; \
+	fi
+	@snips -v
+	snips \
+		-f=../qingcloud-api-specs/2013-08-30/swagger/api_v2.0.json \
+		-t=./template \
+		-o=./service
+	-go fmt ./service/...
 	@echo "ok"
 
 snips:

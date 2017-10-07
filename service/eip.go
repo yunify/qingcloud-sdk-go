@@ -379,11 +379,11 @@ func (v *DescribeEIPsInput) Validate() error {
 }
 
 type DescribeEIPsOutput struct {
-	Message    *string `json:"message" name:"message"`
-	Action     *string `json:"action" name:"action" location:"elements"`
-	EIPSet     []*EIP  `json:"eip_set" name:"eip_set" location:"elements"`
-	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	EIPSet     []interface{} `json:"eip_set" name:"eip_set" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/dissociate_eips.html
@@ -517,11 +517,11 @@ func (v *GetEIPMonitorInput) Validate() error {
 }
 
 type GetEIPMonitorOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	MeterSet   []interface{} `json:"meter_set" name:"meter_set" location:"elements"`
+	ResourceID *string       `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/eip/modify_eip_attributes.html

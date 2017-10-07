@@ -74,19 +74,11 @@ func (s *RouterService) AddRouterStaticEntries(i *AddRouterStaticEntriesInput) (
 }
 
 type AddRouterStaticEntriesInput struct {
-	Entries      []*RouterStaticEntry `json:"entries" name:"entries" location:"params"`
-	RouterStatic *string              `json:"router_static" name:"router_static" location:"params"` // Required
+	Entries      []interface{} `json:"entries" name:"entries" location:"params"`
+	RouterStatic *string       `json:"router_static" name:"router_static" location:"params"` // Required
 }
 
 func (v *AddRouterStaticEntriesInput) Validate() error {
-
-	if len(v.Entries) > 0 {
-		for _, property := range v.Entries {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	if v.RouterStatic == nil {
 		return errors.ParameterRequiredError{
@@ -132,9 +124,9 @@ func (s *RouterService) AddRouterStatics(i *AddRouterStaticsInput) (*AddRouterSt
 }
 
 type AddRouterStaticsInput struct {
-	Router  *string         `json:"router" name:"router" location:"params"`   // Required
-	Statics []*RouterStatic `json:"statics" name:"statics" location:"params"` // Required
-	VxNet   *string         `json:"vxnet" name:"vxnet" location:"params"`
+	Router  *string       `json:"router" name:"router" location:"params"`   // Required
+	Statics []interface{} `json:"statics" name:"statics" location:"params"` // Required
+	VxNet   *string       `json:"vxnet" name:"vxnet" location:"params"`
 }
 
 func (v *AddRouterStaticsInput) Validate() error {
@@ -150,14 +142,6 @@ func (v *AddRouterStaticsInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "Statics",
 			ParentName:    "AddRouterStaticsInput",
-		}
-	}
-
-	if len(v.Statics) > 0 {
-		for _, property := range v.Statics {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -426,11 +410,11 @@ func (v *DescribeRouterStaticEntriesInput) Validate() error {
 }
 
 type DescribeRouterStaticEntriesOutput struct {
-	Message              *string              `json:"message" name:"message"`
-	Action               *string              `json:"action" name:"action" location:"elements"`
-	RetCode              *int                 `json:"ret_code" name:"ret_code" location:"elements"`
-	RouterStaticEntrySet []*RouterStaticEntry `json:"router_static_entry_set" name:"router_static_entry_set" location:"elements"`
-	TotalCount           *int                 `json:"total_count" name:"total_count" location:"elements"`
+	Message              *string       `json:"message" name:"message"`
+	Action               *string       `json:"action" name:"action" location:"elements"`
+	RetCode              *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	RouterStaticEntrySet []interface{} `json:"router_static_entry_set" name:"router_static_entry_set" location:"elements"`
+	TotalCount           *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/router/describe_router_statics.html
@@ -524,11 +508,11 @@ func (v *DescribeRouterStaticsInput) Validate() error {
 }
 
 type DescribeRouterStaticsOutput struct {
-	Message         *string         `json:"message" name:"message"`
-	Action          *string         `json:"action" name:"action" location:"elements"`
-	RetCode         *int            `json:"ret_code" name:"ret_code" location:"elements"`
-	RouterStaticSet []*RouterStatic `json:"router_static_set" name:"router_static_set" location:"elements"`
-	TotalCount      *int            `json:"total_count" name:"total_count" location:"elements"`
+	Message         *string       `json:"message" name:"message"`
+	Action          *string       `json:"action" name:"action" location:"elements"`
+	RetCode         *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	RouterStaticSet []interface{} `json:"router_static_set" name:"router_static_set" location:"elements"`
+	TotalCount      *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/router/describe_router_vxnets.html
@@ -599,11 +583,11 @@ func (v *DescribeRouterVxNetsInput) Validate() error {
 }
 
 type DescribeRouterVxNetsOutput struct {
-	Message        *string        `json:"message" name:"message"`
-	Action         *string        `json:"action" name:"action" location:"elements"`
-	RetCode        *int           `json:"ret_code" name:"ret_code" location:"elements"`
-	RouterVxNetSet []*RouterVxNet `json:"router_vxnet_set" name:"router_vxnet_set" location:"elements"`
-	TotalCount     *int           `json:"total_count" name:"total_count" location:"elements"`
+	Message        *string       `json:"message" name:"message"`
+	Action         *string       `json:"action" name:"action" location:"elements"`
+	RetCode        *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	RouterVxNetSet []interface{} `json:"router_vxnet_set" name:"router_vxnet_set" location:"elements"`
+	TotalCount     *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/router/describe_routers.html
@@ -670,11 +654,11 @@ func (v *DescribeRoutersInput) Validate() error {
 }
 
 type DescribeRoutersOutput struct {
-	Message    *string   `json:"message" name:"message"`
-	Action     *string   `json:"action" name:"action" location:"elements"`
-	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
-	RouterSet  []*Router `json:"router_set" name:"router_set" location:"elements"`
-	TotalCount *int      `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	RouterSet  []interface{} `json:"router_set" name:"router_set" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_monitor.html
@@ -759,11 +743,11 @@ func (v *GetRouterMonitorInput) Validate() error {
 }
 
 type GetRouterMonitorOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	MeterSet   []interface{} `json:"meter_set" name:"meter_set" location:"elements"`
+	ResourceID *string       `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/router/join_router.html

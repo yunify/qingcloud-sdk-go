@@ -74,9 +74,9 @@ func (s *CacheService) AddCacheNodes(i *AddCacheNodesInput) (*AddCacheNodesOutpu
 }
 
 type AddCacheNodesInput struct {
-	Cache      *string           `json:"cache" name:"cache" location:"params"`           // Required
-	NodeCount  *int              `json:"node_count" name:"node_count" location:"params"` // Required
-	PrivateIPs []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
+	Cache      *string       `json:"cache" name:"cache" location:"params"`           // Required
+	NodeCount  *int          `json:"node_count" name:"node_count" location:"params"` // Required
+	PrivateIPs []interface{} `json:"private_ips" name:"private_ips" location:"params"`
 }
 
 func (v *AddCacheNodesInput) Validate() error {
@@ -92,14 +92,6 @@ func (v *AddCacheNodesInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "NodeCount",
 			ParentName:    "AddCacheNodesInput",
-		}
-	}
-
-	if len(v.PrivateIPs) > 0 {
-		for _, property := range v.PrivateIPs {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -191,9 +183,9 @@ func (s *CacheService) ChangeCacheVxNet(i *ChangeCacheVxNetInput) (*ChangeCacheV
 }
 
 type ChangeCacheVxNetInput struct {
-	Cache      *string           `json:"cache" name:"cache" location:"params"` // Required
-	PrivateIPs []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	VxNet      *string           `json:"vxnet" name:"vxnet" location:"params"` // Required
+	Cache      *string       `json:"cache" name:"cache" location:"params"` // Required
+	PrivateIPs []interface{} `json:"private_ips" name:"private_ips" location:"params"`
+	VxNet      *string       `json:"vxnet" name:"vxnet" location:"params"` // Required
 }
 
 func (v *ChangeCacheVxNetInput) Validate() error {
@@ -202,14 +194,6 @@ func (v *ChangeCacheVxNetInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "ChangeCacheVxNetInput",
-		}
-	}
-
-	if len(v.PrivateIPs) > 0 {
-		for _, property := range v.PrivateIPs {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -261,17 +245,17 @@ func (s *CacheService) CreateCache(i *CreateCacheInput) (*CreateCacheOutput, err
 type CreateCacheInput struct {
 	AutoBackupTime *int `json:"auto_backup_time" name:"auto_backup_time" default:"-1" location:"params"`
 	// CacheClass's available values: 0, 1
-	CacheClass          *int              `json:"cache_class" name:"cache_class" location:"params"`
-	CacheName           *string           `json:"cache_name" name:"cache_name" location:"params"`
-	CacheParameterGroup *string           `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
-	CacheSize           *int              `json:"cache_size" name:"cache_size" location:"params"` // Required
-	CacheType           *string           `json:"cache_type" name:"cache_type" location:"params"` // Required
-	MasterCount         *int              `json:"master_count" name:"master_count" location:"params"`
-	NetworkType         *int              `json:"network_type" name:"network_type" location:"params"`
-	NodeCount           *int              `json:"node_count" name:"node_count" default:"1" location:"params"`
-	PrivateIPs          []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	ReplicateCount      *int              `json:"replicate_count" name:"replicate_count" location:"params"`
-	VxNet               *string           `json:"vxnet" name:"vxnet" location:"params"` // Required
+	CacheClass          *int          `json:"cache_class" name:"cache_class" location:"params"`
+	CacheName           *string       `json:"cache_name" name:"cache_name" location:"params"`
+	CacheParameterGroup *string       `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
+	CacheSize           *int          `json:"cache_size" name:"cache_size" location:"params"` // Required
+	CacheType           *string       `json:"cache_type" name:"cache_type" location:"params"` // Required
+	MasterCount         *int          `json:"master_count" name:"master_count" location:"params"`
+	NetworkType         *int          `json:"network_type" name:"network_type" location:"params"`
+	NodeCount           *int          `json:"node_count" name:"node_count" default:"1" location:"params"`
+	PrivateIPs          []interface{} `json:"private_ips" name:"private_ips" location:"params"`
+	ReplicateCount      *int          `json:"replicate_count" name:"replicate_count" location:"params"`
+	VxNet               *string       `json:"vxnet" name:"vxnet" location:"params"` // Required
 }
 
 func (v *CreateCacheInput) Validate() error {
@@ -307,14 +291,6 @@ func (v *CreateCacheInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "CacheType",
 			ParentName:    "CreateCacheInput",
-		}
-	}
-
-	if len(v.PrivateIPs) > 0 {
-		for _, property := range v.PrivateIPs {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -366,16 +342,16 @@ func (s *CacheService) CreateCacheFromSnapshot(i *CreateCacheFromSnapshotInput) 
 type CreateCacheFromSnapshotInput struct {
 	AutoBackupTime *int `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
 	// CacheClass's available values: 0, 1
-	CacheClass          *int              `json:"cache_class" name:"cache_class" location:"params"`
-	CacheName           *string           `json:"cache_name" name:"cache_name" location:"params"`
-	CacheParameterGroup *string           `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
-	CacheSize           *int              `json:"cache_size" name:"cache_size" location:"params"`
-	CacheType           *string           `json:"cache_type" name:"cache_type" location:"params"`
-	NetworkType         *int              `json:"network_type" name:"network_type" location:"params"`
-	NodeCount           *int              `json:"node_count" name:"node_count" location:"params"`
-	PrivateIPs          []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	Snapshot            *string           `json:"snapshot" name:"snapshot" location:"params"` // Required
-	VxNet               *string           `json:"vxnet" name:"vxnet" location:"params"`       // Required
+	CacheClass          *int          `json:"cache_class" name:"cache_class" location:"params"`
+	CacheName           *string       `json:"cache_name" name:"cache_name" location:"params"`
+	CacheParameterGroup *string       `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"`
+	CacheSize           *int          `json:"cache_size" name:"cache_size" location:"params"`
+	CacheType           *string       `json:"cache_type" name:"cache_type" location:"params"`
+	NetworkType         *int          `json:"network_type" name:"network_type" location:"params"`
+	NodeCount           *int          `json:"node_count" name:"node_count" location:"params"`
+	PrivateIPs          []interface{} `json:"private_ips" name:"private_ips" location:"params"`
+	Snapshot            *string       `json:"snapshot" name:"snapshot" location:"params"` // Required
+	VxNet               *string       `json:"vxnet" name:"vxnet" location:"params"`       // Required
 }
 
 func (v *CreateCacheFromSnapshotInput) Validate() error {
@@ -396,14 +372,6 @@ func (v *CreateCacheFromSnapshotInput) Validate() error {
 				ParameterName:  "CacheClass",
 				ParameterValue: cacheClassParameterValue,
 				AllowedValues:  cacheClassValidValues,
-			}
-		}
-	}
-
-	if len(v.PrivateIPs) > 0 {
-		for _, property := range v.PrivateIPs {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -704,11 +672,11 @@ func (v *DescribeCacheNodesInput) Validate() error {
 }
 
 type DescribeCacheNodesOutput struct {
-	Message      *string      `json:"message" name:"message"`
-	Action       *string      `json:"action" name:"action" location:"elements"`
-	CacheNodeSet []*CacheNode `json:"cache_node_set" name:"cache_node_set" location:"elements"`
-	RetCode      *int         `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   *int         `json:"total_count" name:"total_count" location:"elements"`
+	Message      *string       `json:"message" name:"message"`
+	Action       *string       `json:"action" name:"action" location:"elements"`
+	CacheNodeSet []interface{} `json:"cache_node_set" name:"cache_node_set" location:"elements"`
+	RetCode      *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/describe_cache_parameter_groups.html
@@ -752,11 +720,11 @@ func (v *DescribeCacheParameterGroupsInput) Validate() error {
 }
 
 type DescribeCacheParameterGroupsOutput struct {
-	Message                *string                `json:"message" name:"message"`
-	Action                 *string                `json:"action" name:"action" location:"elements"`
-	CacheParameterGroupSet []*CacheParameterGroup `json:"cache_parameter_group_set" name:"cache_parameter_group_set" location:"elements"`
-	RetCode                *int                   `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount             *int                   `json:"total_count" name:"total_count" location:"elements"`
+	Message                *string       `json:"message" name:"message"`
+	Action                 *string       `json:"action" name:"action" location:"elements"`
+	CacheParameterGroupSet []interface{} `json:"cache_parameter_group_set" name:"cache_parameter_group_set" location:"elements"`
+	RetCode                *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount             *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/describe_cache_parameters.html
@@ -803,11 +771,11 @@ func (v *DescribeCacheParametersInput) Validate() error {
 }
 
 type DescribeCacheParametersOutput struct {
-	Message           *string           `json:"message" name:"message"`
-	Action            *string           `json:"action" name:"action" location:"elements"`
-	CacheParameterSet []*CacheParameter `json:"cache_parameter_set" name:"cache_parameter_set" location:"elements"`
-	RetCode           *int              `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount        *int              `json:"total_count" name:"total_count" location:"elements"`
+	Message           *string       `json:"message" name:"message"`
+	Action            *string       `json:"action" name:"action" location:"elements"`
+	CacheParameterSet []interface{} `json:"cache_parameter_set" name:"cache_parameter_set" location:"elements"`
+	RetCode           *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount        *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/describe_caches.html
@@ -853,11 +821,11 @@ func (v *DescribeCachesInput) Validate() error {
 }
 
 type DescribeCachesOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	CacheSet   []*Cache `json:"cache_set" name:"cache_set" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int     `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	CacheSet   []interface{} `json:"cache_set" name:"cache_set" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_cache_monitor.html
@@ -942,11 +910,11 @@ func (v *GetCacheMonitorInput) Validate() error {
 }
 
 type GetCacheMonitorOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	MeterSet   []interface{} `json:"meter_set" name:"meter_set" location:"elements"`
+	ResourceID *string       `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/cache/modify_cache_attributes.html
@@ -1440,8 +1408,8 @@ func (s *CacheService) UpdateCache(i *UpdateCacheInput) (*UpdateCacheOutput, err
 }
 
 type UpdateCacheInput struct {
-	Cache      *string           `json:"cache" name:"cache" location:"params"` // Required
-	PrivateIPs []*CachePrivateIP `json:"private_ips" name:"private_ips" location:"params"`
+	Cache      *string       `json:"cache" name:"cache" location:"params"` // Required
+	PrivateIPs []interface{} `json:"private_ips" name:"private_ips" location:"params"`
 }
 
 func (v *UpdateCacheInput) Validate() error {
@@ -1450,14 +1418,6 @@ func (v *UpdateCacheInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "Cache",
 			ParentName:    "UpdateCacheInput",
-		}
-	}
-
-	if len(v.PrivateIPs) > 0 {
-		for _, property := range v.PrivateIPs {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -1498,8 +1458,8 @@ func (s *CacheService) UpdateCacheParameters(i *UpdateCacheParametersInput) (*Up
 }
 
 type UpdateCacheParametersInput struct {
-	CacheParameterGroup *string         `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
-	Parameters          *CacheParameter `json:"parameters" name:"parameters" location:"params"`                       // Required
+	CacheParameterGroup *string     `json:"cache_parameter_group" name:"cache_parameter_group" location:"params"` // Required
+	Parameters          interface{} `json:"parameters" name:"parameters" location:"params"`                       // Required
 }
 
 func (v *UpdateCacheParametersInput) Validate() error {
@@ -1507,19 +1467,6 @@ func (v *UpdateCacheParametersInput) Validate() error {
 	if v.CacheParameterGroup == nil {
 		return errors.ParameterRequiredError{
 			ParameterName: "CacheParameterGroup",
-			ParentName:    "UpdateCacheParametersInput",
-		}
-	}
-
-	if v.Parameters != nil {
-		if err := v.Parameters.Validate(); err != nil {
-			return err
-		}
-	}
-
-	if v.Parameters == nil {
-		return errors.ParameterRequiredError{
-			ParameterName: "Parameters",
 			ParentName:    "UpdateCacheParametersInput",
 		}
 	}

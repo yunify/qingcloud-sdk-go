@@ -98,10 +98,10 @@ func (v *AttachToS2SharedTargetInput) Validate() error {
 }
 
 type AttachToS2SharedTargetOutput struct {
-	Message      *string         `json:"message" name:"message"`
-	Action       *string         `json:"action" name:"action" location:"elements"`
-	RetCode      *int            `json:"ret_code" name:"ret_code" location:"elements"`
-	SharedTarget *S2SharedTarget `json:"shared_target" name:"shared_target" location:"elements"`
+	Message      *string     `json:"message" name:"message"`
+	Action       *string     `json:"action" name:"action" location:"elements"`
+	RetCode      *int        `json:"ret_code" name:"ret_code" location:"elements"`
+	SharedTarget interface{} `json:"shared_target" name:"shared_target" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/change_s2_server_vxnet.html
@@ -502,11 +502,11 @@ func (v *DescribeS2DefaultParametersInput) Validate() error {
 }
 
 type DescribeS2DefaultParametersOutput struct {
-	Message                *string                `json:"message" name:"message"`
-	Action                 *string                `json:"action" name:"action" location:"elements"`
-	RetCode                *int                   `json:"ret_code" name:"ret_code" location:"elements"`
-	S2DefaultParametersSet []*S2DefaultParameters `json:"s2_default_parameters_set" name:"s2_default_parameters_set" location:"elements"`
-	TotalCount             *int                   `json:"total_count" name:"total_count" location:"elements"`
+	Message                *string       `json:"message" name:"message"`
+	Action                 *string       `json:"action" name:"action" location:"elements"`
+	RetCode                *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	S2DefaultParametersSet []interface{} `json:"s2_default_parameters_set" name:"s2_default_parameters_set" location:"elements"`
+	TotalCount             *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/describe_s2_servers.html
@@ -551,11 +551,11 @@ func (v *DescribeS2ServersInput) Validate() error {
 }
 
 type DescribeS2ServersOutput struct {
-	Message     *string     `json:"message" name:"message"`
-	Action      *string     `json:"action" name:"action" location:"elements"`
-	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
-	S2ServerSet []*S2Server `json:"s2_server_set" name:"s2_server_set" location:"elements"`
-	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
+	Message     *string       `json:"message" name:"message"`
+	Action      *string       `json:"action" name:"action" location:"elements"`
+	RetCode     *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	S2ServerSet []interface{} `json:"s2_server_set" name:"s2_server_set" location:"elements"`
+	TotalCount  *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/describe_s2_shared_targets.html
@@ -599,11 +599,11 @@ func (v *DescribeS2SharedTargetsInput) Validate() error {
 }
 
 type DescribeS2SharedTargetsOutput struct {
-	Message         *string           `json:"message" name:"message"`
-	Action          *string           `json:"action" name:"action" location:"elements"`
-	RetCode         *int              `json:"ret_code" name:"ret_code" location:"elements"`
-	SharedTargetSet []*S2SharedTarget `json:"shared_target_set" name:"shared_target_set" location:"elements"`
-	TotalCount      *int              `json:"total_count" name:"total_count" location:"elements"`
+	Message         *string       `json:"message" name:"message"`
+	Action          *string       `json:"action" name:"action" location:"elements"`
+	RetCode         *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	SharedTargetSet []interface{} `json:"shared_target_set" name:"shared_target_set" location:"elements"`
+	TotalCount      *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/detach_from_s2_shared_target.html
@@ -657,10 +657,10 @@ func (v *DetachFromS2SharedTargetInput) Validate() error {
 }
 
 type DetachFromS2SharedTargetOutput struct {
-	Message      *string         `json:"message" name:"message"`
-	Action       *string         `json:"action" name:"action" location:"elements"`
-	RetCode      *int            `json:"ret_code" name:"ret_code" location:"elements"`
-	SharedTarget *S2SharedTarget `json:"shared_target" name:"shared_target" location:"elements"`
+	Message      *string     `json:"message" name:"message"`
+	Action       *string     `json:"action" name:"action" location:"elements"`
+	RetCode      *int        `json:"ret_code" name:"ret_code" location:"elements"`
+	SharedTarget interface{} `json:"shared_target" name:"shared_target" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vsan/disable_s2_shared_targets.html
