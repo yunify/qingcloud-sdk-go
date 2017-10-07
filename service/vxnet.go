@@ -217,11 +217,11 @@ func (v *DescribeVxNetInstancesInput) Validate() error {
 }
 
 type DescribeVxNetInstancesOutput struct {
-	Message     *string     `json:"message" name:"message"`
-	Action      *string     `json:"action" name:"action" location:"elements"`
-	InstanceSet []*Instance `json:"instance_set" name:"instance_set" location:"elements"`
-	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
+	Message     *string       `json:"message" name:"message"`
+	Action      *string       `json:"action" name:"action" location:"elements"`
+	InstanceSet []interface{} `json:"instance_set" name:"instance_set" location:"elements"`
+	RetCode     *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount  *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vxnet/describe_vxnets.html
@@ -308,11 +308,11 @@ func (v *DescribeVxNetsInput) Validate() error {
 }
 
 type DescribeVxNetsOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int     `json:"total_count" name:"total_count" location:"elements"`
-	VxNetSet   []*VxNet `json:"vxnet_set" name:"vxnet_set" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
+	VxNetSet   []interface{} `json:"vxnet_set" name:"vxnet_set" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/vxnet/join_vxnet.html

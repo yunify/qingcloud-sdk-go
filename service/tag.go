@@ -74,7 +74,7 @@ func (s *TagService) AttachTags(i *AttachTagsInput) (*AttachTagsOutput, error) {
 }
 
 type AttachTagsInput struct {
-	ResourceTagPairs []*ResourceTagPair `json:"resource_tag_pairs" name:"resource_tag_pairs" location:"params"` // Required
+	ResourceTagPairs []interface{} `json:"resource_tag_pairs" name:"resource_tag_pairs" location:"params"` // Required
 }
 
 func (v *AttachTagsInput) Validate() error {
@@ -83,14 +83,6 @@ func (v *AttachTagsInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "ResourceTagPairs",
 			ParentName:    "AttachTagsInput",
-		}
-	}
-
-	if len(v.ResourceTagPairs) > 0 {
-		for _, property := range v.ResourceTagPairs {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 
@@ -256,11 +248,11 @@ func (v *DescribeTagsInput) Validate() error {
 }
 
 type DescribeTagsOutput struct {
-	Message    *string `json:"message" name:"message"`
-	Action     *string `json:"action" name:"action" location:"elements"`
-	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TagSet     []*Tag  `json:"tag_set" name:"tag_set" location:"elements"`
-	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TagSet     []interface{} `json:"tag_set" name:"tag_set" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/tag/detach_tags.html
@@ -290,7 +282,7 @@ func (s *TagService) DetachTags(i *DetachTagsInput) (*DetachTagsOutput, error) {
 }
 
 type DetachTagsInput struct {
-	ResourceTagPairs []*ResourceTagPair `json:"resource_tag_pairs" name:"resource_tag_pairs" location:"params"` // Required
+	ResourceTagPairs []interface{} `json:"resource_tag_pairs" name:"resource_tag_pairs" location:"params"` // Required
 }
 
 func (v *DetachTagsInput) Validate() error {
@@ -299,14 +291,6 @@ func (v *DetachTagsInput) Validate() error {
 		return errors.ParameterRequiredError{
 			ParameterName: "ResourceTagPairs",
 			ParentName:    "DetachTagsInput",
-		}
-	}
-
-	if len(v.ResourceTagPairs) > 0 {
-		for _, property := range v.ResourceTagPairs {
-			if err := property.Validate(); err != nil {
-				return err
-			}
 		}
 	}
 

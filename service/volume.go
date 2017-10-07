@@ -312,11 +312,11 @@ func (v *DescribeVolumesInput) Validate() error {
 }
 
 type DescribeVolumesOutput struct {
-	Message    *string   `json:"message" name:"message"`
-	Action     *string   `json:"action" name:"action" location:"elements"`
-	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int      `json:"total_count" name:"total_count" location:"elements"`
-	VolumeSet  []*Volume `json:"volume_set" name:"volume_set" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
+	VolumeSet  []interface{} `json:"volume_set" name:"volume_set" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/volume/detach_volumes.html

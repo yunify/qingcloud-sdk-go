@@ -407,10 +407,10 @@ func (v *DescribeSnapshotsInput) Validate() error {
 }
 
 type DescribeSnapshotsOutput struct {
-	Message     *string     `json:"message" name:"message"`
-	Action      *string     `json:"action" name:"action" location:"elements"`
-	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
-	SnapshotSet []*Snapshot `json:"snapshot_set" name:"snapshot_set" location:"elements"`
+	Message     *string       `json:"message" name:"message"`
+	Action      *string       `json:"action" name:"action" location:"elements"`
+	RetCode     *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	SnapshotSet []interface{} `json:"snapshot_set" name:"snapshot_set" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/snapshot/modify_snapshot_attributes.html

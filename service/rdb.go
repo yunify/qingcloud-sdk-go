@@ -242,11 +242,11 @@ type CreateRDBInput struct {
 	AutoBackupTime *int    `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
 	Description    *string `json:"description" name:"description" location:"params"`
 	// EngineVersion's available values: mysql,5.5, mysql,5.6, mysql,5.7, psql,9.3, psql,9.4
-	EngineVersion *string         `json:"engine_version" name:"engine_version" default:"mysql,5.7" location:"params"`
-	NodeCount     *int            `json:"node_count" name:"node_count" location:"params"`
-	PrivateIPs    []*RDBPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	ProxyCount    *int            `json:"proxy_count" name:"proxy_count" location:"params"`
-	RDBClass      *int            `json:"rdb_class" name:"rdb_class" location:"params"`
+	EngineVersion *string       `json:"engine_version" name:"engine_version" default:"mysql,5.7" location:"params"`
+	NodeCount     *int          `json:"node_count" name:"node_count" location:"params"`
+	PrivateIPs    []interface{} `json:"private_ips" name:"private_ips" location:"params"`
+	ProxyCount    *int          `json:"proxy_count" name:"proxy_count" location:"params"`
+	RDBClass      *int          `json:"rdb_class" name:"rdb_class" location:"params"`
 	// RDBEngine's available values: mysql, psql
 	RDBEngine   *string `json:"rdb_engine" name:"rdb_engine" default:"mysql" location:"params"`
 	RDBName     *string `json:"rdb_name" name:"rdb_name" location:"params"`
@@ -276,14 +276,6 @@ func (v *CreateRDBInput) Validate() error {
 				ParameterName:  "EngineVersion",
 				ParameterValue: engineVersionParameterValue,
 				AllowedValues:  engineVersionValidValues,
-			}
-		}
-	}
-
-	if len(v.PrivateIPs) > 0 {
-		for _, property := range v.PrivateIPs {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -404,10 +396,10 @@ type CreateRDBFromSnapshotInput struct {
 	AutoBackupTime *int    `json:"auto_backup_time" name:"auto_backup_time" location:"params"`
 	Description    *string `json:"description" name:"description" location:"params"`
 	// EngineVersion's available values: mysql,5.5, mysql,5.6, mysql,5.7, psql,9.3, psql,9.4
-	EngineVersion *string         `json:"engine_version" name:"engine_version" default:"mysql,5.7" location:"params"`
-	NodeCount     *int            `json:"node_count" name:"node_count" location:"params"`
-	PrivateIPs    []*RDBPrivateIP `json:"private_ips" name:"private_ips" location:"params"`
-	ProxyCount    *int            `json:"proxy_count" name:"proxy_count" location:"params"`
+	EngineVersion *string       `json:"engine_version" name:"engine_version" default:"mysql,5.7" location:"params"`
+	NodeCount     *int          `json:"node_count" name:"node_count" location:"params"`
+	PrivateIPs    []interface{} `json:"private_ips" name:"private_ips" location:"params"`
+	ProxyCount    *int          `json:"proxy_count" name:"proxy_count" location:"params"`
 	// RDBEngine's available values: mysql, psql
 	RDBEngine *string `json:"rdb_engine" name:"rdb_engine" default:"mysql" location:"params"`
 	RDBName   *string `json:"rdb_name" name:"rdb_name" location:"params"`
@@ -436,14 +428,6 @@ func (v *CreateRDBFromSnapshotInput) Validate() error {
 				ParameterName:  "EngineVersion",
 				ParameterValue: engineVersionParameterValue,
 				AllowedValues:  engineVersionValidValues,
-			}
-		}
-	}
-
-	if len(v.PrivateIPs) > 0 {
-		for _, property := range v.PrivateIPs {
-			if err := property.Validate(); err != nil {
-				return err
 			}
 		}
 	}
@@ -674,11 +658,11 @@ func (v *DescribeRDBParametersInput) Validate() error {
 }
 
 type DescribeRDBParametersOutput struct {
-	Message      *string         `json:"message" name:"message"`
-	Action       *string         `json:"action" name:"action" location:"elements"`
-	ParameterSet []*RDBParameter `json:"parameter_set" name:"parameter_set" location:"elements"`
-	RetCode      *int            `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   *int            `json:"total_count" name:"total_count" location:"elements"`
+	Message      *string       `json:"message" name:"message"`
+	Action       *string       `json:"action" name:"action" location:"elements"`
+	ParameterSet []interface{} `json:"parameter_set" name:"parameter_set" location:"elements"`
+	RetCode      *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/rdb/describe_rdbs.html
@@ -725,11 +709,11 @@ func (v *DescribeRDBsInput) Validate() error {
 }
 
 type DescribeRDBsOutput struct {
-	Message    *string `json:"message" name:"message"`
-	Action     *string `json:"action" name:"action" location:"elements"`
-	RDBSet     []*RDB  `json:"rdb_set" name:"rdb_set" location:"elements"`
-	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	RDBSet     []interface{} `json:"rdb_set" name:"rdb_set" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/rdb/get_rdb_instance_files.html
@@ -775,11 +759,11 @@ func (v *GetRDBInstanceFilesInput) Validate() error {
 }
 
 type GetRDBInstanceFilesOutput struct {
-	Message     *string  `json:"message" name:"message"`
-	Action      *string  `json:"action" name:"action" location:"elements"`
-	Files       *RDBFile `json:"files" name:"files" location:"elements"`
-	RDBInstance *string  `json:"rdb_instance" name:"rdb_instance" location:"elements"`
-	RetCode     *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Message     *string     `json:"message" name:"message"`
+	Action      *string     `json:"action" name:"action" location:"elements"`
+	Files       interface{} `json:"files" name:"files" location:"elements"`
+	RDBInstance *string     `json:"rdb_instance" name:"rdb_instance" location:"elements"`
+	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/monitor/get_rdb_monitor.html
@@ -881,11 +865,11 @@ func (v *GetRDBMonitorInput) Validate() error {
 }
 
 type GetRDBMonitorOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	MeterSet   []*Meter `json:"meter_set" name:"meter_set" location:"elements"`
-	ResourceID *string  `json:"resource_id" name:"resource_id" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	MeterSet   []interface{} `json:"meter_set" name:"meter_set" location:"elements"`
+	ResourceID *string       `json:"resource_id" name:"resource_id" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/rdb/modify_rdb_parameters.html
@@ -915,19 +899,11 @@ func (s *RDBService) ModifyRDBParameters(i *ModifyRDBParametersInput) (*ModifyRD
 }
 
 type ModifyRDBParametersInput struct {
-	Parameters []*RDBParameters `json:"parameters" name:"parameters" location:"params"`
-	RDB        *string          `json:"rdb" name:"rdb" location:"params"` // Required
+	Parameters []interface{} `json:"parameters" name:"parameters" location:"params"`
+	RDB        *string       `json:"rdb" name:"rdb" location:"params"` // Required
 }
 
 func (v *ModifyRDBParametersInput) Validate() error {
-
-	if len(v.Parameters) > 0 {
-		for _, property := range v.Parameters {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	if v.RDB == nil {
 		return errors.ParameterRequiredError{

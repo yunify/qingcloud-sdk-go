@@ -192,11 +192,11 @@ func (v *DescribeImageUsersInput) Validate() error {
 }
 
 type DescribeImageUsersOutput struct {
-	Message      *string      `json:"message" name:"message"`
-	Action       *string      `json:"action" name:"action" location:"elements"`
-	ImageUserSet []*ImageUser `json:"image_user_set" name:"image_user_set" location:"elements"`
-	RetCode      *int         `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount   *int         `json:"total_count" name:"total_count" location:"elements"`
+	Message      *string       `json:"message" name:"message"`
+	Action       *string       `json:"action" name:"action" location:"elements"`
+	ImageUserSet []interface{} `json:"image_user_set" name:"image_user_set" location:"elements"`
+	RetCode      *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount   *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/describe_images.html
@@ -328,11 +328,11 @@ func (v *DescribeImagesInput) Validate() error {
 }
 
 type DescribeImagesOutput struct {
-	Message    *string  `json:"message" name:"message"`
-	Action     *string  `json:"action" name:"action" location:"elements"`
-	ImageSet   []*Image `json:"image_set" name:"image_set" location:"elements"`
-	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
-	TotalCount *int     `json:"total_count" name:"total_count" location:"elements"`
+	Message    *string       `json:"message" name:"message"`
+	Action     *string       `json:"action" name:"action" location:"elements"`
+	ImageSet   []interface{} `json:"image_set" name:"image_set" location:"elements"`
+	RetCode    *int          `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount *int          `json:"total_count" name:"total_count" location:"elements"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/image/grant-image-to-users.html
