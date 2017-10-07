@@ -45,22 +45,13 @@ lint:
 	 if [[ -n $${lint} ]]; then echo "$${lint}"; exit 1; fi
 	@echo "ok"
 
-generate: snips ../qingcloud-api-specs/package.json
-	./snips \
-		-s=${shell go env GOPATH}/src/github.com/yunify \
-		-m=qingcloud-api-specs \
-		-n=2013-08-30 \
-		-t=./template \
-		-o=./service
-	go fmt ./service/...
+generate:
+	@if [[ ! -f "$$(which snips)" ]]; then \
+		echo "ERROR: Command \"snips\" not found."; \
+	fi
+	snips -f="./specs/qingcloud/2013-08-30/swagger/api_v2.0.json" -t="./template" -o="./service"
+	@find . -path '*/vendor/*' -prune -o -name '*.go' -type f -exec gofmt -s -w {} \;
 	@echo "ok"
-
-snips:
-	curl -L https://github.com/yunify/snips/releases/download/v0.0.9/snips-v0.0.9-${shell go env GOOS}_amd64.tar.gz | tar zx
-
-../qingcloud-api-specs/package.json:
-	-go get -d github.com/yunify/qingcloud-api-specs
-	file %@
 
 build:
 	@echo "build the SDK"
