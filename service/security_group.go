@@ -920,9 +920,9 @@ type ModifySecurityGroupRuleAttributesInput struct {
 	SecurityGroup         *string `json:"security_group" name:"security_group" location:"params"`
 	SecurityGroupRule     *string `json:"security_group_rule" name:"security_group_rule" location:"params"` // Required
 	SecurityGroupRuleName *string `json:"security_group_rule_name" name:"security_group_rule_name" location:"params"`
-	Val1                  *int    `json:"val1" name:"val1" location:"params"`
-	Val2                  *int    `json:"val2" name:"val2" location:"params"`
-	Val3                  *int    `json:"val3" name:"val3" location:"params"`
+	Val1                  *string `json:"val1" name:"val1" location:"params"`
+	Val2                  *string `json:"val2" name:"val2" location:"params"`
+	Val3                  *string `json:"val3" name:"val3" location:"params"`
 }
 
 func (v *ModifySecurityGroupRuleAttributesInput) Validate() error {
