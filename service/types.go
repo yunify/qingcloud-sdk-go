@@ -2351,14 +2351,15 @@ func (v *SecurityGroupIPSet) Validate() error {
 
 type SecurityGroupRule struct {
 	// Action's available values: accept, drop
-	Action              *string `json:"action" name:"action"`
-	Priority            *int    `json:"priority" name:"priority"`
-	Protocol            *string `json:"protocol" name:"protocol"`
-	SecurityGroupID     *string `json:"security_group_id" name:"security_group_id"`
-	SecurityGroupRuleID *string `json:"security_group_rule_id" name:"security_group_rule_id"`
-	Val1                *string `json:"val1" name:"val1"`
-	Val2                *string `json:"val2" name:"val2"`
-	Val3                *string `json:"val3" name:"val3"`
+	Action                *string `json:"action" name:"action"`
+	Priority              *int    `json:"priority" name:"priority"`
+	Protocol              *string `json:"protocol" name:"protocol"`
+	SecurityGroupID       *string `json:"security_group_id" name:"security_group_id"`
+	SecurityGroupRuleID   *string `json:"security_group_rule_id" name:"security_group_rule_id"`
+	SecurityGroupRuleName *string `json:"security_group_rule_name" name:"security_group_rule_name"`
+	Val1                  *string `json:"val1" name:"val1"`
+	Val2                  *string `json:"val2" name:"val2"`
+	Val3                  *string `json:"val3" name:"val3"`
 }
 
 func (v *SecurityGroupRule) Validate() error {
