@@ -1,0 +1,3 @@
+[submodule "specs/qingcloud"]
+	path = specs/qingcloud
+	url = https://github.com/yunify/qingcloud-api-specs.git
