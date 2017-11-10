@@ -45,7 +45,7 @@ lint:
 	 if [[ -n $${lint} ]]; then echo "$${lint}"; exit 1; fi
 	@echo "ok"
 
-generate: snips-dev ../qingcloud-api-specs/package.json
+generate: snips ../qingcloud-api-specs/package.json
 	./snips \
 		-f=../qingcloud-api-specs/2013-08-30/swagger/api_v2.0.json \
 		-t=./template \
