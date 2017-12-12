@@ -67,11 +67,11 @@ func New(accessKeyID, secretAccessKey string) (*Config, error) {
 
 //NewWithEndpoint create a Config with given AccessKeyID , SecretAccessKey and endpoint
 func NewWithEndpoint(accessKeyID, secretAccessKey, endpoint string) (*Config, error) {
-	qcUrl, err := url.Parse(endpoint)
+	qcURL, err := url.Parse(endpoint)
 	if err != nil {
 		return nil, err
 	}
-	if !strings.Contains(qcUrl.Host, ":") {
+	if !strings.Contains(qcURL.Host, ":") {
 		return nil, fmt.Errorf("If you use endpoint , you must pass in the port number ")
 	}
 	config, err := NewDefault()
@@ -81,15 +81,15 @@ func NewWithEndpoint(accessKeyID, secretAccessKey, endpoint string) (*Config, er
 	config.AccessKeyID = accessKeyID
 	config.SecretAccessKey = secretAccessKey
 	// get host and port
-	hostPort := strings.Split(qcUrl.Host, ":")
+	hostPort := strings.Split(qcURL.Host, ":")
 	config.Host = hostPort[0]
 	port, err := strconv.Atoi(hostPort[1])
 	if err != nil {
 		return nil, err
 	}
 	config.Port = port
-	config.Protocol = qcUrl.Scheme
-	config.URI = qcUrl.Path
+	config.Protocol = qcURL.Scheme
+	config.URI = qcURL.Path
 	config.Connection = &http.Client{}
 	return config, nil
 }
