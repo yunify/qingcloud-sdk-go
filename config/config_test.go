@@ -93,13 +93,13 @@ func TestNew(t *testing.T) {
 }
 
 func TestNewWithEndpoint(t *testing.T) {
-	config, err:= NewWithEndpoint("AccessKeyID","SecretAccessKey","https://api.qingcloud.com:443/iaas")
-	assert.Nil(t,err)
+	config, err := NewWithEndpoint("AccessKeyID", "SecretAccessKey", "https://api.qingcloud.com/iaas")
+	assert.Nil(t, err)
 
 	assert.Equal(t, "AccessKeyID", config.AccessKeyID)
 	assert.Equal(t, "SecretAccessKey", config.SecretAccessKey)
 	assert.Equal(t, "https", config.Protocol)
-	assert.Equal(t,"api.qingcloud.com",config.Host)
-	assert.Equal(t,443,config.Port)
-	assert.Equal(t,"/iaas",config.URI)
+	assert.Equal(t, "api.qingcloud.com", config.Host)
+	assert.Equal(t, 443, config.Port)
+	assert.Equal(t, "/iaas", config.URI)
 }
