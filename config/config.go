@@ -87,12 +87,13 @@ func NewWithEndpoint(accessKeyID, secretAccessKey, endpoint string) (*Config, er
 		return nil, err
 	}
 
-	_, port, err := net.SplitHostPort(qcURL.Host)
+	host, port, err := net.SplitHostPort(qcURL.Host)
 	if err != nil {
 		return nil, err
 	}
 
 	config.Port, _ = strconv.Atoi(port)
+	config.Host = host
 	config.AccessKeyID = accessKeyID
 	config.SecretAccessKey = secretAccessKey
 	config.Protocol = qcURL.Scheme
