@@ -766,7 +766,7 @@ type GetRouterMonitorOutput struct {
 	RetCode    *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
-// Documentation URL: https://docs.qingcloud.com/api/router/modify_router_static_attributes.html
+// Documentation URL: https://docs.qingcloud.com/api/router/get_vpn_certs.html
 func (s *RouterService) GetVPNCerts(i *GetVPNCertsInput) (*GetVPNCertsOutput, error) {
 	if i == nil {
 		i = &GetVPNCertsInput{}
@@ -793,10 +793,33 @@ func (s *RouterService) GetVPNCerts(i *GetVPNCertsInput) (*GetVPNCertsOutput, er
 }
 
 type GetVPNCertsInput struct {
-	Router *string `json:"router" name:"router" location:"params"` // Required
+
+	// Platform's available values: windows, linux, mac
+	Platform *string `json:"platform" name:"platform" location:"params"`
+	Router   *string `json:"router" name:"router" location:"params"` // Required
 }
 
 func (v *GetVPNCertsInput) Validate() error {
+
+	if v.Platform != nil {
+		platformValidValues := []string{"windows", "linux", "mac"}
+		platformParameterValue := fmt.Sprint(*v.Platform)
+
+		platformIsValid := false
+		for _, value := range platformValidValues {
+			if value == platformParameterValue {
+				platformIsValid = true
+			}
+		}
+
+		if !platformIsValid {
+			return errors.ParameterValueNotAllowedError{
+				ParameterName:  "Platform",
+				ParameterValue: platformParameterValue,
+				AllowedValues:  platformValidValues,
+			}
+		}
+	}
 
 	if v.Router == nil {
 		return errors.ParameterRequiredError{
