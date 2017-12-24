@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to QingCloud SDK for Go will be documented in this file.
 
+## [v2.0.0-alpha.23] - 2017-12-24
+
+### Fixed
+
+- DescribeServerCertificatesInput field type error
+
 ## [v2.0.0-alpha.22] - 2017-12-23
 
 ### Add
