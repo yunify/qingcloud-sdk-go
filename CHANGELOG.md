@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to QingCloud SDK for Go will be documented in this file.
 
+## [v2.0.0-alpha.26] - 2018-01-04
+
+### Fixed
+
+- fix loadblancer listener timeout location  
+
+## [v2.0.0-alpha.25] - 2018-01-04
+
+### Fixed
+
+- add loadblancer listener timeout  
+
 ## [v2.0.0-alpha.24] - 2018-01-04
 
 ### Fixed
@@ -183,6 +195,8 @@ All notable changes to QingCloud SDK for Go will be documented in this file.
 ### Added
 
 - QingCloud SDK for the Go programming language.
+[v2.0.0-alpha.26]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.25...v2.0.0-alpha.26   
+[v2.0.0-alpha.25]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.24...v2.0.0-alpha.25  
 [v2.0.0-alpha.24]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.23...v2.0.0-alpha.24  
 [v2.0.0-alpha.23]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.22...v2.0.0-alpha.23    
 [v2.0.0-alpha.22]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.21...v2.0.0-alpha.22    
