@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to QingCloud SDK for Go will be documented in this file.
 
+## [v2.0.0-alpha.28] - 2018-01-08
+
+### Fixed
+
+- DescribeLoadBalancerBackends field error  @runzexia
+
 ## [v2.0.0-alpha.27] - 2018-01-08
 
 ### Fixed
@@ -201,6 +207,7 @@ All notable changes to QingCloud SDK for Go will be documented in this file.
 ### Added
 
 - QingCloud SDK for the Go programming language.
+[v2.0.0-alpha.28]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.27...v2.0.0-alpha.28
 [v2.0.0-alpha.27]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.26...v2.0.0-alpha.27
 [v2.0.0-alpha.26]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.25...v2.0.0-alpha.26   
 [v2.0.0-alpha.25]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.24...v2.0.0-alpha.25  
