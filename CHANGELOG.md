@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to QingCloud SDK for Go will be documented in this file.
 
+## [v2.0.0-alpha.29] - 2018-03-26
+
+### Added
+
+- CeaseInstances @calvinyv
+
 ## [v2.0.0-alpha.28] - 2018-01-08
 
 ### Fixed
@@ -207,6 +213,7 @@ All notable changes to QingCloud SDK for Go will be documented in this file.
 ### Added
 
 - QingCloud SDK for the Go programming language.
+[v2.0.0-alpha.29]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.28...v2.0.0-alpha.29
 [v2.0.0-alpha.28]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.27...v2.0.0-alpha.28
 [v2.0.0-alpha.27]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.26...v2.0.0-alpha.27
 [v2.0.0-alpha.26]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.25...v2.0.0-alpha.26   
@@ -236,3 +243,5 @@ All notable changes to QingCloud SDK for Go will be documented in this file.
 [v2.0.0-alpha.2]: https://github.com/yunify/qingcloud-sdk-go/compare/v2.0.0-alpha.1...v2.0.0-alpha.2  
 
 [@jolestar]: https://github.com/jolestar
+[@calvinyv]: https://github.com/calvinyv
+[@runzexia]: https://github.com/runzexia
