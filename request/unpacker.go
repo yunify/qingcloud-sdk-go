@@ -81,8 +81,8 @@ func (u *Unpacker) parseError() error {
 	retCodeValue := u.output.Elem().FieldByName("RetCode")
 	messageValue := u.output.Elem().FieldByName("Message")
 
-	if retCodeValue.IsValid() && retCodeValue.Type().String() == "*int" &&
-		messageValue.IsValid() && messageValue.Type().String() == "*string" &&
+	if retCodeValue.Elem().IsValid() && retCodeValue.Type().String() == "*int" &&
+		messageValue.Elem().IsValid() && messageValue.Type().String() == "*string" &&
 		retCodeValue.Elem().Int() != 0 {
 
 		return &errors.QingCloudError{
