@@ -78,8 +78,15 @@ func (u *Unpacker) parseResponse() error {
 }
 
 func (u *Unpacker) parseError() error {
+	if !u.output.IsValid() {
+		return fmt.Errorf("output fmt error")
+	}
 	retCodeValue := u.output.Elem().FieldByName("RetCode")
 	messageValue := u.output.Elem().FieldByName("Message")
+
+	if !retCodeValue.IsValid() || !messageValue.IsValid() {
+		return fmt.Errorf("can not get retcode/message")
+	}
 
 	if retCodeValue.Elem().IsValid() && retCodeValue.Type().String() == "*int" &&
 		messageValue.Elem().IsValid() && messageValue.Type().String() == "*string" &&
