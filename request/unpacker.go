@@ -71,6 +71,10 @@ func (u *Unpacker) parseResponse() error {
 			if err != nil {
 				return err
 			}
+
+			if !u.output.IsValid() {
+				return fmt.Errorf("API Gateway output format error")
+			}
 		}
 	}
 
@@ -78,15 +82,9 @@ func (u *Unpacker) parseResponse() error {
 }
 
 func (u *Unpacker) parseError() error {
-	if !u.output.IsValid() {
-		return fmt.Errorf("output fmt error")
-	}
+
 	retCodeValue := u.output.Elem().FieldByName("RetCode")
 	messageValue := u.output.Elem().FieldByName("Message")
-
-	if !retCodeValue.IsValid() || !messageValue.IsValid() {
-		return fmt.Errorf("can not get retcode/message")
-	}
 
 	if retCodeValue.Elem().IsValid() && retCodeValue.Type().String() == "*int" &&
 		messageValue.Elem().IsValid() && messageValue.Type().String() == "*string" &&
@@ -96,6 +94,8 @@ func (u *Unpacker) parseError() error {
 			RetCode: int(retCodeValue.Elem().Int()),
 			Message: messageValue.Elem().String(),
 		}
+	} else {
+		return fmt.Errorf("can not get retcode/message")
 	}
 
 	return nil
