@@ -87,17 +87,18 @@ func (u *Unpacker) parseError() error {
 	messageValue := u.output.Elem().FieldByName("Message")
 
 	if !retCodeValue.Elem().IsValid() || retCodeValue.Type().String() != "*int" {
-		return fmt.Errorf("can not get retcode/message")
+		return fmt.Errorf("can not get retcode")
 	}
 
 	if retCodeValue.Elem().Int() != 0 {
-		if messageValue.Elem().IsValid() && messageValue.Type().String() == "*string" {
-			return &errors.QingCloudError{
-				RetCode: int(retCodeValue.Elem().Int()),
-				Message: messageValue.Elem().String(),
-			}
+		if !messageValue.Elem().IsValid() || messageValue.Type().String() != "*string" {
+			return fmt.Errorf("can not get error message")
 		}
-		return fmt.Errorf("can not get retcode/message")
+
+		return &errors.QingCloudError{
+			RetCode: int(retCodeValue.Elem().Int()),
+			Message: messageValue.Elem().String(),
+		}
 	}
 	return nil
 }
