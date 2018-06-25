@@ -562,7 +562,9 @@ type RunInstancesInput struct {
 	// CPU's available values: 1, 2, 4, 8, 16
 	CPU *int `json:"cpu" name:"cpu" default:"1" location:"params"`
 	// CPUMax's available values: 1, 2, 4, 8, 16
-	CPUMax   *int    `json:"cpu_max" name:"cpu_max" location:"params"`
+	CPUMax *int `json:"cpu_max" name:"cpu_max" location:"params"`
+	// CPUModel's available values: Westmere, SandyBridge, IvyBridge, Haswell, Broadwell
+	CPUModel *string `json:"cpu_model" name:"cpu_model" default:"Westmere" location:"params"`
 	Gpu      *int    `json:"gpu" name:"gpu" default:"0" location:"params"`
 	Hostname *string `json:"hostname" name:"hostname" location:"params"`
 	ImageID  *string `json:"image_id" name:"image_id" location:"params"` // Required
@@ -631,6 +633,26 @@ func (v *RunInstancesInput) Validate() error {
 				ParameterName:  "CPUMax",
 				ParameterValue: cpuMaxParameterValue,
 				AllowedValues:  cpuMaxValidValues,
+			}
+		}
+	}
+
+	if v.CPUModel != nil {
+		cpuModelValidValues := []string{"Westmere", "SandyBridge", "IvyBridge", "Haswell", "Broadwell"}
+		cpuModelParameterValue := fmt.Sprint(*v.CPUModel)
+
+		cpuModelIsValid := false
+		for _, value := range cpuModelValidValues {
+			if value == cpuModelParameterValue {
+				cpuModelIsValid = true
+			}
+		}
+
+		if !cpuModelIsValid {
+			return errors.ParameterValueNotAllowedError{
+				ParameterName:  "CPUModel",
+				ParameterValue: cpuModelParameterValue,
+				AllowedValues:  cpuModelValidValues,
 			}
 		}
 	}
