@@ -204,6 +204,14 @@ func (b *Builder) parseRequestParams() error {
 									if fieldValue != nil {
 										requestParams[tagKey] = *fieldValue
 									}
+								case []*string:
+									dst := make([]string, len(fieldValue))
+									for i := 0; i < len(fieldValue); i++ {
+										if fieldValue[i] != nil {
+											dst[i] = *(fieldValue[i])
+										}
+									}
+									requestParams[tagKey] = strings.Join(dst, ",")
 								}
 							}
 						}
