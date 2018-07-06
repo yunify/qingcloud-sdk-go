@@ -211,7 +211,10 @@ func (b *Builder) parseRequestParams() error {
 											dst[i] = *(fieldValue[i])
 										}
 									}
-									requestParams[tagKey] = strings.Join(dst, ",")
+									if len(dst) != 0 {
+										requestParams[tagKey] = strings.Join(dst, ",")
+									}
+
 								}
 							}
 						}
