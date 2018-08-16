@@ -23,6 +23,73 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
+type App struct {
+	Abstraction           *string   `json:"abstraction" name:"abstraction"`
+	AppContractStatus     *string   `json:"app_contract_status" name:"app_contract_status"`
+	AppID                 *string   `json:"app_id" name:"app_id"`
+	AppInstanceID         *string   `json:"app_instance_id" name:"app_instance_id"`
+	AppName               *string   `json:"app_name" name:"app_name"`
+	AppType               *string   `json:"app_type" name:"app_type"`
+	AuthLevel             *int      `json:"auth_level" name:"auth_level"`
+	Category              *string   `json:"category" name:"category"`
+	CompanyURL            *string   `json:"company_url" name:"company_url"`
+	Contact               *string   `json:"contact" name:"contact"`
+	CoverImg              *string   `json:"cover_img" name:"cover_img"`
+	Description           *string   `json:"description" name:"description"`
+	Icon                  *string   `json:"icon" name:"icon"`
+	Screenshots           []*string `json:"screenshots" name:"screenshots"`
+	Status                *string   `json:"status" name:"status"`
+	Tags                  []*string `json:"tags" name:"tags"`
+	TermsOfService        *string   `json:"terms_of_service" name:"terms_of_service"`
+	TermsOfServiceLink    *string   `json:"terms_of_service_link" name:"terms_of_service_link"`
+	URL                   *string   `json:"url" name:"url"`
+	UsageInstructions     *string   `json:"usage_instructions" name:"usage_instructions"`
+	UsageInstructionsLink *string   `json:"usage_instructions_link" name:"usage_instructions_link"`
+	Visibility            *string   `json:"visibility" name:"visibility"`
+	Zones                 []*string `json:"zones" name:"zones"`
+}
+
+func (v *App) Validate() error {
+
+	return nil
+}
+
+type AppVersion struct {
+	AppID       *string    `json:"app_id" name:"app_id"`
+	CreateTime  *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Description *string    `json:"description" name:"description"`
+	Name        *string    `json:"name" name:"name"`
+	ResourceKit *string    `json:"resource_kit" name:"resource_kit"`
+	Status      *string    `json:"status" name:"status"`
+	StatusTime  *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	VersionID   *string    `json:"version_id" name:"version_id"`
+}
+
+func (v *AppVersion) Validate() error {
+
+	return nil
+}
+
+type AppVersionAttachment struct {
+	AttachmentID   *string    `json:"attachment_id" name:"attachment_id"`
+	AttachmentType *string    `json:"attachment_type" name:"attachment_type"`
+	Category       *string    `json:"category" name:"category"`
+	CreateTime     *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
+	Filename       *string    `json:"filename" name:"filename"`
+	Filesize       *int       `json:"filesize" name:"filesize"`
+	Name           *string    `json:"name" name:"name"`
+	Owner          *string    `json:"owner" name:"owner"`
+	ResourceID     *string    `json:"resource_id" name:"resource_id"`
+	ResourceType   *string    `json:"resource_type" name:"resource_type"`
+	StatusTime     *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
+	SubCategory    *string    `json:"sub_category" name:"sub_category"`
+}
+
+func (v *AppVersionAttachment) Validate() error {
+
+	return nil
+}
+
 type Cache struct {
 	AutoBackupTime *int `json:"auto_backup_time" name:"auto_backup_time"`
 	// CacheClass's available values: 0, 1
