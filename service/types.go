@@ -469,17 +469,12 @@ type Cluster struct {
 	AppVersion                 *string            `json:"app_version" name:"app_version"`
 	AppVersionInfo             interface{}        `json:"app_version_info" name:"app_version_info"`
 	AutoBackupTime             *int               `json:"auto_backup_time" name:"auto_backup_time"`
-	Backup                     map[string]*bool   `json:"backup" name:"backup"`
 	BackupPolicy               *string            `json:"backup_policy" name:"backup_policy"`
-	BackupService              interface{}        `json:"backup_service" name:"backup_service"`
-	CfgmgmtID                  *string            `json:"cfgmgmt_id" name:"cfgmgmt_id"`
 	ClusterID                  *string            `json:"cluster_id" name:"cluster_id"`
 	ClusterType                *int               `json:"cluster_type" name:"cluster_type"`
 	ConsoleID                  *string            `json:"console_id" name:"console_id"`
-	Controller                 *string            `json:"controller" name:"controller"`
 	CreateTime                 *time.Time         `json:"create_time" name:"create_time" format:"ISO 8601"`
 	CustomService              interface{}        `json:"custom_service" name:"custom_service"`
-	Debug                      *bool              `json:"debug" name:"debug"`
 	Description                *string            `json:"description" name:"description"`
 	DisplayTabs                interface{}        `json:"display_tabs" name:"display_tabs"`
 	Endpoints                  interface{}        `json:"endpoints" name:"endpoints"`
@@ -487,38 +482,22 @@ type Cluster struct {
 	HealthCheckEnablement      map[string]*bool   `json:"health_check_enablement" name:"health_check_enablement"`
 	IncrementalBackupSupported *bool              `json:"incremental_backup_supported" name:"incremental_backup_supported"`
 	LatestSnapshotTime         *string            `json:"latest_snapshot_time" name:"latest_snapshot_time"`
-	Links                      map[string]*string `json:"links" name:"links"`
-	MetadataRootAccess         *int               `json:"metadata_root_access" name:"metadata_root_access"`
 	Name                       *string            `json:"name" name:"name"`
 	NodeCount                  *int               `json:"node_count" name:"node_count"`
-	Nodes                      []*ClusterNode     `json:"nodes" name:"nodes"`
 	Owner                      *string            `json:"owner" name:"owner"`
-	PartnerAccess              *bool              `json:"partner_access" name:"partner_access"`
-	RestoreService             interface{}        `json:"restore_service" name:"restore_service"`
-	ReuseHyper                 *int               `json:"reuse_hyper" name:"reuse_hyper"`
 	RoleCount                  map[string]*int    `json:"role_count" name:"role_count"`
 	Roles                      []*string          `json:"roles" name:"roles"`
 	RootUserID                 *string            `json:"root_user_id" name:"root_user_id"`
 	SecurityGroupID            *string            `json:"security_group_id" name:"security_group_id"`
 	Status                     *string            `json:"status" name:"status"`
-	StatusTime                 *time.Time         `json:"status_time" name:"status_time" format:"ISO 8601"`
-	SubCode                    *int               `json:"sub_code" name:"sub_code"`
+	Tags                       []*string          `json:"tags" name:"tags"`
 	TransitionStatus           *string            `json:"transition_status" name:"transition_status"`
-	UpgradePolicy              []*string          `json:"upgrade_policy" name:"upgrade_policy"`
 	UpgradeStatus              *string            `json:"upgrade_status" name:"upgrade_status"`
 	UpgradeTime                *time.Time         `json:"upgrade_time" name:"upgrade_time" format:"ISO 8601"`
 	VxNet                      *VxNet             `json:"vxnet" name:"vxnet"`
 }
 
 func (v *Cluster) Validate() error {
-
-	if len(v.Nodes) > 0 {
-		for _, property := range v.Nodes {
-			if err := property.Validate(); err != nil {
-				return err
-			}
-		}
-	}
 
 	if v.VxNet != nil {
 		if err := v.VxNet.Validate(); err != nil {
