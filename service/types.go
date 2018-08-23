@@ -465,9 +465,9 @@ func (v *CachePrivateIP) Validate() error {
 type Cluster struct {
 	AdvancedActions            map[string]*string `json:"advanced_actions" name:"advanced_actions"`
 	AppID                      *string            `json:"app_id" name:"app_id"`
-	AppInfo                    interface{}        `json:"app_info" name:"app_info"`
+	AppInfo                    *App               `json:"app_info" name:"app_info"`
 	AppVersion                 *string            `json:"app_version" name:"app_version"`
-	AppVersionInfo             interface{}        `json:"app_version_info" name:"app_version_info"`
+	AppVersionInfo             *AppVersion        `json:"app_version_info" name:"app_version_info"`
 	AutoBackupTime             *int               `json:"auto_backup_time" name:"auto_backup_time"`
 	BackupPolicy               *string            `json:"backup_policy" name:"backup_policy"`
 	ClusterID                  *string            `json:"cluster_id" name:"cluster_id"`
@@ -498,6 +498,18 @@ type Cluster struct {
 }
 
 func (v *Cluster) Validate() error {
+
+	if v.AppInfo != nil {
+		if err := v.AppInfo.Validate(); err != nil {
+			return err
+		}
+	}
+
+	if v.AppVersionInfo != nil {
+		if err := v.AppVersionInfo.Validate(); err != nil {
+			return err
+		}
+	}
 
 	if v.VxNet != nil {
 		if err := v.VxNet.Validate(); err != nil {
