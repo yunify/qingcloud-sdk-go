@@ -1216,7 +1216,7 @@ type KeyPair struct {
 	Owner         *string   `json:"owner" name:"owner"`
 	PrivKey       *string   `json:"priv_key" name:"priv_key"`
 	PubKey        *string   `json:"pub_key" name:"pub_key"`
-	ResourceIDs   *string   `json:"resource_ids" name:"resource_ids"`
+	ResourceIDs   []*string `json:"resource_ids" name:"resource_ids"`
 	Tags          []*Tag    `json:"tags" name:"tags"`
 }
 
