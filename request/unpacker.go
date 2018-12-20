@@ -102,9 +102,14 @@ func (u *Unpacker) parseError() error {
 			RetCode: int(retCodeValue.Elem().Int()),
 		}
 		if messageValue.IsValid() && messageValue.Type().String() == "*string" {
-			err.Message = messageValue.Elem().String()
+			if messageValue.Elem().IsValid() {
+				err.Message = messageValue.Elem().String()
+			} else {
+				err.Message = "null"
+			}
 		}
 		return err
 	}
+
 	return fmt.Errorf("invalid retCodeValue %v returned", retCodeValue)
 }
