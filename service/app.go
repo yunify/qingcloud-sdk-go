@@ -336,3 +336,57 @@ type GetGlobalUniqueIdOutput struct {
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 	UUID    *string `json:"uuid" name:"uuid" location:"elements"`
 }
+
+type UploadCommonAttachmentInput struct {
+	Owner             string `json:"owner" name:"owner" location:"params"`
+	ResourceID        string `json:"resource_id" name:"resource_id" location:"params"`
+	ResourceType      string `json:"resource_type" name:"resource_type" location:"params"`
+	Filext            string `json:"filext" name:"filext" location:"params"`
+	Category          string `json:"category" name:"category" location:"params"`
+	AttachmentType    string `json:"attachment_type" name:"attachment_type" location:"params"`
+	AttachmentContent string `json:"attachment_content" name:"attachment_content" location:"params"`
+	Filename          string `json:"filename" name:"filename" location:"params"`
+	Action            string `json:"action" name:"action" location:"params"`
+}
+
+func (s *UploadCommonAttachmentInput) Default() {
+	//TODO
+	if s.Action == "" {
+		s.Action = "UploadCommonAttachment"
+	}
+}
+func (s *UploadCommonAttachmentInput) Validate() error {
+	//TODO
+	return nil
+}
+
+type UploadCommonAttachmentOutput struct {
+	Message string `json:"message" name:"message" location:"elements"`
+	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+func (s *AppService) UploadCommonAttachment(i *UploadCommonAttachmentInput) (*UploadCommonAttachmentOutput, error) {
+	if i == nil {
+		i = &UploadCommonAttachmentInput{}
+		i.Default()
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "UploadCommonAttachment",
+		RequestMethod: "POST",
+	}
+
+	x := &UploadCommonAttachmentOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
