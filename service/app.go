@@ -349,11 +349,15 @@ type UploadCommonAttachmentInput struct {
 	Action            string `json:"action" name:"action" location:"params"`
 }
 
-func (s *UploadCommonAttachmentInput) Default() {
+//defaultField will be called always, so others should not call it manually
+func (s *UploadCommonAttachmentInput) defaultField() {
 	//TODO
 	if s.Action == "" {
 		s.Action = "UploadCommonAttachment"
 	}
+	s.ResourceType = "app_version"
+	s.Category = "resource_kit"
+	s.AttachmentType = "archive"
 }
 func (s *UploadCommonAttachmentInput) Validate() error {
 	//TODO
@@ -361,15 +365,15 @@ func (s *UploadCommonAttachmentInput) Validate() error {
 }
 
 type UploadCommonAttachmentOutput struct {
-	Message string `json:"message" name:"message" location:"elements"`
-	RetCode int    `json:"ret_code" name:"ret_code" location:"elements"`
+	Message *string `json:"message" name:"message"`
+	RetCode int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 func (s *AppService) UploadCommonAttachment(i *UploadCommonAttachmentInput) (*UploadCommonAttachmentOutput, error) {
 	if i == nil {
 		i = &UploadCommonAttachmentInput{}
-		i.Default()
 	}
+	i.defaultField()
 	o := &data.Operation{
 		Config:        s.Config,
 		Properties:    s.Properties,
