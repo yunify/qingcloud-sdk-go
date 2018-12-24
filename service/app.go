@@ -338,26 +338,30 @@ type GetGlobalUniqueIdOutput struct {
 }
 
 type UploadCommonAttachmentInput struct {
-	Owner             string `json:"owner" name:"owner" location:"params"`
-	ResourceID        string `json:"resource_id" name:"resource_id" location:"params"`
-	ResourceType      string `json:"resource_type" name:"resource_type" location:"params"`
-	Filext            string `json:"filext" name:"filext" location:"params"`
-	Category          string `json:"category" name:"category" location:"params"`
-	AttachmentType    string `json:"attachment_type" name:"attachment_type" location:"params"`
-	AttachmentContent string `json:"attachment_content" name:"attachment_content" location:"params"`
-	Filename          string `json:"filename" name:"filename" location:"params"`
-	Action            string `json:"action" name:"action" location:"params"`
+	Owner             *string `json:"owner" name:"owner" location:"params"`
+	ResourceID        *string `json:"resource_id" name:"resource_id" location:"params"`
+	ResourceType      *string `json:"resource_type" name:"resource_type" location:"params"`
+	Filext            *string `json:"filext" name:"filext" location:"params"`
+	Category          *string `json:"category" name:"category" location:"params"`
+	AttachmentType    *string `json:"attachment_type" name:"attachment_type" location:"params"`
+	AttachmentContent *string `json:"attachment_content" name:"attachment_content" location:"params"`
+	Filename          *string `json:"filename" name:"filename" location:"params"`
+	Action            *string `json:"action" name:"action" location:"params"`
 }
+
+var (
+	UploadCommonAttachmentAction string = "UploadCommonAttachment"
+	ResourceType                 string = "app_version"
+	Catogory                     string = "resource_kit"
+	AttachmentType               string = "archive"
+)
 
 //defaultField will be called always, so others should not call it manually
 func (s *UploadCommonAttachmentInput) defaultField() {
-	//TODO
-	if s.Action == "" {
-		s.Action = "UploadCommonAttachment"
-	}
-	s.ResourceType = "app_version"
-	s.Category = "resource_kit"
-	s.AttachmentType = "archive"
+	s.Action = &UploadCommonAttachmentAction
+	s.ResourceType = &ResourceType
+	s.Category = &Catogory
+	s.AttachmentType = &AttachmentType
 }
 func (s *UploadCommonAttachmentInput) Validate() error {
 	//TODO
@@ -366,7 +370,7 @@ func (s *UploadCommonAttachmentInput) Validate() error {
 
 type UploadCommonAttachmentOutput struct {
 	Message *string `json:"message" name:"message"`
-	RetCode int     `json:"ret_code" name:"ret_code" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 func (s *AppService) UploadCommonAttachment(i *UploadCommonAttachmentInput) (*UploadCommonAttachmentOutput, error) {
