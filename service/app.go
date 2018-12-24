@@ -350,10 +350,10 @@ type UploadCommonAttachmentInput struct {
 }
 
 var (
-	UploadCommonAttachmentAction string = "UploadCommonAttachment"
-	ResourceType                 string = "app_version"
-	Catogory                     string = "resource_kit"
-	AttachmentType               string = "archive"
+	UploadCommonAttachmentAction  = "UploadCommonAttachment"
+	ResourceType                  = "app_version"
+	Catogory                      = "resource_kit"
+	AttachmentType                = "archive"
 )
 
 //defaultField will be called always, so others should not call it manually
