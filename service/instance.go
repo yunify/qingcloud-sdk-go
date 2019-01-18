@@ -97,7 +97,7 @@ type CeaseInstancesOutput struct {
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/describe_instance_types.html
-func (s *InstanceService) DescribeInstanceTypes(i *DescribeInstanceTypesInput) (*DescribeInstanceTypesOutput, error) {
+func (s *InstanceService) DescribeInstanceTypes(i *DescribeInstanceTypesInput) (*DescribeInstanceTypesOutput, error,*request.Request) {
 	if i == nil {
 		i = &DescribeInstanceTypesInput{}
 	}
@@ -111,15 +111,15 @@ func (s *InstanceService) DescribeInstanceTypes(i *DescribeInstanceTypesInput) (
 	x := &DescribeInstanceTypesOutput{}
 	r, err := request.New(o, i, x)
 	if err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 
 	err = r.Send()
 	if err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 
-	return x, err
+	return x, err, r
 }
 
 type DescribeInstanceTypesInput struct {
@@ -140,7 +140,7 @@ type DescribeInstanceTypesOutput struct {
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/describe_instances.html
-func (s *InstanceService) DescribeInstances(i *DescribeInstancesInput) (*DescribeInstancesOutput, error) {
+func (s *InstanceService) DescribeInstances(i *DescribeInstancesInput) (*DescribeInstancesOutput, error,*request.Request) {
 	if i == nil {
 		i = &DescribeInstancesInput{}
 	}
@@ -154,15 +154,15 @@ func (s *InstanceService) DescribeInstances(i *DescribeInstancesInput) (*Describ
 	x := &DescribeInstancesOutput{}
 	r, err := request.New(o, i, x)
 	if err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 
 	err = r.Send()
 	if err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 
-	return x, err
+	return x, err,r
 }
 
 type DescribeInstancesInput struct {

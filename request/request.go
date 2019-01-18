@@ -33,7 +33,7 @@ type Request struct {
 	Operation *data.Operation
 	Input     *reflect.Value
 	Output    *reflect.Value
-
+	Data 		 []byte
 	HTTPRequest  *http.Request
 	HTTPResponse *http.Response
 }
@@ -162,7 +162,7 @@ func (r *Request) send() error {
 
 func (r *Request) unpack() error {
 	u := &Unpacker{}
-	err := u.UnpackHTTPRequest(r.Operation, r.HTTPResponse, r.Output)
+	err := u.UnpackHTTPRequest(r)
 	if err != nil {
 		return err
 	}

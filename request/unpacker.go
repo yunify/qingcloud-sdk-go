@@ -37,12 +37,12 @@ type Unpacker struct {
 }
 
 // UnpackHTTPRequest unpack the http response with an operation, http response and an output.
-func (u *Unpacker) UnpackHTTPRequest(o *data.Operation, r *http.Response, x *reflect.Value) error {
-	u.operation = o
-	u.httpResponse = r
-	u.output = x
+func (u *Unpacker) UnpackHTTPRequest(r *Request) error {
+	u.operation = r.Operation
+	u.httpResponse = r.HTTPResponse
+	u.output = r.Output
 
-	err := u.parseResponse()
+	err := u.parseResponse(r)
 	if err != nil {
 		return err
 	}
@@ -55,7 +55,7 @@ func (u *Unpacker) UnpackHTTPRequest(o *data.Operation, r *http.Response, x *ref
 	return nil
 }
 
-func (u *Unpacker) parseResponse() error {
+func (u *Unpacker) parseResponse(r *Request) error {
 	if u.httpResponse.StatusCode == 200 {
 		if u.httpResponse.Header.Get("Content-Type") == "application/json" {
 			buffer := &bytes.Buffer{}
@@ -66,7 +66,7 @@ func (u *Unpacker) parseResponse() error {
 				"Response json string: [%d] %s",
 				utils.StringToUnixInt(u.httpResponse.Header.Get("Date"), "RFC 822"),
 				string(buffer.Bytes())))
-
+			r.Data = buffer.Bytes()
 			_, err := utils.JSONDecode(buffer.Bytes(), u.output.Interface())
 			if err != nil {
 				return err
