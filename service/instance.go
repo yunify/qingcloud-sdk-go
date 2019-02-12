@@ -572,7 +572,7 @@ type RunInstancesInput struct {
 	Gpu      *int    `json:"gpu" name:"gpu" default:"0" location:"params"`
 	Hostname *string `json:"hostname" name:"hostname" location:"params"`
 	ImageID  *string `json:"image_id" name:"image_id" location:"params"` // Required
-	// InstanceClass's available values: 0, 1
+	// InstanceClass's available values: 0, 1, 2, 3, 4, 5, 6, 100, 101, 200, 201, 300, 301
 	InstanceClass *int    `json:"instance_class" name:"instance_class" location:"params"`
 	InstanceName  *string `json:"instance_name" name:"instance_name" location:"params"`
 	InstanceType  *string `json:"instance_type" name:"instance_type" location:"params"`
@@ -670,7 +670,7 @@ func (v *RunInstancesInput) Validate() error {
 	}
 
 	if v.InstanceClass != nil {
-		instanceClassValidValues := []string{"0", "1"}
+		instanceClassValidValues := []string{"0", "1", "2", "3", "4", "5", "6", "100", "101", "200", "201", "300", "301"}
 		instanceClassParameterValue := fmt.Sprint(*v.InstanceClass)
 
 		instanceClassIsValid := false
