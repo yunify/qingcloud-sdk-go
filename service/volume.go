@@ -134,7 +134,7 @@ type CreateVolumesInput struct {
 	Count      *int    `json:"count" name:"count" default:"1" location:"params"`
 	Size       *int    `json:"size" name:"size" location:"params"` // Required
 	VolumeName *string `json:"volume_name" name:"volume_name" location:"params"`
-	// VolumeType's available values: 0, 1, 2, 3
+	// VolumeType's available values: 0, 1, 2, 3, 4, 5, 10, 100, 200
 	VolumeType *int `json:"volume_type" name:"volume_type" default:"0" location:"params"`
 }
 
@@ -148,7 +148,7 @@ func (v *CreateVolumesInput) Validate() error {
 	}
 
 	if v.VolumeType != nil {
-		volumeTypeValidValues := []string{"0", "1", "2", "3"}
+		volumeTypeValidValues := []string{"0", "1", "2", "3", "4", "5", "10", "100", "200"}
 		volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
 
 		volumeTypeIsValid := false
@@ -262,7 +262,7 @@ type DescribeVolumesInput struct {
 	Tags       []*string `json:"tags" name:"tags" location:"params"`
 	// Verbose's available values: 0, 1
 	Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
-	// VolumeType's available values: 0, 1, 2, 3, 5
+	// VolumeType's available values: 0, 1, 2, 3, 4, 5, 10, 100, 200
 	VolumeType *int      `json:"volume_type" name:"volume_type" location:"params"`
 	Volumes    []*string `json:"volumes" name:"volumes" location:"params"`
 }
@@ -290,7 +290,7 @@ func (v *DescribeVolumesInput) Validate() error {
 	}
 
 	if v.VolumeType != nil {
-		volumeTypeValidValues := []string{"0", "1", "2", "3", "5"}
+		volumeTypeValidValues := []string{"0", "1", "2", "3", "4", "5", "10", "100", "200"}
 		volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
 
 		volumeTypeIsValid := false
