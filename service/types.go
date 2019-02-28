@@ -2941,6 +2941,7 @@ type Volume struct {
 	LatestSnapshotTime *time.Time  `json:"latest_snapshot_time" name:"latest_snapshot_time" format:"ISO 8601"`
 	Owner              *string     `json:"owner" name:"owner"`
 	PlaceGroupID       *string     `json:"place_group_id" name:"place_group_id"`
+	Repl               *string     `json:"repl" name:"repl"`
 	Size               *int        `json:"size" name:"size"`
 	// Status's available values: pending, available, in-use, suspended, deleted, ceased
 	Status     *string    `json:"status" name:"status"`
