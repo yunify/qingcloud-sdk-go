@@ -508,14 +508,14 @@ type Cluster struct {
 	IncrementalBackupSupported *bool              `json:"incremental_backup_supported" name:"incremental_backup_supported"`
 	LatestSnapshotTime         *string            `json:"latest_snapshot_time" name:"latest_snapshot_time"`
 	Links                      map[string]*string `json:"links" name:"links"`
-	MetadataRootAccess         *int               `json:"metadata_root_access" name:"metadata_root_access"`
+	MetadataRootAccess         *bool              `json:"metadata_root_access" name:"metadata_root_access"`
 	Name                       *string            `json:"name" name:"name"`
 	NodeCount                  *int               `json:"node_count" name:"node_count"`
 	Nodes                      []*ClusterNode     `json:"nodes" name:"nodes"`
 	Owner                      *string            `json:"owner" name:"owner"`
 	PartnerAccess              *bool              `json:"partner_access" name:"partner_access"`
 	RestoreService             interface{}        `json:"restore_service" name:"restore_service"`
-	ReuseHyper                 *int               `json:"reuse_hyper" name:"reuse_hyper"`
+	ReuseHyper                 *bool              `json:"reuse_hyper" name:"reuse_hyper"`
 	RoleCount                  map[string]*int    `json:"role_count" name:"role_count"`
 	Roles                      []*string          `json:"roles" name:"roles"`
 	RootUserID                 *string            `json:"root_user_id" name:"root_user_id"`

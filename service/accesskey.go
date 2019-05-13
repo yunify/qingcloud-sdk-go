@@ -23,7 +23,7 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/config"
 	"github.com/yunify/qingcloud-sdk-go/request"
 	"github.com/yunify/qingcloud-sdk-go/request/data"
-	//"github.com/yunify/qingcloud-sdk-go/request/errors"
+	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
 var _ fmt.State
@@ -45,6 +45,55 @@ func (s *QingCloudService) Accesskey(zone string) (*AccesskeyService, error) {
 	}
 
 	return &AccesskeyService{Config: s.Config, Properties: properties}, nil
+}
+
+func (s *AccesskeyService) DeleteAccessKeys(i *DeleteAccessKeysInput) (*DeleteAccessKeysOutput, error) {
+	if i == nil {
+		i = &DeleteAccessKeysInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "DeleteAccessKeys",
+		RequestMethod: "GET",
+	}
+
+	x := &DeleteAccessKeysOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type DeleteAccessKeysInput struct {
+	AccessKeys []*string `json:"access_keys" name:"access_keys" location:"params"` // Required
+}
+
+func (v *DeleteAccessKeysInput) Validate() error {
+
+	if len(v.AccessKeys) == 0 {
+		return errors.ParameterRequiredError{
+			ParameterName: "AccessKeys",
+			ParentName:    "DeleteAccessKeysInput",
+		}
+	}
+
+	return nil
+}
+
+type DeleteAccessKeysOutput struct {
+	Message    *string   `json:"message" name:"message"`
+	AccessKeys []*string `json:"access_keys" name:"access_keys" location:"elements"`
+	Action     *string   `json:"action" name:"action" location:"elements"`
+	JobID      *string   `json:"job_id" name:"job_id" location:"elements"`
+	RetCode    *int      `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
 func (s *AccesskeyService) DescribeAccessKeys(i *DescribeAccessKeysInput) (*DescribeAccessKeysOutput, error) {
