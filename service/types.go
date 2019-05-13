@@ -23,6 +23,26 @@ import (
 	"github.com/yunify/qingcloud-sdk-go/request/errors"
 )
 
+type AccessKey struct {
+	AccessKeyID     *string `json:"access_key_id" name:"access_key_id"`
+	AccessKeyName   *string `json:"access_key_name" name:"access_key_name"`
+	ConsoleID       *string `json:"console_id" name:"console_id"`
+	Controller      *string `json:"controller" name:"controller"`
+	CreateTime      *string `json:"create_time" name:"create_time"`
+	Description     *string `json:"description" name:"description"`
+	IPWhiteList     *string `json:"ip_white_list" name:"ip_white_list"`
+	Owner           *string `json:"owner" name:"owner"`
+	RootUserID      *string `json:"root_user_id" name:"root_user_id"`
+	SecretAccessKey *string `json:"secret_access_key" name:"secret_access_key"`
+	Status          *string `json:"status" name:"status"`
+	StatusTime      *string `json:"status_time" name:"status_time"`
+}
+
+func (v *AccessKey) Validate() error {
+
+	return nil
+}
+
 type App struct {
 	Abstraction           *string   `json:"abstraction" name:"abstraction"`
 	AppContractStatus     *string   `json:"app_contract_status" name:"app_contract_status"`
