@@ -564,6 +564,7 @@ type DescribeSecurityGroupIPSetsInput struct {
 	Limit                  *int      `json:"limit" name:"limit" default:"20" location:"params"`
 	Offset                 *int      `json:"offset" name:"offset" default:"0" location:"params"`
 	Owner                  *string   `json:"owner" name:"owner" location:"params"`
+	ProjectID              *string   `json:"project_id" name:"project_id" location:"params"`
 	SecurityGroupIPSetName *string   `json:"security_group_ipset_name" name:"security_group_ipset_name" location:"params"`
 	SecurityGroupIPSets    []*string `json:"security_group_ipsets" name:"security_group_ipsets" location:"params"`
 	Tags                   []*string `json:"tags" name:"tags" location:"params"`
@@ -702,6 +703,7 @@ func (s *SecurityGroupService) DescribeSecurityGroupSnapshots(i *DescribeSecurit
 type DescribeSecurityGroupSnapshotsInput struct {
 	Limit                  *int      `json:"limit" name:"limit" default:"20" location:"params"`
 	Offset                 *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	ProjectID              *string   `json:"project_id" name:"project_id" location:"params"`
 	Reverse                *int      `json:"reverse" name:"reverse" default:"1" location:"params"`
 	SecurityGroup          *string   `json:"security_group" name:"security_group" location:"params"` // Required
 	SecurityGroupSnapshots []*string `json:"security_group_snapshots" name:"security_group_snapshots" location:"params"`
@@ -757,6 +759,7 @@ type DescribeSecurityGroupsInput struct {
 	Limit          *int      `json:"limit" name:"limit" default:"20" location:"params"`
 	Offset         *int      `json:"offset" name:"offset" default:"0" location:"params"`
 	Owner          *string   `json:"owner" name:"owner" location:"params"`
+	ProjectID      *string   `json:"project_id" name:"project_id" location:"params"`
 	SearchWord     *string   `json:"search_word" name:"search_word" location:"params"`
 	SecurityGroups []*string `json:"security_groups" name:"security_groups" location:"params"`
 	Tags           []*string `json:"tags" name:"tags" location:"params"`
