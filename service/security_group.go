@@ -162,6 +162,55 @@ type ApplySecurityGroupOutput struct {
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
+// Documentation URL: https://docs.qingcloud.com/api/sg/apply_security_group_ipsets.html
+func (s *SecurityGroupService) ApplySecurityGroupIPSets(i *ApplySecurityGroupIPSetsInput) (*ApplySecurityGroupIPSetsOutput, error) {
+	if i == nil {
+		i = &ApplySecurityGroupIPSetsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ApplySecurityGroupIPSets",
+		RequestMethod: "GET",
+	}
+
+	x := &ApplySecurityGroupIPSetsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ApplySecurityGroupIPSetsInput struct {
+	SecurityGroupIPSets []*string `json:"security_group_ipsets" name:"security_group_ipsets" location:"params"` // Required
+}
+
+func (v *ApplySecurityGroupIPSetsInput) Validate() error {
+
+	if len(v.SecurityGroupIPSets) == 0 {
+		return errors.ParameterRequiredError{
+			ParameterName: "SecurityGroupIPSets",
+			ParentName:    "ApplySecurityGroupIPSetsInput",
+		}
+	}
+
+	return nil
+}
+
+type ApplySecurityGroupIPSetsOutput struct {
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
 // Documentation URL: https://docs.qingcloud.com/api/sg/create_security_group.html
 func (s *SecurityGroupService) CreateSecurityGroup(i *CreateSecurityGroupInput) (*CreateSecurityGroupOutput, error) {
 	if i == nil {
