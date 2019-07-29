@@ -251,6 +251,7 @@ func (s *SnapshotService) CreateVolumeFromSnapshot(i *CreateVolumeFromSnapshotIn
 type CreateVolumeFromSnapshotInput struct {
 	Snapshot   *string `json:"snapshot" name:"snapshot" location:"params"` // Required
 	VolumeName *string `json:"volume_name" name:"volume_name" location:"params"`
+	Zone       *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *CreateVolumeFromSnapshotInput) Validate() error {
