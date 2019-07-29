@@ -344,6 +344,7 @@ type DescribeVolumesInput struct {
 	// VolumeType's available values: 0, 1, 2, 3, 4, 5, 10, 100, 200
 	VolumeType *int      `json:"volume_type" name:"volume_type" location:"params"`
 	Volumes    []*string `json:"volumes" name:"volumes" location:"params"`
+	Zone       *string   `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *DescribeVolumesInput) Validate() error {
