@@ -2181,11 +2181,10 @@ func (v *Resource) Validate() error {
 }
 
 type ResourceTagPair struct {
-	ResourceID   *string    `json:"resource_id" name:"resource_id"`
-	ResourceType *string    `json:"resource_type" name:"resource_type"`
-	Status       *string    `json:"status" name:"status"`
-	StatusTime   *time.Time `json:"status_time" name:"status_time" format:"ISO 8601"`
-	TagID        *string    `json:"tag_id" name:"tag_id"`
+	ResourceID   *string `json:"resource_id" name:"resource_id"`
+	ResourceType *string `json:"resource_type" name:"resource_type"`
+	Status       *string `json:"status" name:"status"`
+	TagID        *string `json:"tag_id" name:"tag_id"`
 }
 
 func (v *ResourceTagPair) Validate() error {
