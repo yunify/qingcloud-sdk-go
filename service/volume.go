@@ -212,7 +212,8 @@ type CreateVolumesInput struct {
 	Size       *int    `json:"size" name:"size" location:"params"` // Required
 	VolumeName *string `json:"volume_name" name:"volume_name" location:"params"`
 	// VolumeType's available values: 0, 1, 2, 3, 4, 5, 10, 100, 200
-	VolumeType *int `json:"volume_type" name:"volume_type" default:"0" location:"params"`
+	VolumeType *int    `json:"volume_type" name:"volume_type" default:"0" location:"params"`
+	Zone       *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *CreateVolumesInput) Validate() error {

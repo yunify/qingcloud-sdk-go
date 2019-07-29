@@ -1012,6 +1012,7 @@ type Instance struct {
 	InstanceType     *string        `json:"instance_type" name:"instance_type"`
 	KeyPairIDs       []*string      `json:"keypair_ids" name:"keypair_ids"`
 	MemoryCurrent    *int           `json:"memory_current" name:"memory_current"`
+	Repl             *string        `json:"repl" name:"repl"`
 	SecurityGroup    *SecurityGroup `json:"security_group" name:"security_group"`
 	// Status's available values: pending, running, stopped, suspended, terminated, ceased
 	Status     *string    `json:"status" name:"status"`
@@ -1024,6 +1025,7 @@ type Instance struct {
 	VolumeIDs        []*string   `json:"volume_ids" name:"volume_ids"`
 	Volumes          []*Volume   `json:"volumes" name:"volumes"`
 	VxNets           []*NICVxNet `json:"vxnets" name:"vxnets"`
+	ZoneID           *string     `json:"zone_id" name:"zone_id"`
 }
 
 func (v *Instance) Validate() error {
@@ -3016,7 +3018,8 @@ type Volume struct {
 	VolumeID         *string `json:"volume_id" name:"volume_id"`
 	VolumeName       *string `json:"volume_name" name:"volume_name"`
 	// VolumeType's available values: 0, 1, 2, 3
-	VolumeType *int `json:"volume_type" name:"volume_type"`
+	VolumeType *int    `json:"volume_type" name:"volume_type"`
+	ZoneID     *string `json:"zone_id" name:"zone_id"`
 }
 
 func (v *Volume) Validate() error {
