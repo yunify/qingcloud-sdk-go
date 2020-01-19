@@ -524,7 +524,7 @@ type Cluster struct {
 	StatusTime                 *time.Time         `json:"status_time" name:"status_time" format:"ISO 8601"`
 	SubCode                    *int               `json:"sub_code" name:"sub_code"`
 	TransitionStatus           *string            `json:"transition_status" name:"transition_status"`
-	UpgradePolicy              []*string          `json:"upgrade_policy" name:"upgrade_policy"`
+	UpgradePolicy              []interface{}      `json:"upgrade_policy" name:"upgrade_policy"`
 	UpgradeStatus              *string            `json:"upgrade_status" name:"upgrade_status"`
 	UpgradeTime                *time.Time         `json:"upgrade_time" name:"upgrade_time" format:"ISO 8601"`
 	VxNet                      *VxNet             `json:"vxnet" name:"vxnet"`
