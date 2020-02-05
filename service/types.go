@@ -1850,6 +1850,19 @@ func (v *NICVxNet) Validate() error {
 	return nil
 }
 
+type NotificationData struct {
+	AlarmPolicy   *string `json:"alarm_policy" name:"alarm_policy"`
+	PrevStatus    *string `json:"prev_status" name:"prev_status"`
+	Rules         *string `json:"rules" name:"rules"`
+	TriggerStatus *string `json:"trigger_status" name:"trigger_status"`
+	UserID        *string `json:"user_id" name:"user_id"`
+}
+
+func (v *NotificationData) Validate() error {
+
+	return nil
+}
+
 type Project struct {
 	ConsoleID       *string `json:"console_id" name:"console_id"`
 	CreateTime      *string `json:"create_time" name:"create_time"`
