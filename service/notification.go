@@ -47,6 +47,65 @@ func (s *QingCloudService) Notification(zone string) (*NotificationService, erro
 	return &NotificationService{Config: s.Config, Properties: properties}, nil
 }
 
+func (s *NotificationService) DescribeNotificationLists(i *DescribeNotificationListsInput) (*DescribeNotificationListsOutput, error) {
+	if i == nil {
+		i = &DescribeNotificationListsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "DescribeNotificationLists",
+		RequestMethod: "GET",
+	}
+
+	x := &DescribeNotificationListsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type DescribeNotificationListsInput struct {
+	Limit             *int      `json:"limit" name:"limit" default:"10" location:"params"`
+	NotificationLists []*string `json:"notification_lists" name:"notification_lists" location:"params"` // Required
+	Offset            *int      `json:"offset" name:"offset" default:"0" location:"params"`
+	Owner             *string   `json:"owner" name:"owner" location:"params"` // Required
+}
+
+func (v *DescribeNotificationListsInput) Validate() error {
+
+	if len(v.NotificationLists) == 0 {
+		return errors.ParameterRequiredError{
+			ParameterName: "NotificationLists",
+			ParentName:    "DescribeNotificationListsInput",
+		}
+	}
+
+	if v.Owner == nil {
+		return errors.ParameterRequiredError{
+			ParameterName: "Owner",
+			ParentName:    "DescribeNotificationListsInput",
+		}
+	}
+
+	return nil
+}
+
+type DescribeNotificationListsOutput struct {
+	Message             *string             `json:"message" name:"message"`
+	Action              *string             `json:"action" name:"action" location:"elements"`
+	NotificationListSet []*NotificationList `json:"notification_list_set" name:"notification_list_set" location:"elements"`
+	RetCode             *int                `json:"ret_code" name:"ret_code" location:"elements"`
+	TotalCount          *int                `json:"total_count" name:"total_count" location:"elements"`
+}
+
 func (s *NotificationService) SendAlarmNotification(i *SendAlarmNotificationInput) (*SendAlarmNotificationOutput, error) {
 	if i == nil {
 		i = &SendAlarmNotificationInput{}

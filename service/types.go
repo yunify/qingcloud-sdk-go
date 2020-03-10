@@ -1863,6 +1863,52 @@ func (v *NotificationData) Validate() error {
 	return nil
 }
 
+type NotificationList struct {
+	ConsoleID            *string                 `json:"console_id" name:"console_id"`
+	CreateTime           *string                 `json:"create_time" name:"create_time"`
+	IsMine               *string                 `json:"is_mine" name:"is_mine"`
+	Items                []*NotificationListItem `json:"items" name:"items"`
+	NotificationListID   *string                 `json:"notification_list_id" name:"notification_list_id"`
+	NotificationListName *string                 `json:"notification_list_name" name:"notification_list_name"`
+	Owner                *string                 `json:"owner" name:"owner"`
+	RootUserID           *string                 `json:"root_user_id" name:"root_user_id"`
+	Shared               *string                 `json:"shared" name:"shared"`
+	Visibility           *string                 `json:"visibility" name:"visibility"`
+}
+
+func (v *NotificationList) Validate() error {
+
+	if len(v.Items) > 0 {
+		for _, property := range v.Items {
+			if err := property.Validate(); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+type NotificationListItem struct {
+	ConsoleID            *string `json:"console_id" name:"console_id"`
+	Content              *string `json:"content" name:"content"`
+	CreateTime           *string `json:"create_time" name:"create_time"`
+	NotificationItemID   *string `json:"notification_item_id" name:"notification_item_id"`
+	NotificationItemType *string `json:"notification_item_type" name:"notification_item_type"`
+	Owner                *string `json:"owner" name:"owner"`
+	Remarks              *string `json:"remarks" name:"remarks"`
+	RootUserID           *string `json:"root_user_id" name:"root_user_id"`
+	ValidStatus          *int    `json:"valid_status" name:"valid_status"`
+	VerificationCode     *string `json:"verification_code" name:"verification_code"`
+	Verified             *int    `json:"verified" name:"verified"`
+	VerifyTime           *string `json:"verify_time" name:"verify_time"`
+}
+
+func (v *NotificationListItem) Validate() error {
+
+	return nil
+}
+
 type Project struct {
 	ConsoleID       *string `json:"console_id" name:"console_id"`
 	CreateTime      *string `json:"create_time" name:"create_time"`
