@@ -27,7 +27,11 @@ log_level: 'warn'
 
 ## Usage
 
-Just create a config structure instance with your API AccessKey, and initialize services that you need using Init() function of target service.
+1. Just create a config structure instance with your API AccessKey, and initialize services that you need using Init() function of target service.
+
+2. Or if you do not want to expose your AccessKeyID and SecretAccessKey, you can also call our API without them in the following way:
+- Go to our IAM service, create an instance role and attach it to your instance.
+- Create the config structure instance without AccessKeyID and SecretAccessKey.
 
 ### Code Snippet
 

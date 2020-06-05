@@ -19,6 +19,7 @@ package request
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"reflect"
 	"time"
@@ -37,6 +38,24 @@ type Request struct {
 	HTTPRequest  *http.Request
 	HTTPResponse *http.Response
 }
+
+const CredentialProxyHost = "169.254.169.254"
+const CredentialProxyPort = "80"
+const CredentialProxyProtocol = "http"
+const CredentialProxyUri = "/latest/meta-data/security-credentials"
+
+var CredentialProxyUrl = CredentialProxyProtocol + "://" + CredentialProxyHost + ":" + CredentialProxyPort + CredentialProxyUri
+
+type TokenOutput struct {
+	Jti string `json:"jti"`
+	Token string `json:"id_token"`
+	AccessKey string `json:"access_key"`
+	SecretAccess string `json:"secret_key"`
+	Expiration int64 `json:"expiration"`
+	Action string `json:"action,omitempty"`
+	RetCode string `json:"ret_code"`
+}
+
 
 // New create a Request from given Operation, Input and Output.
 // It returns a Request.
@@ -89,6 +108,20 @@ func (r *Request) Send() error {
 }
 
 func (r *Request) check() error {
+	if r.Operation.Config.AccessKeyID == "" && r.Operation.Config.SecretAccessKey == "" && r.isTokenExpired() {
+		t := TokenOutput{}
+		err := t.GetToken()
+
+		if err != nil {
+			return err
+		}
+		r.Operation.Config.AccessKeyID = t.AccessKey
+		r.Operation.Config.SecretAccessKey = t.SecretAccess
+		r.Operation.Config.URI = "/iam"
+		r.Operation.Config.Token = t.Token
+		r.Operation.Config.Expiration = t.Expiration
+	}
+
 	if r.Operation.Config.AccessKeyID == "" {
 		return errors.New("access key not provided")
 	}
@@ -168,4 +201,31 @@ func (r *Request) unpack() error {
 	}
 
 	return nil
+}
+
+func (t *TokenOutput) GetToken() error{
+	response, err := http.Get(CredentialProxyUrl)
+	if err != nil {
+		return err
+	}
+
+	content, err := ioutil.ReadAll(response.Body)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = utils.JSONDecode(content, t)
+
+	return err
+}
+
+func (r *Request) isTokenExpired() bool {
+	if r.Operation.Config.Token == "" {
+		return true
+	}
+
+	now := time.Now().UTC().Unix()
+
+	return now >= r.Operation.Config.Expiration
 }

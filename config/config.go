@@ -47,6 +47,9 @@ type Config struct {
 
 	Zone string `yaml:"zone"`
 
+	Token string
+	Expiration int64
+
 	Connection *http.Client
 }
 
