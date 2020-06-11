@@ -39,12 +39,10 @@ type Request struct {
 	HTTPResponse *http.Response
 }
 
-const CredentialProxyHost = "169.254.169.254"
-const CredentialProxyPort = "80"
-const CredentialProxyProtocol = "http"
-const CredentialProxyUri = "/latest/meta-data/security-credentials"
-
-var CredentialProxyUrl = CredentialProxyProtocol + "://" + CredentialProxyHost + ":" + CredentialProxyPort + CredentialProxyUri
+const DefaultCredentialProxyHost = "169.254.169.254"
+const DefaultCredentialProxyPort = 80
+const DefaultCredentialProxyProtocol = "http"
+const DefaultCredentialProxyUri = "/latest/meta-data/security-credentials"
 
 type TokenOutput struct {
 	Jti string `json:"jti"`
@@ -108,9 +106,9 @@ func (r *Request) Send() error {
 }
 
 func (r *Request) check() error {
-	if r.Operation.Config.AccessKeyID == "" && r.Operation.Config.SecretAccessKey == "" && r.isTokenExpired() {
+	if r.Operation.Config.AccessKeyID == "" && r.Operation.Config.SecretAccessKey == "" || r.Operation.Config.URI == "/iam" && r.isTokenExpired() {
 		t := TokenOutput{}
-		err := t.GetToken()
+		err := t.GetToken(r.getCredentialProxyUrl())
 
 		if err != nil {
 			return err
@@ -203,8 +201,8 @@ func (r *Request) unpack() error {
 	return nil
 }
 
-func (t *TokenOutput) GetToken() error{
-	response, err := http.Get(CredentialProxyUrl)
+func (t *TokenOutput) GetToken(credentialProxyUrl string) error{
+	response, err := http.Get(credentialProxyUrl)
 	if err != nil {
 		return err
 	}
@@ -228,4 +226,39 @@ func (r *Request) isTokenExpired() bool {
 	now := time.Now().UTC().Unix()
 
 	return now >= r.Operation.Config.Expiration
+}
+
+func (r *Request) getCredentialProxyUrl() string {
+	var credentialProxyProtocol string
+	var credentialProxyHost string
+	var credentialProxyPort int
+	var credentialProxyUri string
+
+	if r.Operation.Config.CredentialProxyProtocol != "" {
+		credentialProxyProtocol = r.Operation.Config.CredentialProxyProtocol
+	} else {
+		credentialProxyProtocol = DefaultCredentialProxyProtocol
+	}
+
+	if r.Operation.Config.CredentialProxyHost != "" {
+		credentialProxyHost = r.Operation.Config.CredentialProxyHost
+	} else {
+		credentialProxyHost = DefaultCredentialProxyHost
+	}
+
+	if r.Operation.Config.CredentialProxyPort != 0 {
+		credentialProxyPort = r.Operation.Config.CredentialProxyPort
+	} else {
+		credentialProxyPort = DefaultCredentialProxyPort
+	}
+
+	if r.Operation.Config.CredentialProxyUri != "" {
+		credentialProxyUri = r.Operation.Config.CredentialProxyUri
+	} else {
+		credentialProxyUri = DefaultCredentialProxyUri
+	}
+
+	credentialProxyUrl := fmt.Sprintf("%s://%s:%d%s", credentialProxyProtocol, credentialProxyHost, credentialProxyPort, credentialProxyUri)
+
+	return credentialProxyUrl
 }

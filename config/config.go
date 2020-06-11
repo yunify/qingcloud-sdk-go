@@ -47,6 +47,11 @@ type Config struct {
 
 	Zone string `yaml:"zone"`
 
+	CredentialProxyProtocol string `yaml:"credential_proxy_protocol"`
+	CredentialProxyHost string `yaml:"credential_proxy_host"`
+	CredentialProxyPort int `yaml:"credential_proxy_port"`
+	CredentialProxyUri string `yaml:"credential_proxy_uri"`
+
 	Token string
 	Expiration int64
 
