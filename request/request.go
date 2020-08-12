@@ -201,8 +201,8 @@ func (r *Request) unpack() error {
 	return nil
 }
 
-func (t *TokenOutput) GetToken(credentialProxyUrl string) error{
-	response, err := http.Get(credentialProxyUrl)
+func (t *TokenOutput) GetToken(credentialProxyURL string) error{
+	response, err := http.Get(credentialProxyURL)
 	if err != nil {
 		return err
 	}
