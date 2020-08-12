@@ -39,11 +39,16 @@ type Request struct {
 	HTTPResponse *http.Response
 }
 
+// Default credential proxy host
 const DefaultCredentialProxyHost = "169.254.169.254"
+// Default credential proxy port
 const DefaultCredentialProxyPort = 80
+// Default credential proxy protocol
 const DefaultCredentialProxyProtocol = "http"
+// Default credential proxy URI
 const DefaultCredentialProxyURI = "/latest/meta-data/security-credentials"
 
+// The structure of token when retrieving it
 type TokenOutput struct {
 	Jti string `json:"jti"`
 	Token string `json:"id_token"`
@@ -201,6 +206,7 @@ func (r *Request) unpack() error {
 	return nil
 }
 
+// Get token from credential proxy server
 func (t *TokenOutput) GetToken(credentialProxyURL string) error{
 	response, err := http.Get(credentialProxyURL)
 	if err != nil {
