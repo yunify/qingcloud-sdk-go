@@ -42,7 +42,7 @@ type Request struct {
 const DefaultCredentialProxyHost = "169.254.169.254"
 const DefaultCredentialProxyPort = 80
 const DefaultCredentialProxyProtocol = "http"
-const DefaultCredentialProxyUri = "/latest/meta-data/security-credentials"
+const DefaultCredentialProxyURI = "/latest/meta-data/security-credentials"
 
 type TokenOutput struct {
 	Jti string `json:"jti"`
@@ -108,7 +108,7 @@ func (r *Request) Send() error {
 func (r *Request) check() error {
 	if r.Operation.Config.AccessKeyID == "" && r.Operation.Config.SecretAccessKey == "" || r.Operation.Config.URI == "/iam" && r.isTokenExpired() {
 		t := TokenOutput{}
-		err := t.GetToken(r.getCredentialProxyUrl())
+		err := t.GetToken(r.getCredentialProxyURL())
 
 		if err != nil {
 			return err
@@ -228,11 +228,11 @@ func (r *Request) isTokenExpired() bool {
 	return now >= r.Operation.Config.Expiration
 }
 
-func (r *Request) getCredentialProxyUrl() string {
+func (r *Request) getCredentialProxyURL() string {
 	var credentialProxyProtocol string
 	var credentialProxyHost string
 	var credentialProxyPort int
-	var credentialProxyUri string
+	var credentialProxyURI string
 
 	if r.Operation.Config.CredentialProxyProtocol != "" {
 		credentialProxyProtocol = r.Operation.Config.CredentialProxyProtocol
@@ -252,13 +252,13 @@ func (r *Request) getCredentialProxyUrl() string {
 		credentialProxyPort = DefaultCredentialProxyPort
 	}
 
-	if r.Operation.Config.CredentialProxyUri != "" {
-		credentialProxyUri = r.Operation.Config.CredentialProxyUri
+	if r.Operation.Config.CredentialProxyURI != "" {
+		credentialProxyURI = r.Operation.Config.CredentialProxyURI
 	} else {
-		credentialProxyUri = DefaultCredentialProxyUri
+		credentialProxyURI = DefaultCredentialProxyURI
 	}
 
-	credentialProxyUrl := fmt.Sprintf("%s://%s:%d%s", credentialProxyProtocol, credentialProxyHost, credentialProxyPort, credentialProxyUri)
+	credentialProxyURL := fmt.Sprintf("%s://%s:%d%s", credentialProxyProtocol, credentialProxyHost, credentialProxyPort, credentialProxyURI)
 
-	return credentialProxyUrl
+	return credentialProxyURL
 }
