@@ -4,7 +4,7 @@
 
 This SDK uses a structure called "Config" to store and manage configuration, read ["config/config.go"](https://github.com/yunify/qingcloud-sdk-go/blob/master/config/config.go) file's comments of public functions for more information.
 
-Except for AccessKeyID and SecretAccessKey, you can also configure the API servers for private cloud usage scenario. All available configureable items are list in default configuration file.
+Except for AccessKeyID and SecretAccessKey, you can also configure the API servers for private cloud usage scenario. All available configurable items are list in default configuration file.
 
 ___Default Configuration File:___
 
@@ -27,7 +27,20 @@ log_level: 'warn'
 
 ## Usage
 
-Just create a config structure instance with your API AccessKey, and initialize services that you need using Init() function of target service.
+1. Just create a config structure instance with your API AccessKey, and initialize services that you need using Init() function of target service.
+
+2. Or if you do not want to expose your AccessKeyID and SecretAccessKey, you can also call our API without them in the following way:
+- Go to our IAM service, create an instance role and attach it to your instance.
+- Create the config structure instance without AccessKeyID and SecretAccessKey.
+
+Note that you can also configure your own credential proxy server (where you retrieve tokens) in configuration file like this:
+
+```yaml
+credential_proxy_protocol: 'http'
+credential_proxy_host: '169.254.169.254'
+credential_proxy_port: 80
+credential_proxy_uri: '/latest/meta-data/security-credentials'
+```
 
 ### Code Snippet
 
