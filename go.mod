@@ -1,4 +1,4 @@
-module tcchend
+module github.com/yunify/qingcloud-sdk-go
 
 go 1.13
 
