@@ -36,7 +36,7 @@ check: vet lint
 
 vet:
 	@echo "go vet"
-	@go vet -all ./${DIRS_TO_CHECK}
+	@go vet  ${DIRS_TO_CHECK}
 	@echo "ok"
 
 lint:
