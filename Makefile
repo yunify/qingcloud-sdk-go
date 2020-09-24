@@ -35,8 +35,8 @@ all: check build unit release
 check: vet lint
 
 vet:
-	@echo "go vet, skipping vendor packages"
-	@go vet -all ${DIRS_TO_CHECK}
+	@echo "go vet"
+	@go vet -all ./${DIRS_TO_CHECK}
 	@echo "ok"
 
 lint:
