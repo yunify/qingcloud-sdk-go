@@ -36,7 +36,7 @@ check: vet lint
 
 vet:
 	@echo "go vet"
-	@go vet  ${DIRS_TO_CHECK}
+	@for i in $DIRS_TO_CHECK; do go vet ./$i;done
 	@echo "ok"
 
 lint:
