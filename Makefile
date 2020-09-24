@@ -36,7 +36,7 @@ check: vet lint
 
 vet:
 	@echo "go tool vet, skipping vendor packages"
-	@go tool vet -all ${DIRS_TO_CHECK}
+	@go vet -all ${DIRS_TO_CHECK}
 	@echo "ok"
 
 lint:
@@ -98,10 +98,10 @@ unit-race:
 	go test -v -race -cpu=1,2,4 ${PKGS_TO_CHECK}
 	@echo "ok"
 
-unit-runtime: unit-runtime-go-1.9 unit-runtime-go-1.10 unit-runtime-go-1.11
+unit-runtime: unit-runtime-go-1.13
 
-export define DOCKERFILE_GO_1_11
-FROM golang:1.11
+export define DOCKERFILE_GO_1_13
+FROM golang:1.13
 
 ADD . /go/src/github.com/yunify/qingcloud-sdk-go
 WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
@@ -109,14 +109,14 @@ WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
 CMD ["make", "build", "unit"]
 endef
 
-unit-runtime-go-1.11:
-	@echo "run test in go 1.11"
-	echo "$${DOCKERFILE_GO_1_11}" > "dockerfile_go_1.11"
-	docker build -f "./dockerfile_go_1.11" -t "${PREFIX}:go-1.11" .
-	rm -f "./dockerfile_go_1.11"
-	docker run --name "${PREFIX}-go-1.11-unit" -t "${PREFIX}:go-1.11"
-	docker rm "${PREFIX}-go-1.11-unit"
-	docker rmi "${PREFIX}:go-1.11"
+unit-runtime-go-1.13:
+	@echo "run test in go 1.13"
+	echo "$${DOCKERFILE_GO_1_13}" > "dockerfile_go_1.13"
+	docker build -f "./dockerfile_go_1.13" -t "${PREFIX}:go-1.13" .
+	rm -f "./dockerfile_go_1.13"
+	docker run --name "${PREFIX}-go-1.13-unit" -t "${PREFIX}:go-1.13"
+	docker rm "${PREFIX}-go-1.13-unit"
+	docker rmi "${PREFIX}:go-1.13"
 	@echo "ok"
 
 export define DOCKERFILE_GO_1_10
