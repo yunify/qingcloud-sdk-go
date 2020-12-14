@@ -1204,6 +1204,7 @@ type Job struct {
 	CreateTime  *time.Time `json:"create_time" name:"create_time" format:"ISO 8601"`
 	JobAction   *string    `json:"job_action" name:"job_action"`
 	JobID       *string    `json:"job_id" name:"job_id"`
+	Directive   *string    `json:"directive" name:"directive"`
 	Owner       *string    `json:"owner" name:"owner"`
 	ResourceIDs *string    `json:"resource_ids" name:"resource_ids"`
 	// Status's available values: pending, working, failed, successful, done with failure
