@@ -41,24 +41,26 @@ type Request struct {
 
 // DefaultCredentialProxyHost is default credential proxy host
 const DefaultCredentialProxyHost = "169.254.169.254"
+
 // DefaultCredentialProxyPort is default credential proxy port
 const DefaultCredentialProxyPort = 80
+
 // DefaultCredentialProxyProtocol is default credential proxy protocol
 const DefaultCredentialProxyProtocol = "http"
+
 // DefaultCredentialProxyURI is default credential proxy URI
 const DefaultCredentialProxyURI = "/latest/meta-data/security-credentials"
 
 // TokenOutput is the structure of token when retrieving it
 type TokenOutput struct {
-	Jti string `json:"jti"`
-	Token string `json:"id_token"`
-	AccessKey string `json:"access_key"`
+	Jti          string `json:"jti"`
+	Token        string `json:"id_token"`
+	AccessKey    string `json:"access_key"`
 	SecretAccess string `json:"secret_key"`
-	Expiration int64 `json:"expiration"`
-	Action string `json:"action,omitempty"`
-	RetCode string `json:"ret_code"`
+	Expiration   int64  `json:"expiration"`
+	Action       string `json:"action,omitempty"`
+	RetCode      string `json:"ret_code"`
 }
-
 
 // New create a Request from given Operation, Input and Output.
 // It returns a Request.
@@ -207,7 +209,7 @@ func (r *Request) unpack() error {
 }
 
 // GetToken is used to get token from credential proxy server
-func (t *TokenOutput) GetToken(credentialProxyURL string) error{
+func (t *TokenOutput) GetToken(credentialProxyURL string) error {
 	response, err := http.Get(credentialProxyURL)
 	if err != nil {
 		return err
