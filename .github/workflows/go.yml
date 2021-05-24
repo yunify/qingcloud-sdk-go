@@ -1,0 +1,30 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        go: [1.13]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          pushd ${HOME}/source
+          if [[ ! -d "./make-4.0" ]]; then
+            wget http://ftp.gnu.org/gnu/make/make-4.0.tar.gz &&
+            tar -vxzf make-4.0.tar.gz &&
+            pushd make-4.0 && ./configure && make && popd;
+          fi
+          pushd make-4.0 && sudo make install && popd
+          popd
+          /usr/local/bin/make --version
+          go get -u golang.org/x/lint/golint
+      - run: /usr/local/bin/make check
+      - run: /usr/local/bin/make release
+      - run: /usr/local/bin/make unit-runtime-go-${{ matrix.go }}
