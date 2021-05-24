@@ -262,6 +262,7 @@ type DescribeVxNetsInput struct {
 	// VxNetType's available values: 0, 1, 2
 	VxNetType *int      `json:"vxnet_type" name:"vxnet_type" location:"params"`
 	VxNets    []*string `json:"vxnets" name:"vxnets" location:"params"`
+	Zone      *string   `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *DescribeVxNetsInput) Validate() error {
