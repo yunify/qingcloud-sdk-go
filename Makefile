@@ -13,6 +13,8 @@ LINT_IGNORE_DOC="service\/.*\.go:.+(comment on exported|should have comment or b
 LINT_IGNORE_CONFLICT="service\/.*\.go:.+(type name will be used as)"
 LINT_IGNORE_METHOD="GetGlobalUniqueId"
 
+GO_VERSION?=1.13
+
 help:
 	@echo "Please use \`make <target>\` where <target> is one of"
 	@echo "  all               to check, build, test and release this SDK"
@@ -98,29 +100,10 @@ unit-race:
 	go test -v -race -cpu=1,2,4 ${PKGS_TO_CHECK}
 	@echo "ok"
 
-unit-runtime: unit-runtime-go-1.13
+unit-runtime: unit-runtime-go
 
-export define DOCKERFILE_GO_1_13
-FROM golang:1.13
-
-ADD . /go/src/github.com/yunify/qingcloud-sdk-go
-WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
-
-CMD ["make", "build", "unit"]
-endef
-
-unit-runtime-go-1.13:
-	@echo "run test in go 1.13"
-	echo "$${DOCKERFILE_GO_1_13}" > "dockerfile_go_1.13"
-	docker build -f "./dockerfile_go_1.13" -t "${PREFIX}:go-1.13" .
-	rm -f "./dockerfile_go_1.13"
-	docker run --name "${PREFIX}-go-1.13-unit" -t "${PREFIX}:go-1.13"
-	docker rm "${PREFIX}-go-1.13-unit"
-	docker rmi "${PREFIX}:go-1.13"
-	@echo "ok"
-
-export define DOCKERFILE_GO_1_10
-FROM golang:1.10
+export define DOCKERFILE_WITH_GO_VERSION
+FROM golang:GO_VERSION
 
 ADD . /go/src/github.com/yunify/qingcloud-sdk-go
 WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
@@ -128,34 +111,14 @@ WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
 CMD ["make", "build", "unit"]
 endef
 
-unit-runtime-go-1.10:
-	@echo "run test in go 1.10"
-	echo "$${DOCKERFILE_GO_1_10}" > "dockerfile_go_1.10"
-	docker build -f "./dockerfile_go_1.10" -t "${PREFIX}:go-1.10" .
-	rm -f "./dockerfile_go_1.10"
-	docker run --name "${PREFIX}-go-1.10-unit" -t "${PREFIX}:go-1.10"
-	docker rm "${PREFIX}-go-1.10-unit"
-	docker rmi "${PREFIX}:go-1.10"
-	@echo "ok"
-
-export define DOCKERFILE_GO_1_9
-FROM golang:1.9
-ENV GO15VENDOREXPERIMENT="1"
-
-ADD . /go/src/github.com/yunify/qingcloud-sdk-go
-WORKDIR /go/src/github.com/yunify/qingcloud-sdk-go
-
-CMD ["make", "build", "unit"]
-endef
-
-unit-runtime-go-1.9:
-	@echo "run test in go 1.9"
-	echo "$${DOCKERFILE_GO_1_9}" > "dockerfile_go_1.9"
-	docker build -f "./dockerfile_go_1.9" -t "${PREFIX}:go-1.9" .
-	rm -f "./dockerfile_go_1.9"
-	docker run --name "${PREFIX}-go-1.9-unit" -t "${PREFIX}:go-1.9"
-	docker rm "${PREFIX}-go-1.9-unit"
-	docker rmi "${PREFIX}:go-1.9"
+unit-runtime-go:
+	@echo "run test in go ${GO_VERSION}"
+	echo "$${DOCKERFILE_WITH_GO_VERSION}" | sed 's/GO_VERSION/${GO_VERSION}/' > "dockerfile_go_${GO_VERSION}"
+	docker build -f "./dockerfile_go_${GO_VERSION}" -t "${PREFIX}:go-${GO_VERSION}" .
+	rm -f "./dockerfile_go_${GO_VERSION}"
+	docker run --name "${PREFIX}-go-${GO_VERSION}-unit" -t "${PREFIX}:go-${GO_VERSION}"
+	docker rm "${PREFIX}-go-${GO_VERSION}-unit"
+	docker rmi "${PREFIX}:go-${GO_VERSION}"
 	@echo "ok"
 
 test:
