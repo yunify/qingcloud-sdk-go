@@ -671,7 +671,7 @@ func (v *RunInstancesInput) Validate() error {
 	}
 
 	if v.InstanceClass != nil {
-		instanceClassValidValues := []string{"0", "1", "2", "3", "4", "5", "6", "100", "101", "200", "201", "300", "301"}
+		instanceClassValidValues := []string{"0", "1", "2", "3", "4", "5", "6", "100", "101", "200", "201", "300", "301", "202", "203"}
 		instanceClassParameterValue := fmt.Sprint(*v.InstanceClass)
 
 		instanceClassIsValid := false
