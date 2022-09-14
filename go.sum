@@ -1,5 +1,5 @@
-github.com/cucumber/godog v0.7.9 h1:xBFguv4NJkVgDTGE95g53uzxruxQMclSee/L6rI7NTc=
-github.com/cucumber/godog v0.7.9/go.mod h1:2+kSV+QWoeX5l4THUNR1v5OnHuGM9QUD7nQILpqoklI=
+github.com/cucumber/godog v0.8.1 h1:lVb+X41I4YDreE+ibZ50bdXmySxgRviYFgKY6Aw4XE8=
+github.com/cucumber/godog v0.8.1/go.mod h1:vSh3r/lM+psC1BPXvdkSEuNjmXfpVqrMGYAElF6hxnA=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

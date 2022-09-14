@@ -4,8 +4,8 @@ import:
   version: ~1.0.2
 - package: gopkg.in/yaml.v2
 testImport:
-- package: github.com/DATA-DOG/godog
-  version: ~0.7.3
+- package: github.com/cucumber/godog
+  version: ~0.8.1
   subpackages:
   - gherkin
 - package: github.com/stretchr/testify

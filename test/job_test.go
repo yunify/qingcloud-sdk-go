@@ -3,7 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/DATA-DOG/godog"
+
+	"github.com/cucumber/godog"
 	qc "github.com/yunify/qingcloud-sdk-go/service"
 )
 
