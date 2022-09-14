@@ -23,7 +23,7 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/DATA-DOG/godog"
+	"github.com/cucumber/godog"
 
 	"github.com/yunify/qingcloud-sdk-go/config"
 	qc "github.com/yunify/qingcloud-sdk-go/service"

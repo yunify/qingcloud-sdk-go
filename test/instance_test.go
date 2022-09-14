@@ -3,12 +3,13 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/DATA-DOG/godog"
-	"github.com/DATA-DOG/godog/gherkin"
-	qcErrors "github.com/yunify/qingcloud-sdk-go/request/errors"
-	qc "github.com/yunify/qingcloud-sdk-go/service"
 	"strconv"
 	"time"
+
+	"github.com/cucumber/godog"
+	"github.com/cucumber/godog/gherkin"
+	qcErrors "github.com/yunify/qingcloud-sdk-go/request/errors"
+	qc "github.com/yunify/qingcloud-sdk-go/service"
 )
 
 var instanceService *qc.InstanceService
