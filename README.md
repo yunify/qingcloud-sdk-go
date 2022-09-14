@@ -45,6 +45,7 @@ Checkout our [releases](https://github.com/yunify/qingcloud-sdk-go/releases) and
 3. Commit your changes (`git commit -asm 'Add some feature'`)
 4. Push to the branch (`git push origin new-feature`)
 5. Create a new Pull Request
+6. test
 
 ## LICENSE
 
