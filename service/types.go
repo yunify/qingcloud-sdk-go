@@ -3158,9 +3158,8 @@ type Volume struct {
     TransitionStatus *string `json:"transition_status" name:"transition_status"`
     VolumeID         *string `json:"volume_id" name:"volume_id"`
     VolumeName       *string `json:"volume_name" name:"volume_name"`
-    // VolumeType's available values: 0, 1, 2, 3
-    VolumeType *int    `json:"volume_type" name:"volume_type"`
-    ZoneID     *string `json:"zone_id" name:"zone_id"`
+    VolumeType       *int    `json:"volume_type" name:"volume_type"`
+    ZoneID           *string `json:"zone_id" name:"zone_id"`
 }
 
 func (v *Volume) Validate() error {
@@ -3228,11 +3227,9 @@ func (v *Volume) Validate() error {
     }
 
     if v.VolumeType != nil {
-        volumeTypeValidValues := []string{"0", "1", "2", "3"}
-        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
-
         volumeTypeIsValid := false
-        for _, value := range volumeTypeValidValues {
+        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
+        for _, value := range _volumeTypeValidValues {
             if value == volumeTypeParameterValue {
                 volumeTypeIsValid = true
             }
@@ -3242,7 +3239,7 @@ func (v *Volume) Validate() error {
             return errors.ParameterValueNotAllowedError{
                 ParameterName:  "VolumeType",
                 ParameterValue: volumeTypeParameterValue,
-                AllowedValues:  volumeTypeValidValues,
+                AllowedValues:  _volumeTypeValidValues,
             }
         }
     }

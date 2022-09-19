@@ -29,6 +29,8 @@ import (
 var _ fmt.State
 var _ time.Time
 
+var _volumeTypeValidValues = []string{"0", "1", "2", "3", "4", "5", "6", "7", "10", "20", "100", "200"}
+
 type VolumeService struct {
     Config     *config.Config
     Properties *VolumeServiceProperties
@@ -135,7 +137,6 @@ type CloneVolumesInput struct {
     SubZones   *string `json:"sub_zones" name:"sub_zones" location:"params"`
     Volume     *string `json:"volume" name:"volume" location:"params"` // Required
     VolumeName *string `json:"volume_name" name:"volume_name" location:"params"`
-    // VolumeType's available values: 0, 1, 2, 3, 4, 5, 6, 10, 100, 200
     VolumeType *int    `json:"volume_type" name:"volume_type" default:"0" location:"params"`
     Zone       *string `json:"zone" name:"zone" location:"params"`
 }
@@ -150,11 +151,9 @@ func (v *CloneVolumesInput) Validate() error {
     }
 
     if v.VolumeType != nil {
-        volumeTypeValidValues := []string{"0", "1", "2", "3", "4", "5", "6", "10", "100", "200"}
-        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
-
         volumeTypeIsValid := false
-        for _, value := range volumeTypeValidValues {
+        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
+        for _, value := range _volumeTypeValidValues {
             if value == volumeTypeParameterValue {
                 volumeTypeIsValid = true
             }
@@ -164,7 +163,7 @@ func (v *CloneVolumesInput) Validate() error {
             return errors.ParameterValueNotAllowedError{
                 ParameterName:  "VolumeType",
                 ParameterValue: volumeTypeParameterValue,
-                AllowedValues:  volumeTypeValidValues,
+                AllowedValues:  _volumeTypeValidValues,
             }
         }
     }
@@ -211,7 +210,6 @@ type CreateVolumesInput struct {
     Repl       *string `json:"repl" name:"repl" location:"params"`
     Size       *int    `json:"size" name:"size" location:"params"` // Required
     VolumeName *string `json:"volume_name" name:"volume_name" location:"params"`
-    // VolumeType's available values: 0, 1, 2, 3, 4, 5, 6, 7, 10, 100, 200
     VolumeType *int    `json:"volume_type" name:"volume_type" default:"0" location:"params"`
     Zone       *string `json:"zone" name:"zone" location:"params"`
     // For VolumeType=5/6/7 to set replica count
@@ -228,11 +226,9 @@ func (v *CreateVolumesInput) Validate() error {
     }
 
     if v.VolumeType != nil {
-        volumeTypeValidValues := []string{"0", "1", "2", "3", "4", "5", "6", "7", "10", "100", "200"}
-        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
-
         volumeTypeIsValid := false
-        for _, value := range volumeTypeValidValues {
+        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
+        for _, value := range _volumeTypeValidValues {
             if value == volumeTypeParameterValue {
                 volumeTypeIsValid = true
             }
@@ -242,7 +238,7 @@ func (v *CreateVolumesInput) Validate() error {
             return errors.ParameterValueNotAllowedError{
                 ParameterName:  "VolumeType",
                 ParameterValue: volumeTypeParameterValue,
-                AllowedValues:  volumeTypeValidValues,
+                AllowedValues:  _volumeTypeValidValues,
             }
         }
     }
@@ -342,8 +338,7 @@ type DescribeVolumesInput struct {
     Status     []*string `json:"status" name:"status" location:"params"`
     Tags       []*string `json:"tags" name:"tags" location:"params"`
     // Verbose's available values: 0, 1
-    Verbose *int `json:"verbose" name:"verbose" default:"0" location:"params"`
-    // VolumeType's available values: 0, 1, 2, 3, 4, 5, 6, 10, 100, 200
+    Verbose    *int      `json:"verbose" name:"verbose" default:"0" location:"params"`
     VolumeType *int      `json:"volume_type" name:"volume_type" location:"params"`
     Volumes    []*string `json:"volumes" name:"volumes" location:"params"`
     Zone       *string   `json:"zone" name:"zone" location:"params"`
@@ -372,11 +367,9 @@ func (v *DescribeVolumesInput) Validate() error {
     }
 
     if v.VolumeType != nil {
-        volumeTypeValidValues := []string{"0", "1", "2", "3", "4", "5", "6", "10", "100", "200"}
-        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
-
         volumeTypeIsValid := false
-        for _, value := range volumeTypeValidValues {
+        volumeTypeParameterValue := fmt.Sprint(*v.VolumeType)
+        for _, value := range _volumeTypeValidValues {
             if value == volumeTypeParameterValue {
                 volumeTypeIsValid = true
             }
@@ -386,7 +379,7 @@ func (v *DescribeVolumesInput) Validate() error {
             return errors.ParameterValueNotAllowedError{
                 ParameterName:  "VolumeType",
                 ParameterValue: volumeTypeParameterValue,
-                AllowedValues:  volumeTypeValidValues,
+                AllowedValues:  _volumeTypeValidValues,
             }
         }
     }
