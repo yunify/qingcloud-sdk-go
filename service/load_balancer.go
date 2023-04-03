@@ -1451,6 +1451,7 @@ type ModifyLoadBalancerListenerAttributesInput struct {
 	ListenerOption           *int      `json:"listener_option" name:"listener_option" location:"params"`
 	LoadBalancerListener     *string   `json:"loadbalancer_listener" name:"loadbalancer_listener" location:"params"` // Required
 	LoadBalancerListenerName *string   `json:"loadbalancer_listener_name" name:"loadbalancer_listener_name" location:"params"`
+	Scene                    *int      `json:"scene" name:"scene" location:"params"`
 	ServerCertificateID      []*string `json:"server_certificate_id" name:"server_certificate_id" location:"params"`
 	SessionSticky            *string   `json:"session_sticky" name:"session_sticky" location:"params"`
 	Timeout                  *int      `json:"timeout" name:"timeout" location:"params"`
