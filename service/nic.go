@@ -135,6 +135,7 @@ type CreateNicsInput struct {
 	NICName    *string   `json:"nic_name" name:"nic_name" location:"params"`
 	PrivateIPs []*string `json:"private_ips" name:"private_ips" location:"params"`
 	VxNet      *string   `json:"vxnet" name:"vxnet" location:"params"` // Required
+	DisableIP  *int      `json:"disable_ip" name:"disable_ip" location:"params"`
 }
 
 func (v *CreateNicsInput) Validate() error {
