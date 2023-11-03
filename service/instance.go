@@ -644,7 +644,9 @@ func (v *RunInstancesInput) Validate() error {
 	}
 
 	if v.CPUModel != nil {
-		cpuModelValidValues := []string{"Westmere", "SandyBridge", "IvyBridge", "Haswell", "Broadwell"}
+		cpuModelValidValues := []string{"Westmere", "SandyBridge", "IvyBridge", "Haswell", "Broadwell", "EPYC",
+						"Skylake", "CascadeLake", "IceLake", "SapphireRapids", "Haswell-noTSX",
+					       "EPYC-Rome"}
 		cpuModelParameterValue := fmt.Sprint(*v.CPUModel)
 
 		cpuModelIsValid := false
