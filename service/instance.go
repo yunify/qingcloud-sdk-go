@@ -643,25 +643,25 @@ func (v *RunInstancesInput) Validate() error {
 		}
 	}
 
-	if v.CPUModel != nil {
-		cpuModelValidValues := []string{"Westmere", "SandyBridge", "IvyBridge", "Haswell", "Broadwell"}
-		cpuModelParameterValue := fmt.Sprint(*v.CPUModel)
-
-		cpuModelIsValid := false
-		for _, value := range cpuModelValidValues {
-			if value == cpuModelParameterValue {
-				cpuModelIsValid = true
-			}
-		}
-
-		if !cpuModelIsValid {
-			return errors.ParameterValueNotAllowedError{
-				ParameterName:  "CPUModel",
-				ParameterValue: cpuModelParameterValue,
-				AllowedValues:  cpuModelValidValues,
-			}
-		}
-	}
+	//if v.CPUModel != nil {
+	//	cpuModelValidValues := []string{"Westmere", "SandyBridge", "IvyBridge", "Haswell", "Broadwell"}
+	//	cpuModelParameterValue := fmt.Sprint(*v.CPUModel)
+	//
+	//	cpuModelIsValid := false
+	//	for _, value := range cpuModelValidValues {
+	//		if value == cpuModelParameterValue {
+	//			cpuModelIsValid = true
+	//		}
+	//	}
+	//
+	//	if !cpuModelIsValid {
+	//		return errors.ParameterValueNotAllowedError{
+	//			ParameterName:  "CPUModel",
+	//			ParameterValue: cpuModelParameterValue,
+	//			AllowedValues:  cpuModelValidValues,
+	//		}
+	//	}
+	//}
 
 	if v.ImageID == nil {
 		return errors.ParameterRequiredError{
