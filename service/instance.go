@@ -569,7 +569,7 @@ type RunInstancesInput struct {
 	// CPUMax's available values: 1, 2, 4, 8, 16
 	CPUMax *int `json:"cpu_max" name:"cpu_max" location:"params"`
 	// CPUModel's available values: Westmere, SandyBridge, IvyBridge, Haswell, Broadwell
-	CPUModel *string `json:"cpu_model" name:"cpu_model" default:"Westmere" location:"params"`
+	CPUModel *string `json:"cpu_model" name:"cpu_model" location:"params"`
 	Gpu      *int    `json:"gpu" name:"gpu" default:"0" location:"params"`
 	Hostname *string `json:"hostname" name:"hostname" location:"params"`
 	ImageID  *string `json:"image_id" name:"image_id" location:"params"` // Required
