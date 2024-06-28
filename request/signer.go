@@ -54,6 +54,7 @@ func (is *Signer) WriteSignature(request *http.Request) error {
 	}
 	request.URL = newRequest.URL
 	request.Body = newRequest.Body
+	request.ContentLength = newRequest.ContentLength
 
 	logger.Info(fmt.Sprintf(
 		"Signed QingCloud request: [%d] %s",
