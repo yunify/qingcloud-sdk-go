@@ -123,6 +123,8 @@ func (s *InstanceService) DescribeInstanceTypes(i *DescribeInstanceTypesInput) (
 }
 
 type DescribeInstanceTypesInput struct {
+	Baremetal *int `json:"baremetal" name:"baremetal" location:"params"`
+	// 指定查询的云服务器类型
 	InstanceTypes []*string `json:"instance_types" name:"instance_types" location:"params"`
 }
 
@@ -181,6 +183,78 @@ type DescribeInstancesInput struct {
 	Tags          []*string `json:"tags" name:"tags" location:"params"`
 	// Verbose's available values: 0, 1
 	Verbose *int `json:"verbose" name:"verbose" location:"params"`
+
+	// alarm status of the instance
+	AlarmStatus *string `json:"alarm_status" name:"alarm_status" location:"params"`
+	// filter by border
+	Border    *string `json:"border" name:"border" location:"params"`
+	ConsoleID *string `json:"console_id" name:"console_id" location:"params"`
+	// pitrix or self.
+	Controller           *string `json:"controller" name:"controller" location:"params"`
+	CreateTime           *string `json:"create_time" name:"create_time" location:"params"`
+	DedicatedHostGroupID *string `json:"dedicated_host_group_id" name:"dedicated_host_group_id" location:"params"`
+	DedicatedHostID      *string `json:"dedicated_host_id" name:"dedicated_host_id" location:"params"`
+	// directory_id
+	DirectoryID *string `json:"directory_id" name:"directory_id" location:"params"`
+	// for filter reserved resource
+	ExcludeReserved *string `json:"exclude_reserved" name:"exclude_reserved" location:"params"`
+	ExcludeUser     *string `json:"exclude_user" name:"exclude_user" location:"params"`
+	// for filter directory resources
+	ExcludedDir *string `json:"excluded_dir" name:"excluded_dir" location:"params"`
+	// query instances by excluded_plg_id
+	ExcludedPlgID *string `json:"excluded_plg_id" name:"excluded_plg_id" location:"params"`
+	// filter by fence
+	Fence *string `json:"fence" name:"fence" location:"params"`
+	// The graphics protocol
+	GraphicsProtocol *string `json:"graphics_protocol" name:"graphics_protocol" location:"params"`
+	// the host machine of instances.
+	HostMachine *string `json:"host_machine" name:"host_machine" location:"params"`
+	// filter by hypervisor.
+	Hypervisor *string `json:"hypervisor" name:"hypervisor" location:"params"`
+	// filter by instance group
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// the name of the instance. Support partial match.
+	InstanceName *string `json:"instance_name" name:"instance_name" location:"params"`
+	IsElastic    *string `json:"is_elastic" name:"is_elastic" location:"params"`
+	// memory_current
+	MemoryCurrent *string `json:"memory_current" name:"memory_current" location:"params"`
+	// output mount detail(1
+	MountDetail *string `json:"mount_detail" name:"mount_detail" location:"params"`
+	// query instances by mounted image
+	MountImageID *string `json:"mount_image_id" name:"mount_image_id" location:"params"`
+	// 0: include resources whose transition_status is not empty
+	NotTransition *string `json:"not_transition" name:"not_transition" default:"0" location:"params"`
+	// os_disk_size
+	OSDiskSize *string `json:"os_disk_size" name:"os_disk_size" location:"params"`
+	// the place group of instances
+	PlaceGroupID *string `json:"place_group_id" name:"place_group_id" location:"params"`
+	// Support windows
+	Platform *string `json:"platform" name:"platform" location:"params"`
+	// filter by replica policy.
+	Repl *string `json:"repl" name:"repl" location:"params"`
+	// for reverse sorting. 1: reverse
+	Reverse *string `json:"reverse" name:"reverse" location:"params"`
+	// if role==partner then it is for partner to get the instances of her/his Apps
+	Role       *string `json:"role" name:"role" location:"params"`
+	RootUserID *string `json:"root_user_id" name:"root_user_id" location:"params"`
+	// sort key
+	SortKey *string `json:"sort_key" name:"sort_key" location:"params"`
+	// sriov_nic_type
+	SriovNICType *string `json:"sriov_nic_type" name:"sriov_nic_type" location:"params"`
+	// query instances support cdrom(1
+	SupportCdrom *string `json:"support_cdrom" name:"support_cdrom" location:"params"`
+	// filter by tags
+	TransitionStatus *string `json:"transition_status" name:"transition_status" location:"params"`
+	// vcpus_current
+	VCPUsCurrent *string `json:"vcpus_current" name:"vcpus_current" location:"params"`
+	VdcNodeID    *string `json:"vdc_node_id" name:"vdc_node_id" location:"params"`
+	// filter by vxnet.
+	VxNet *string `json:"vxnet" name:"vxnet" location:"params"`
+	// filter by vxnet type.
+	VxNetType       *string `json:"vxnet_type" name:"vxnet_type" location:"params"`
+	WithoutContract *string `json:"without_contract" name:"without_contract" location:"params"`
+	// zone id
+	Zone *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *DescribeInstancesInput) Validate() error {
@@ -266,6 +340,7 @@ type ModifyInstanceAttributesInput struct {
 	Description  *string `json:"description" name:"description" location:"params"`
 	Instance     *string `json:"instance" name:"instance" location:"params"` // Required
 	InstanceName *string `json:"instance_name" name:"instance_name" location:"params"`
+	NICMqueue    *string `json:"nic_mqueue" name:"nic_mqueue" location:"params"`
 }
 
 func (v *ModifyInstanceAttributesInput) Validate() error {
@@ -320,6 +395,18 @@ type ResetInstancesInput struct {
 	LoginPasswd *string `json:"login_passwd" name:"login_passwd" location:"params"`
 	// NeedNewSID's available values: 0, 1
 	NeedNewSID *int `json:"need_newsid" name:"need_newsid" default:"0" location:"params"`
+
+	// force.
+	Force *string `json:"force" name:"force" default:"0" location:"params"`
+	// image_id.
+	ImageID *string `json:"image_id" name:"image_id" location:"params"`
+	// os_disk_size.
+	OSDiskSize   *string `json:"os_disk_size" name:"os_disk_size" location:"params"`
+	Type         *string `json:"type" name:"type" location:"params"`
+	UserData     *string `json:"user_data" name:"user_data" location:"params"`
+	Value        *string `json:"value" name:"value" location:"params"`
+	VmDefinition *string `json:"vm_definition" name:"vm_definition" location:"params"`
+	Zone         *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *ResetInstancesInput) Validate() error {
@@ -425,6 +512,18 @@ type ResizeInstancesInput struct {
 	// Memory's available values: 1024, 2048, 4096, 6144, 8192, 12288, 16384, 24576, 32768
 	Memory     *int `json:"memory" name:"memory" location:"params"`
 	OSDiskSize *int `json:"os_disk_size" name:"os_disk_size" location:"params"`
+
+	// the boot device
+	BootDev *string `json:"boot_dev" name:"boot_dev" location:"params"`
+	// the CPU topology
+	CPUTopology   *string `json:"cpu_topology" name:"cpu_topology" location:"params"`
+	MemoryCurrent *string `json:"memory_current" name:"memory_current" location:"params"`
+	MemoryMax     *string `json:"memory_max" name:"memory_max" location:"params"`
+	OSDisSize     *string `json:"os_disk_size" name:"os_disk_size" location:"params"`
+	VCPUsCurrent  *string `json:"vcpus_current" name:"vcpus_current" location:"params"`
+	VCPUsMax      *string `json:"vcpus_max" name:"vcpus_max" location:"params"`
+	VmDefinition  *string `json:"vm_definition" name:"vm_definition" location:"params"`
+	Zone          *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *ResizeInstancesInput) Validate() error {
@@ -609,6 +708,77 @@ type RunInstancesInput struct {
 	Hypervisor       *string   `json:"hypervisor" name:"hypervisor" location:"params"`
 	GpuClass         *string   `json:"gpu_class" name:"gpu_class" location:"params"`
 	PlaceGroupID     *string   `json:"place_group_id" name:"place_group_id" location:"params"`
+
+	AutoRenew            *string `json:"auto_renew" name:"auto_renew" location:"params"`
+	AutoVolumes          *string `json:"auto_volumes" name:"auto_volumes" location:"params"`
+	Backups              *string `json:"backups" name:"backups" location:"params"`
+	ChargeMode           *string `json:"charge_mode" name:"charge_mode" location:"params"`
+	CipherAlg            *string `json:"cipher_alg" name:"cipher_alg" location:"params"`
+	ContractDescription  *string `json:"contract_description" name:"contract_description" location:"params"`
+	ContractEntries      *string `json:"contract_entries" name:"contract_entries" location:"params"`
+	ContractID           *string `json:"contract_id" name:"contract_id" location:"params"`
+	CouponID             *string `json:"coupon_id" name:"coupon_id" location:"params"`
+	CPUTopology          *int    `json:"cpu_topology" name:"cpu_topology" location:"params"`
+	DedicatedHostGroupID *string `json:"dedicated_host_group_id" name:"dedicated_host_group_id" location:"params"`
+	DedicatedHostID      *string `json:"dedicated_host_id" name:"dedicated_host_id" location:"params"`
+	DirectoryID          *string `json:"directory_id" name:"directory_id" location:"params"`
+	// dry_run
+	DryRun *string `json:"dry_run" name:"dry_run" default:"0" location:"params"`
+	// eip_bandwidth.
+	EIPBandwidth *string `json:"eip_bandwidth" name:"eip_bandwidth" location:"params"`
+	// eip_bandwidth.
+	EIPBillingMode *string `json:"eip_billing_mode" name:"eip_billing_mode" location:"params"`
+	// eip_group.
+	EIPGroup *string `json:"eip_group" name:"eip_group" location:"params"`
+	// eips.
+	EIPIDs *string `json:"eip_ids" name:"eip_ids" location:"params"`
+	// eip billing
+	EIPIgnoreContract *string `json:"eip_ignore_contract" name:"eip_ignore_contract" location:"params"`
+	EIPVirgin         *string `json:"eip_virgin" name:"eip_virgin" location:"params"`
+	Entries           *string `json:"entries" name:"entries" location:"params"`
+	ExpirationTime    *string `json:"expiration_time" name:"expiration_time" location:"params"`
+	// type of the physical GPU where the vGPU will be allocated
+	GpuType            *string `json:"gpu_type" name:"gpu_type" location:"params"`
+	InResourceGroupIDs *string `json:"in_resource_group_ids" name:"in_resource_group_ids" location:"params"`
+	// instance_ext_type
+	InstanceExtType *string `json:"instance_ext_type" name:"instance_ext_type" location:"params"`
+	// instance_ext_type
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// login_keypair
+	LoginKeyPairList *string `json:"login_keypair_list" name:"login_keypair_list" location:"params"`
+	MemoryCurrent    *string `json:"memory_current" name:"memory_current" location:"params"`
+	MemoryMax        *string `json:"memory_max" name:"memory_max" location:"params"`
+	Months           *string `json:"months" name:"months" location:"params"`
+	NextChargeMode   *string `json:"next_charge_mode" name:"next_charge_mode" location:"params"`
+	ProjectID        *string `json:"project_id" name:"project_id" location:"params"`
+	PromotionID      *string `json:"promotion_id" name:"promotion_id" location:"params"`
+	ReservedContract *string `json:"reserved_contract" name:"reserved_contract" location:"params"`
+	// Whether to stop on error
+	StopOnError *string `json:"stop_on_error" name:"stop_on_error" location:"params"`
+	Tags        *string `json:"tags" name:"tags" location:"params"`
+	// the user who will own this instance
+	TargetUser            *string `json:"target_user" name:"target_user" location:"params"`
+	Type                  *string `json:"type" name:"type" location:"params"`
+	UserData              *string `json:"user_data" name:"user_data" location:"params"`
+	Value                 *string `json:"value" name:"value" location:"params"`
+	VCPUsCurrent          *string `json:"vcpus_current" name:"vcpus_current" location:"params"`
+	VCPUsMax              *string `json:"vcpus_max" name:"vcpus_max" location:"params"`
+	VdcNodeID             *string `json:"vdc_node_id" name:"vdc_node_id" location:"params"`
+	VmDefinition          *string `json:"vm_definition" name:"vm_definition" location:"params"`
+	VolumeContractEntries *string `json:"volume_contract_entries" name:"volume_contract_entries" location:"params"`
+	// volume_encryption.
+	VolumeEncryption *string `json:"volume_encryption" name:"volume_encryption" location:"params"`
+	// volume_filesystem_type.
+	VolumeFilesystemType *string `json:"volume_filesystem_type" name:"volume_filesystem_type" location:"params"`
+	// volume_mount_point.
+	VolumeMountPoint *string `json:"volume_mount_point" name:"volume_mount_point" location:"params"`
+	VolumeRepl       *string `json:"volume_repl" name:"volume_repl" location:"params"`
+	// volume_size.
+	VolumeSize *string `json:"volume_size" name:"volume_size" location:"params"`
+	// volume_type.
+	VolumeType *string `json:"volume_type" name:"volume_type" location:"params"`
+	// zone id to run instance to
+	Zone *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *RunInstancesInput) Validate() error {
@@ -868,6 +1038,7 @@ func (s *InstanceService) StartInstances(i *StartInstancesInput) (*StartInstance
 
 type StartInstancesInput struct {
 	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
+	Volumes   *string   `json:"volumes" name:"volumes" location:"params"`
 }
 
 func (v *StartInstancesInput) Validate() error {
@@ -1004,6 +1175,92 @@ func (v *TerminateInstancesInput) Validate() error {
 }
 
 type TerminateInstancesOutput struct {
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// Documentation URL: https://docs.qingcloud.com/api/instance/describe_instances.html
+func (s *InstanceService) CloneInstances(i *CloneInstancesInput) (*CloneInstancesOutput, error) {
+	if i == nil {
+		i = &CloneInstancesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "CloneInstances",
+		RequestMethod: "GET",
+	}
+
+	x := &CloneInstancesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type CloneInstancesInput struct {
+	Instances *string `json:"instances" name:"instances" location:"params"`
+	VxNets    *string `json:"vxnets" name:"vxnets" location:"params"`
+}
+
+func (v *CloneInstancesInput) Validate() error {
+
+	return nil
+}
+
+type CloneInstancesOutput struct {
+	Message *string `json:"message" name:"message"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// CreateBrokers: CreateBrokers
+
+func (s *InstanceService) CreateBrokers(i *CreateBrokersInput) (*CreateBrokersOutput, error) {
+	if i == nil {
+		i = &CreateBrokersInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "CreateBrokers",
+		RequestMethod: "GET",
+	}
+
+	x := &CreateBrokersOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type CreateBrokersInput struct {
+	Instances *string `json:"instances" name:"instances" location:"params"`
+}
+
+func (v *CreateBrokersInput) Validate() error {
+
+	return nil
+}
+
+type CreateBrokersOutput struct {
 	Message *string `json:"message" name:"message"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
