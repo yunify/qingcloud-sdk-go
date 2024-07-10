@@ -90,7 +90,7 @@ func (v *CeaseInstancesInput) Validate() error {
 }
 
 type CeaseInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -134,7 +134,7 @@ func (v *DescribeInstanceTypesInput) Validate() error {
 }
 
 type DescribeInstanceTypesOutput struct {
-	Message         *string         `json:"message" name:"message"`
+	Message         *string         `json:"message" name:"message" location:"elements"`
 	Action          *string         `json:"action" name:"action" location:"elements"`
 	InstanceTypeSet []*InstanceType `json:"instance_type_set" name:"instance_type_set" location:"elements"`
 	RetCode         *int            `json:"ret_code" name:"ret_code" location:"elements"`
@@ -313,7 +313,7 @@ func (v *DescribeInstancesInput) Validate() error {
 }
 
 type DescribeInstancesOutput struct {
-	Message     *string     `json:"message" name:"message"`
+	Message     *string     `json:"message" name:"message" location:"elements"`
 	Action      *string     `json:"action" name:"action" location:"elements"`
 	InstanceSet []*Instance `json:"instance_set" name:"instance_set" location:"elements"`
 	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
@@ -407,7 +407,7 @@ func (v *ModifyInstanceAttributesInput) Validate() error {
 }
 
 type ModifyInstanceAttributesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
@@ -520,7 +520,7 @@ func (v *ResetInstancesInput) Validate() error {
 }
 
 type ResetInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -630,7 +630,7 @@ func (v *ResizeInstancesInput) Validate() error {
 }
 
 type ResizeInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -679,7 +679,7 @@ func (v *RestartInstancesInput) Validate() error {
 }
 
 type RestartInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -1054,7 +1054,7 @@ func (v *RunInstancesInput) Validate() error {
 }
 
 type RunInstancesOutput struct {
-	Message   *string   `json:"message" name:"message"`
+	Message   *string   `json:"message" name:"message" location:"elements"`
 	Action    *string   `json:"action" name:"action" location:"elements"`
 	Instances []*string `json:"instances" name:"instances" location:"elements"`
 	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
@@ -1105,7 +1105,7 @@ func (v *StartInstancesInput) Validate() error {
 }
 
 type StartInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -1177,7 +1177,7 @@ func (v *StopInstancesInput) Validate() error {
 }
 
 type StopInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -1226,13 +1226,13 @@ func (v *TerminateInstancesInput) Validate() error {
 }
 
 type TerminateInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
-// Documentation URL: https://docs.qingcloud.com/api/instance/describe_instances.html
+// Documentation URL: https://docs.qingcloud.com/api/instance/clone_instances.html
 func (s *InstanceService) CloneInstances(i *CloneInstancesInput) (*CloneInstancesOutput, error) {
 	if i == nil {
 		i = &CloneInstancesInput{}
@@ -1269,7 +1269,7 @@ func (v *CloneInstancesInput) Validate() error {
 }
 
 type CloneInstancesOutput struct {
-	Message      *string                    `json:"message" name:"message"`
+	Message      *string                    `json:"message" name:"message" location:"elements"`
 	Action       *string                    `json:"action" name:"action" location:"elements"`
 	JobID        *string                    `json:"job_id" name:"job_id" location:"elements"`
 	RetCode      *int                       `json:"ret_code" name:"ret_code" location:"elements"`
@@ -1319,7 +1319,7 @@ func (v *CreateBrokersInput) Validate() error {
 }
 
 type CreateBrokersOutput struct {
-	Message *string  `json:"message" name:"message"`
+	Message *string  `json:"message" name:"message" location:"elements"`
 	Action  *string  `json:"action" name:"action" location:"elements"`
 	JobID   *string  `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int     `json:"ret_code" name:"ret_code" location:"elements"`
@@ -1368,9 +1368,381 @@ func (v *DeleteBrokersInput) Validate() error {
 }
 
 type DeleteBrokersOutput struct {
-	Message *string  `json:"message" name:"message"`
+	Message *string  `json:"message" name:"message" location:"elements"`
 	Action  *string  `json:"action" name:"action" location:"elements"`
 	JobID   *string  `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int     `json:"ret_code" name:"ret_code" location:"elements"`
-	Brokers []Broker `json:"brokers"`
+	Brokers []Broker `json:"brokers"  name:"brokers" location:"elements"`
+}
+
+// ApplyInstanceGroup: ApplyInstanceGroup
+func (s *InstanceService) ApplyInstanceGroup(i *ApplyInstanceGroupInput) (*ApplyInstanceGroupOutput, error) {
+	if i == nil {
+		i = &ApplyInstanceGroupInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ApplyInstanceGroup",
+		RequestMethod: "GET",
+	}
+
+	x := &ApplyInstanceGroupOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ApplyInstanceGroupInput struct {
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	Zone          *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *ApplyInstanceGroupInput) Validate() error {
+
+	return nil
+}
+
+type ApplyInstanceGroupOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// CreateInstanceGroups: CreateInstanceGroups
+
+func (s *InstanceService) CreateInstanceGroups(i *CreateInstanceGroupsInput) (*CreateInstanceGroupsOutput, error) {
+	if i == nil {
+		i = &CreateInstanceGroupsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "CreateInstanceGroups",
+		RequestMethod: "GET",
+	}
+
+	x := &CreateInstanceGroupsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type CreateInstanceGroupsInput struct {
+
+	// The number of instance group to create.
+	Count *int `json:"count" name:"count" default:"1" location:"params"`
+	// The description of the instance group
+	Description *string `json:"description" name:"description" location:"params"`
+	// the short name of instance_group you want to create.
+	InstanceGroupName *string `json:"instance_group_name" name:"instance_group_name" location:"params"`
+	ProjectID         *string `json:"project_id" name:"project_id" location:"params"`
+	// The instance group relation. Supported relations are `repel` or `attract`
+	Relation *string `json:"relation" name:"relation" location:"params"`
+	Zone     *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *CreateInstanceGroupsInput) Validate() error {
+
+	return nil
+}
+
+type CreateInstanceGroupsOutput struct {
+	InstanceGroups []string `json:"instance_groups"  name:"instance_groups"  location:"elements"`
+	Message        *string  `json:"message" name:"message"`
+	Action         *string  `json:"action" name:"action" location:"elements"`
+	JobID          *string  `json:"job_id" name:"job_id" location:"elements"`
+	RetCode        *int     `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// DeleteInstanceGroups: DeleteInstanceGroups
+
+func (s *InstanceService) DeleteInstanceGroups(i *DeleteInstanceGroupsInput) (*DeleteInstanceGroupsOutput, error) {
+	if i == nil {
+		i = &DeleteInstanceGroupsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "DeleteInstanceGroups",
+		RequestMethod: "GET",
+	}
+
+	x := &DeleteInstanceGroupsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type DeleteInstanceGroupsInput struct {
+
+	// the IDs of instance groups you want to delete.
+	InstanceGroups []*string `json:"instance_groups" name:"instance_groups" location:"params"`
+	Zone           *string   `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *DeleteInstanceGroupsInput) Validate() error {
+
+	return nil
+}
+
+type DeleteInstanceGroupsOutput struct {
+	Message        *string  `json:"message" name:"message" location:"elements"`
+	Action         *string  `json:"action" name:"action" location:"elements"`
+	JobID          *string  `json:"job_id" name:"job_id" location:"elements"`
+	InstanceGroups []string `json:"instance_groups"  name:"instance_groups"  location:"elements"`
+	RetCode        *int     `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// DescribeInstanceGroups: DescribeInstanceGroups
+
+func (s *InstanceService) DescribeInstanceGroups(i *DescribeInstanceGroupsInput) (*DescribeInstanceGroupsOutput, error) {
+	if i == nil {
+		i = &DescribeInstanceGroupsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "DescribeInstanceGroups",
+		RequestMethod: "GET",
+	}
+
+	x := &DescribeInstanceGroupsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type DescribeInstanceGroupsInput struct {
+	ConsoleID *string `json:"console_id" name:"console_id" location:"params"`
+	// the name of the instance group. Support partial match.
+	InstanceGroupName *string `json:"instance_group_name" name:"instance_group_name" location:"params"`
+	// the comma separated IDs of instance_groups you want to list.
+	InstanceGroups []*string `json:"instance_groups" name:"instance_groups" location:"params"`
+	// specify the number of the returning results.
+	Limit *int `json:"limit" name:"limit" default:"20" location:"params"`
+	// the starting offset of the returning results.
+	Offset *int `json:"offset" name:"offset" location:"params"`
+	// the owner id of instance_groups
+	Owner []*string `json:"owner" name:"owner" location:"params"`
+	// project id
+	ProjectID *string `json:"project_id" name:"project_id" location:"params"`
+	// filter by instance_group relation
+	Relation []*string `json:"relation" name:"relation" location:"params"`
+	// for reverse sorting. 1: reverse
+	Reverse    *int    `json:"reverse" name:"reverse" location:"params"`
+	RootUserID *string `json:"root_user_id" name:"root_user_id" location:"params"`
+	SearchWord *string `json:"search_word" name:"search_word" location:"params"`
+	// sort key
+	SortKey *string `json:"sort_key" name:"sort_key" location:"params"`
+	// filter by tags
+	Tags []*string `json:"tags" name:"tags" location:"params"`
+	// the number to specify the verbose level
+	Verbose *int    `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Zone    *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *DescribeInstanceGroupsInput) Validate() error {
+
+	return nil
+}
+
+type DescribeInstanceGroupsOutput struct {
+	Message        *string          `json:"message" name:"message" location:"elements"`
+	Action         *string          `json:"action" name:"action" location:"elements"`
+	JobID          *string          `json:"job_id" name:"job_id" location:"elements"`
+	InstanceGroups []*InstanceGroup `json:"instance_group_set"  name:"instance_group_set"  location:"elements"`
+	RetCode        *int             `json:"ret_code" name:"ret_code" location:"elements"`
+}
+type InstanceGroup struct {
+	InstanceGroupName *string   `json:"instance_group_name"`
+	Description       *string   `json:"description"`
+	Tags              []*string `json:"tags"`
+	Controller        *string   `json:"controller"`
+	ConsoleID         *string   `json:"console_id"`
+	RootUserID        *string   `json:"root_user_id"`
+	CreateTime        *string   `json:"create_time"`
+	Relation          *string   `json:"relation"`
+	Owner             *string   `json:"owner"`
+	InstanceGroupID   *string   `json:"instance_group_id"`
+}
+
+// ModifyInstanceGroupAttributes: ModifyInstanceGroupAttributes
+
+func (s *InstanceService) ModifyInstanceGroupAttributes(i *ModifyInstanceGroupAttributesInput) (*ModifyInstanceGroupAttributesOutput, error) {
+	if i == nil {
+		i = &ModifyInstanceGroupAttributesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ModifyInstanceGroupAttributes",
+		RequestMethod: "GET",
+	}
+
+	x := &ModifyInstanceGroupAttributesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ModifyInstanceGroupAttributesInput struct {
+
+	// The detailed description of the resource
+	Description   *string `json:"description" name:"description" location:"params"`
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// specify the new instance_group name.
+	InstanceGroupName *string `json:"instance_group_name" name:"instance_group_name" location:"params"`
+	// The instance group relation. Supported relations are `repel` or `attract`
+	Relation *string `json:"relation" name:"relation" location:"params"`
+	Zone     *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *ModifyInstanceGroupAttributesInput) Validate() error {
+
+	return nil
+}
+
+type ModifyInstanceGroupAttributesOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// JoinInstanceGroup: JoinInstanceGroup
+
+func (s *InstanceService) JoinInstanceGroup(i *JoinInstanceGroupInput) (*JoinInstanceGroupOutput, error) {
+	if i == nil {
+		i = &JoinInstanceGroupInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "JoinInstanceGroup",
+		RequestMethod: "GET",
+	}
+
+	x := &JoinInstanceGroupOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type JoinInstanceGroupInput struct {
+
+	// the id of instance_group the instances will join.
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// the IDs of instances that will join a instance_group.
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+	Zone      *string   `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *JoinInstanceGroupInput) Validate() error {
+
+	return nil
+}
+
+type JoinInstanceGroupOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// LeaveInstanceGroup: LeaveInstanceGroup
+
+func (s *InstanceService) LeaveInstanceGroup(i *LeaveInstanceGroupInput) (*LeaveInstanceGroupOutput, error) {
+	if i == nil {
+		i = &LeaveInstanceGroupInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "LeaveInstanceGroup",
+		RequestMethod: "GET",
+	}
+
+	x := &LeaveInstanceGroupOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type LeaveInstanceGroupInput struct {
+
+	// the id of the instance_group the instances will leave.
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// the IDs of instances that will leave a instance_group.
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+	Zone      *string   `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *LeaveInstanceGroupInput) Validate() error {
+
+	return nil
+}
+
+type LeaveInstanceGroupOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
