@@ -570,7 +570,6 @@ type ResizeInstancesInput struct {
 	CPUTopology   *string `json:"cpu_topology" name:"cpu_topology" location:"params"`
 	MemoryCurrent *string `json:"memory_current" name:"memory_current" location:"params"`
 	MemoryMax     *string `json:"memory_max" name:"memory_max" location:"params"`
-	OSDisSize     *string `json:"os_disk_size" name:"os_disk_size" location:"params"`
 	VCPUsCurrent  *string `json:"vcpus_current" name:"vcpus_current" location:"params"`
 	VCPUsMax      *string `json:"vcpus_max" name:"vcpus_max" location:"params"`
 	VmDefinition  *string `json:"vm_definition" name:"vm_definition" location:"params"`
