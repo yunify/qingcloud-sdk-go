@@ -157,6 +157,11 @@ type CreateNicsOutput struct {
 	RetCode *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
+type NICIP struct {
+	NIC_ID    string `json:"nic_id"`
+	PrivateIP string `json:"private_ip"`
+}
+
 // Documentation URL: https://docs.qingcloud.com/api/nic/delete_nics.html
 func (s *NicService) DeleteNics(i *DeleteNicsInput) (*DeleteNicsOutput, error) {
 	if i == nil {
@@ -278,6 +283,21 @@ type DescribeNicsOutput struct {
 	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
 }
 
+type NIC struct {
+	VxnetID       string   `json:"vxnet_id"`
+	NICName       string   `json:"nic_name"`
+	Status        string   `json:"status"`
+	Tags          []string `json:"tags"`
+	Role          int      `json:"role"`
+	Sequence      int      `json:"sequence"`
+	InstanceID    string   `json:"instance_id"`
+	PrivateIP     string   `json:"private_ip"`
+	SecurityGroup string   `json:"security_group"`
+	NICID         string   `json:"nic_id"`
+	StatusTime    string   `json:"status_time"`
+	CreateTime    string   `json:"create_time"`
+}
+
 // Documentation URL: https://docs.qingcloud.com/api/nic/detach_nics.html
 func (s *NicService) DetachNics(i *DetachNicsInput) (*DetachNicsOutput, error) {
 	if i == nil {
@@ -358,6 +378,11 @@ type ModifyNicAttributesInput struct {
 	NICName   *string `json:"nic_name" name:"nic_name" location:"params"`
 	PrivateIP *string `json:"private_ip" name:"private_ip" location:"params"`
 	VxNet     *string `json:"vxnet" name:"vxnet" location:"params"`
+
+	// enable/disable vxnet aspoof 1/0
+	EnableAspoof *int `json:"enable_aspoof" name:"enable_aspoof" location:"params"`
+	// specify the ipv6 address
+	Ipv6Address *string `json:"ipv6_address" name:"ipv6_address" location:"params"`
 }
 
 func (v *ModifyNicAttributesInput) Validate() error {
