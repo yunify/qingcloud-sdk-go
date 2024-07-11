@@ -595,10 +595,20 @@ type RunInstancesInput struct {
 	UserdataFile  *string `json:"userdata_file" name:"userdata_file" default:"/etc/rc.local" location:"params"`
 	UserdataPath  *string `json:"userdata_path" name:"userdata_path" default:"/etc/qingcloud/userdata" location:"params"`
 	// UserdataType's available values: plain, exec, tar
-	UserdataType  *string   `json:"userdata_type" name:"userdata_type" location:"params"`
-	UserdataValue *string   `json:"userdata_value" name:"userdata_value" location:"params"`
-	Volumes       []*string `json:"volumes" name:"volumes" location:"params"`
-	VxNets        []*string `json:"vxnets" name:"vxnets" location:"params"`
+	UserdataType     *string   `json:"userdata_type" name:"userdata_type" location:"params"`
+	UserdataValue    *string   `json:"userdata_value" name:"userdata_value" location:"params"`
+	Volumes          []*string `json:"volumes" name:"volumes" location:"params"`
+	VxNets           []*string `json:"vxnets" name:"vxnets" location:"params"`
+	OsDiskEncryption *int      `json:"os_disk_encryption" name:"os_disk_encryption" location:"params"`
+	NicMqueue        *int      `json:"nic_mqueue" name:"nic_mqueue" location:"params"`
+	Platform         *string   `json:"platform" name:"platform" location:"params"`
+	FResetpwd        *int      `json:"f_resetpwd" name:"f_resetpwd" location:"params"`
+	ProcessorType    *string   `json:"processor_type" name:"processor_type" location:"params"`
+	DefaultUser      *string   `json:"default_user" name:"default_user" location:"params"`
+	DefaultPasswd    *string   `json:"default_passwd" name:"default_passwd" location:"params"`
+	Hypervisor       *string   `json:"hypervisor" name:"hypervisor" location:"params"`
+	GpuClass         *string   `json:"gpu_class" name:"gpu_class" location:"params"`
+	PlaceGroupID     *string   `json:"place_group_id" name:"place_group_id" location:"params"`
 }
 
 func (v *RunInstancesInput) Validate() error {
@@ -645,8 +655,8 @@ func (v *RunInstancesInput) Validate() error {
 
 	if v.CPUModel != nil {
 		cpuModelValidValues := []string{"Westmere", "SandyBridge", "IvyBridge", "Haswell", "Broadwell", "EPYC",
-						"Skylake", "CascadeLake", "IceLake", "SapphireRapids", "Haswell-noTSX",
-					       "EPYC-Rome"}
+			"Skylake", "CascadeLake", "IceLake", "SapphireRapids", "Haswell-noTSX",
+			"EPYC-Rome"}
 		cpuModelParameterValue := fmt.Sprint(*v.CPUModel)
 
 		cpuModelIsValid := false

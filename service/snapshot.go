@@ -217,7 +217,7 @@ func (v *CreateSnapshotsInput) Validate() error {
 type CreateSnapshotsOutput struct {
 	Message   *string   `json:"message" name:"message"`
 	Action    *string   `json:"action" name:"action" location:"elements"`
-	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
+	JobID     *[]string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode   *int      `json:"ret_code" name:"ret_code" location:"elements"`
 	Snapshots []*string `json:"snapshots" name:"snapshots" location:"elements"`
 }
