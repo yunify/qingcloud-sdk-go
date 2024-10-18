@@ -33,11 +33,16 @@ type {{$service.Name | camelCase}}Service struct {
 }
 
 type {{$service.Name | camelCase}}ServiceProperties struct {
+	// QingCloud Zone ID
+	Zone *string `json:"zone" name:"zone"` // Required
+
 	{{template "RenderProperties" passThrough $service.Properties ""}}
 }
 
 func Init(c *config.Config) (*{{$service.Name | camelCase}}Service, error) {
-	properties := &{{$service.Name | camelCase}}ServiceProperties{}
+	properties := &InstanceServiceProperties{
+		Zone: &{{$service.Name | camelCase}},
+	}
     logger.SetLevel(c.LogLevel)
 	return &{{$service.Name | camelCase}}Service{Config: c, Properties: properties}, nil
 }

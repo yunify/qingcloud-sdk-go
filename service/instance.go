@@ -141,16 +141,6 @@ type DescribeInstanceTypesOutput struct {
 	TotalCount      *int            `json:"total_count" name:"total_count" location:"elements"`
 }
 
-type InstanceType struct {
-	VCPUsCurrent     int    `json:"vcpus_current"`
-	Status           string `json:"status"`
-	Description      string `json:"description"`
-	InstanceTypeName string `json:"instance_type_name"`
-	InstanceTypeID   string `json:"instance_type_id"`
-	ZoneID           string `json:"zone_id"`
-	MemoryCurrent    int    `json:"memory_current"`
-}
-
 // Documentation URL: https://docs.qingcloud.com/api/instance/describe_instances.html
 func (s *InstanceService) DescribeInstances(i *DescribeInstancesInput) (*DescribeInstancesOutput, error) {
 	if i == nil {
@@ -318,47 +308,6 @@ type DescribeInstancesOutput struct {
 	InstanceSet []*Instance `json:"instance_set" name:"instance_set" location:"elements"`
 	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
 	TotalCount  *int        `json:"total_count" name:"total_count" location:"elements"`
-}
-
-type Instance struct {
-	VCPUsCurrent int      `json:"vcpus_current"`
-	InstanceID   string   `json:"instance_id"`
-	VolumeIDs    []string `json:"volume_ids"`
-	Vxnets       []struct {
-		VxnetName string `json:"vxnet_name"`
-		VxnetType int    `json:"vxnet_type"`
-		VxnetID   string `json:"vxnet_id"`
-		NICID     string `json:"nic_id"`
-		PrivateIP string `json:"private_ip"`
-	} `json:"vxnets"`
-	EIP struct {
-		EIPID     string `json:"eip_id"`
-		EIPAddr   string `json:"eip_addr"`
-		Bandwidth string `json:"bandwidth"`
-	} `json:"eip"`
-	MemoryCurrent    int       `json:"memory_current"`
-	SubCode          int       `json:"sub_code"`
-	TransitionStatus string    `json:"transition_status"`
-	InstanceName     string    `json:"instance_name"`
-	InstanceType     string    `json:"instance_type"`
-	CreateTime       time.Time `json:"create_time"`
-	Status           string    `json:"status"`
-	Description      string    `json:"description"`
-	SecurityGroup    struct {
-		IsDefault       int    `json:"is_default"`
-		SecurityGroupID string `json:"security_group_id"`
-	} `json:"security_group"`
-	StatusTime time.Time `json:"status_time"`
-	Image      struct {
-		ProcessorType string `json:"processor_type"`
-		Platform      string `json:"platform"`
-		ImageSize     int    `json:"image_size"`
-		ImageName     string `json:"image_name"`
-		ImageID       string `json:"image_id"`
-		OSFamily      string `json:"os_family"`
-		Provider      string `json:"provider"`
-	} `json:"image"`
-	KeypairIDs []string `json:"keypair_ids"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/instance/modify_instance_attributes.html
@@ -1258,8 +1207,8 @@ func (s *InstanceService) CloneInstances(i *CloneInstancesInput) (*CloneInstance
 }
 
 type CloneInstancesInput struct {
-	Instances *string `json:"instances" name:"instances" location:"params"`
-	VxNets    *string `json:"vxnets" name:"vxnets" location:"params"`
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+	VxNets    []*string `json:"vxnets" name:"vxnets" location:"params"`
 }
 
 func (v *CloneInstancesInput) Validate() error {
@@ -1309,7 +1258,7 @@ func (s *InstanceService) CreateBrokers(i *CreateBrokersInput) (*CreateBrokersOu
 }
 
 type CreateBrokersInput struct {
-	Instances *string `json:"instances" name:"instances" location:"params"`
+	Instances []*string `json:"instances" name:"instances" location:"params"`
 }
 
 func (v *CreateBrokersInput) Validate() error {
@@ -1358,7 +1307,7 @@ func (s *InstanceService) DeleteBrokers(i *DeleteBrokersInput) (*DeleteBrokersOu
 }
 
 type DeleteBrokersInput struct {
-	Instances *string `json:"instances" name:"instances" location:"params"`
+	Instances []*string `json:"instances" name:"instances" location:"params"`
 }
 
 func (v *DeleteBrokersInput) Validate() error {

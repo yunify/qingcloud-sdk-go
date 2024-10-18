@@ -464,19 +464,6 @@ type DescribeVolumesOutput struct {
 	VolumeSet  []*Volume `json:"volume_set" name:"volume_set" location:"elements"`
 }
 
-type Volume struct {
-	Status           string            `json:"status"`
-	Description      string            `json:"description"` // 可能为null，使用interface{}处理
-	VolumeName       string            `json:"volume_name"`
-	SubCode          int               `json:"sub_code"`
-	TransitionStatus string            `json:"transition_status"`
-	Instance         map[string]string `json:"instance"`
-	CreateTime       string            `json:"create_time"`
-	VolumeID         string            `json:"volume_id"`
-	StatusTime       string            `json:"status_time"`
-	Size             int               `json:"size"`
-}
-
 // Documentation URL: https://docs.qingcloud.com/api/volume/detach_volumes.html
 func (s *VolumeService) DetachVolumes(i *DetachVolumesInput) (*DetachVolumesOutput, error) {
 	if i == nil {

@@ -157,11 +157,6 @@ type CreateNicsOutput struct {
 	RetCode *int     `json:"ret_code" name:"ret_code" location:"elements"`
 }
 
-type NICIP struct {
-	NIC_ID    string `json:"nic_id"`
-	PrivateIP string `json:"private_ip"`
-}
-
 // Documentation URL: https://docs.qingcloud.com/api/nic/delete_nics.html
 func (s *NicService) DeleteNics(i *DeleteNicsInput) (*DeleteNicsOutput, error) {
 	if i == nil {
@@ -281,21 +276,6 @@ type DescribeNicsOutput struct {
 	NICSet     []*NIC  `json:"nic_set" name:"nic_set" location:"elements"`
 	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
 	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
-}
-
-type NIC struct {
-	VxnetID       string   `json:"vxnet_id"`
-	NICName       string   `json:"nic_name"`
-	Status        string   `json:"status"`
-	Tags          []string `json:"tags"`
-	Role          int      `json:"role"`
-	Sequence      int      `json:"sequence"`
-	InstanceID    string   `json:"instance_id"`
-	PrivateIP     string   `json:"private_ip"`
-	SecurityGroup string   `json:"security_group"`
-	NICID         string   `json:"nic_id"`
-	StatusTime    string   `json:"status_time"`
-	CreateTime    string   `json:"create_time"`
 }
 
 // Documentation URL: https://docs.qingcloud.com/api/nic/detach_nics.html

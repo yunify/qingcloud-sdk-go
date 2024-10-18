@@ -78,7 +78,7 @@ type AddBorderStaticsInput struct {
 	// the ID of intranet router whose statics you want to add.
 	Border *string `json:"border" name:"border" location:"params"`
 	// a json string of rules list. e.g.[{static_type:0
-	Statics *string `json:"statics" name:"statics" location:"params"`
+	Statics []*string `json:"statics" name:"statics" location:"params"`
 }
 
 func (v *AddBorderStaticsInput) Validate() error {
@@ -420,40 +420,10 @@ func (v *DescribeBorderVxNetsInput) Validate() error {
 }
 
 type DescribeBorderVxNetsOutput struct {
-	Message     *string           `json:"message" name:"message"`
-	Action      *string           `json:"action" name:"action" location:"elements"`
-	RetCode     *int              `json:"ret_code" name:"ret_code" location:"elements"`
-	BorderVxnet []*BorderVxnetSet `json:"border_vxnet_set"  name:"border_vxnet_set" location:"elements"`
-}
-
-type BorderVxnetSet struct {
-	VxnetID          string    `json:"vxnet_id"`
-	DynIPStart       string    `json:"dyn_ip_start"`
-	DynIPv6End       string    `json:"dyn_ipv6_end"`
-	ConsoleID        string    `json:"console_id"`
-	CreateTime       time.Time `json:"create_time"`
-	Owner            string    `json:"owner"`
-	DhcpServerIP     string    `json:"dhcp_server_ip"`
-	Features         int       `json:"features"`
-	ManagerIP        string    `json:"manager_ip"`
-	BorderID         string    `json:"border_id"`
-	IPv6Network      string    `json:"ipv6_network"`
-	VxnetName        string    `json:"vxnet_name"`
-	BorderPrivateIP  string    `json:"border_private_ip"`
-	DhcpServerIPv6   string    `json:"dhcp_server_ipv6"`
-	RouterID         string    `json:"router_id"`
-	IPNetwork        string    `json:"ip_network"`
-	DynIPEnd         string    `json:"dyn_ip_end"`
-	TransitionStatus string    `json:"transition_status"`
-	Controller       string    `json:"controller"`
-	DomainServers    string    `json:"domain_servers"`
-	BorderZoneID     string    `json:"border_zone_id"`
-	DynIPv6Start     string    `json:"dyn_ipv6_start"`
-	ManagerIPv6      string    `json:"manager_ipv6"`
-	VpcRouterID      string    `json:"vpc_router_id"`
-	VxnetZoneID      string    `json:"vxnet_zone_id"`
-	RootUserID       string    `json:"root_user_id"`
-	Mode             int       `json:"mode"`
+	Message     *string        `json:"message" name:"message"`
+	Action      *string        `json:"action" name:"action" location:"elements"`
+	RetCode     *int           `json:"ret_code" name:"ret_code" location:"elements"`
+	BorderVxnet []*BorderVxnet `json:"border_vxnet_set"  name:"border_vxnet_set" location:"elements"`
 }
 
 // DescribeVpcBorders: DescribeVpcBorders
@@ -508,21 +478,6 @@ type DescribeVpcBordersOutput struct {
 	RetCode      *int         `json:"ret_code" name:"ret_code" location:"elements"`
 	TotalCount   *int         `json:"total_count" name:"total_count" location:"elements"`
 	VpcBorderSet []*VpcBorder `json:"vpc_border_set" name:"vpc_border_set" location:"elements"`
-}
-
-type VpcBorder struct {
-	RouterID            string   `json:"router_id"`
-	Status              string   `json:"status"`
-	BorderName          string   `json:"border_name"`
-	ZoneID              string   `json:"zone_id"`
-	Tags                []string `json:"tags"`
-	VpcBorderID         string   `json:"vpc_border_id"`
-	BorderType          int      `json:"border_type"`
-	CreateTime          string   `json:"create_time"`
-	Owner               string   `json:"owner"`
-	StatusTime          string   `json:"status_time"`
-	ResourceProjectInfo []string `json:"resource_project_info"`
-	Description         string   `json:"description"`
 }
 
 // DissociateBorder: DissociateBorder
