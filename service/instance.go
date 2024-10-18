@@ -599,6 +599,7 @@ type RunInstancesInput struct {
 	UserdataValue *string   `json:"userdata_value" name:"userdata_value" location:"params"`
 	Volumes       []*string `json:"volumes" name:"volumes" location:"params"`
 	VxNets        []*string `json:"vxnets" name:"vxnets" location:"params"`
+	RepCount      *string   `json:"rep_count" name:"rep_count" location:"params"`
 }
 
 func (v *RunInstancesInput) Validate() error {
@@ -645,8 +646,8 @@ func (v *RunInstancesInput) Validate() error {
 
 	if v.CPUModel != nil {
 		cpuModelValidValues := []string{"Westmere", "SandyBridge", "IvyBridge", "Haswell", "Broadwell", "EPYC",
-						"Skylake", "CascadeLake", "IceLake", "SapphireRapids", "Haswell-noTSX",
-					       "EPYC-Rome"}
+			"Skylake", "CascadeLake", "IceLake", "SapphireRapids", "Haswell-noTSX",
+			"EPYC-Rome"}
 		cpuModelParameterValue := fmt.Sprint(*v.CPUModel)
 
 		cpuModelIsValid := false
