@@ -599,7 +599,7 @@ type RunInstancesInput struct {
 	UserdataValue *string   `json:"userdata_value" name:"userdata_value" location:"params"`
 	Volumes       []*string `json:"volumes" name:"volumes" location:"params"`
 	VxNets        []*string `json:"vxnets" name:"vxnets" location:"params"`
-	RepCount      *string   `json:"rep_count" name:"rep_count" location:"params"`
+	RepCount      *int      `json:"rep_count" name:"rep_count" location:"params"`
 }
 
 func (v *RunInstancesInput) Validate() error {
