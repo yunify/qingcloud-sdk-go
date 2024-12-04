@@ -609,6 +609,7 @@ type RunInstancesInput struct {
 	Hypervisor       *string   `json:"hypervisor" name:"hypervisor" location:"params"`
 	GpuClass         *string   `json:"gpu_class" name:"gpu_class" location:"params"`
 	PlaceGroupID     *string   `json:"place_group_id" name:"place_group_id" location:"params"`
+	RepCount      *int      `json:"rep_count" name:"rep_count" location:"params"`
 }
 
 func (v *RunInstancesInput) Validate() error {
