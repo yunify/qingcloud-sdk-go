@@ -982,12 +982,12 @@ func (s *ClusterService) ResizeCluster(i *ResizeClusterInput) (*ResizeClusterOut
 }
 
 type ResizeClusterInput struct {
-	Cluster     *string `json:"cluster" name:"cluster" location:"params"` // Required
-	CPU         *int    `json:"cpu" name:"cpu" location:"params"`
-	Gpu         *int    `json:"gpu" name:"gpu" location:"params"`
-	Memory      *int    `json:"memory" name:"memory" location:"params"`
-	NodeRole    *string `json:"node_role" name:"node_role" location:"params"`
-	StorageSize *int    `json:"storage_size" name:"storage_size" location:"params"`
+	Cluster     *string   `json:"cluster" name:"cluster" location:"params"` // Required
+	CPU         *int      `json:"cpu" name:"cpu" location:"params"`
+	Gpu         *int      `json:"gpu" name:"gpu" location:"params"`
+	Memory      *int      `json:"memory" name:"memory" location:"params"`
+	NodeRole    []*string `json:"node_role" name:"node_role" location:"params"`
+	StorageSize *int      `json:"storage_size" name:"storage_size" location:"params"`
 }
 
 func (v *ResizeClusterInput) Validate() error {

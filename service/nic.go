@@ -358,6 +358,11 @@ type ModifyNicAttributesInput struct {
 	NICName   *string `json:"nic_name" name:"nic_name" location:"params"`
 	PrivateIP *string `json:"private_ip" name:"private_ip" location:"params"`
 	VxNet     *string `json:"vxnet" name:"vxnet" location:"params"`
+
+	// enable/disable vxnet aspoof 1/0
+	EnableAspoof *int `json:"enable_aspoof" name:"enable_aspoof" location:"params"`
+	// specify the ipv6 address
+	Ipv6Address *string `json:"ipv6_address" name:"ipv6_address" location:"params"`
 }
 
 func (v *ModifyNicAttributesInput) Validate() error {

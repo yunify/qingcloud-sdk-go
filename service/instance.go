@@ -90,7 +90,7 @@ func (v *CeaseInstancesInput) Validate() error {
 }
 
 type CeaseInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -123,6 +123,8 @@ func (s *InstanceService) DescribeInstanceTypes(i *DescribeInstanceTypesInput) (
 }
 
 type DescribeInstanceTypesInput struct {
+	Baremetal *int `json:"baremetal" name:"baremetal" location:"params"`
+	// 指定查询的云服务器类型
 	InstanceTypes []*string `json:"instance_types" name:"instance_types" location:"params"`
 }
 
@@ -132,7 +134,7 @@ func (v *DescribeInstanceTypesInput) Validate() error {
 }
 
 type DescribeInstanceTypesOutput struct {
-	Message         *string         `json:"message" name:"message"`
+	Message         *string         `json:"message" name:"message" location:"elements"`
 	Action          *string         `json:"action" name:"action" location:"elements"`
 	InstanceTypeSet []*InstanceType `json:"instance_type_set" name:"instance_type_set" location:"elements"`
 	RetCode         *int            `json:"ret_code" name:"ret_code" location:"elements"`
@@ -181,6 +183,78 @@ type DescribeInstancesInput struct {
 	Tags          []*string `json:"tags" name:"tags" location:"params"`
 	// Verbose's available values: 0, 1
 	Verbose *int `json:"verbose" name:"verbose" location:"params"`
+
+	// alarm status of the instance
+	AlarmStatus *string `json:"alarm_status" name:"alarm_status" location:"params"`
+	// filter by border
+	Border    *string `json:"border" name:"border" location:"params"`
+	ConsoleID *string `json:"console_id" name:"console_id" location:"params"`
+	// pitrix or self.
+	Controller           *string `json:"controller" name:"controller" location:"params"`
+	CreateTime           *string `json:"create_time" name:"create_time" location:"params"`
+	DedicatedHostGroupID *string `json:"dedicated_host_group_id" name:"dedicated_host_group_id" location:"params"`
+	DedicatedHostID      *string `json:"dedicated_host_id" name:"dedicated_host_id" location:"params"`
+	// directory_id
+	DirectoryID *string `json:"directory_id" name:"directory_id" location:"params"`
+	// for filter reserved resource
+	ExcludeReserved *string `json:"exclude_reserved" name:"exclude_reserved" location:"params"`
+	ExcludeUser     *string `json:"exclude_user" name:"exclude_user" location:"params"`
+	// for filter directory resources
+	ExcludedDir *string `json:"excluded_dir" name:"excluded_dir" location:"params"`
+	// query instances by excluded_plg_id
+	ExcludedPlgID *string `json:"excluded_plg_id" name:"excluded_plg_id" location:"params"`
+	// filter by fence
+	Fence *string `json:"fence" name:"fence" location:"params"`
+	// The graphics protocol
+	GraphicsProtocol *string `json:"graphics_protocol" name:"graphics_protocol" location:"params"`
+	// the host machine of instances.
+	HostMachine *string `json:"host_machine" name:"host_machine" location:"params"`
+	// filter by hypervisor.
+	Hypervisor *string `json:"hypervisor" name:"hypervisor" location:"params"`
+	// filter by instance group
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// the name of the instance. Support partial match.
+	InstanceName *string `json:"instance_name" name:"instance_name" location:"params"`
+	IsElastic    *string `json:"is_elastic" name:"is_elastic" location:"params"`
+	// memory_current
+	MemoryCurrent *string `json:"memory_current" name:"memory_current" location:"params"`
+	// output mount detail(1
+	MountDetail *string `json:"mount_detail" name:"mount_detail" location:"params"`
+	// query instances by mounted image
+	MountImageID *string `json:"mount_image_id" name:"mount_image_id" location:"params"`
+	// 0: include resources whose transition_status is not empty
+	NotTransition *string `json:"not_transition" name:"not_transition" default:"0" location:"params"`
+	// os_disk_size
+	OSDiskSize *string `json:"os_disk_size" name:"os_disk_size" location:"params"`
+	// the place group of instances
+	PlaceGroupID *string `json:"place_group_id" name:"place_group_id" location:"params"`
+	// Support windows
+	Platform *string `json:"platform" name:"platform" location:"params"`
+	// filter by replica policy.
+	Repl *string `json:"repl" name:"repl" location:"params"`
+	// for reverse sorting. 1: reverse
+	Reverse *string `json:"reverse" name:"reverse" location:"params"`
+	// if role==partner then it is for partner to get the instances of her/his Apps
+	Role       *string `json:"role" name:"role" location:"params"`
+	RootUserID *string `json:"root_user_id" name:"root_user_id" location:"params"`
+	// sort key
+	SortKey *string `json:"sort_key" name:"sort_key" location:"params"`
+	// sriov_nic_type
+	SriovNICType *string `json:"sriov_nic_type" name:"sriov_nic_type" location:"params"`
+	// query instances support cdrom(1
+	SupportCdrom *string `json:"support_cdrom" name:"support_cdrom" location:"params"`
+	// filter by tags
+	TransitionStatus *string `json:"transition_status" name:"transition_status" location:"params"`
+	// vcpus_current
+	VCPUsCurrent *string `json:"vcpus_current" name:"vcpus_current" location:"params"`
+	VdcNodeID    *string `json:"vdc_node_id" name:"vdc_node_id" location:"params"`
+	// filter by vxnet.
+	VxNet *string `json:"vxnet" name:"vxnet" location:"params"`
+	// filter by vxnet type.
+	VxNetType       *string `json:"vxnet_type" name:"vxnet_type" location:"params"`
+	WithoutContract *string `json:"without_contract" name:"without_contract" location:"params"`
+	// zone id
+	Zone *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *DescribeInstancesInput) Validate() error {
@@ -229,7 +303,7 @@ func (v *DescribeInstancesInput) Validate() error {
 }
 
 type DescribeInstancesOutput struct {
-	Message     *string     `json:"message" name:"message"`
+	Message     *string     `json:"message" name:"message" location:"elements"`
 	Action      *string     `json:"action" name:"action" location:"elements"`
 	InstanceSet []*Instance `json:"instance_set" name:"instance_set" location:"elements"`
 	RetCode     *int        `json:"ret_code" name:"ret_code" location:"elements"`
@@ -266,6 +340,7 @@ type ModifyInstanceAttributesInput struct {
 	Description  *string `json:"description" name:"description" location:"params"`
 	Instance     *string `json:"instance" name:"instance" location:"params"` // Required
 	InstanceName *string `json:"instance_name" name:"instance_name" location:"params"`
+	NICMqueue    *string `json:"nic_mqueue" name:"nic_mqueue" location:"params"`
 }
 
 func (v *ModifyInstanceAttributesInput) Validate() error {
@@ -281,7 +356,7 @@ func (v *ModifyInstanceAttributesInput) Validate() error {
 }
 
 type ModifyInstanceAttributesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
 }
@@ -320,6 +395,18 @@ type ResetInstancesInput struct {
 	LoginPasswd *string `json:"login_passwd" name:"login_passwd" location:"params"`
 	// NeedNewSID's available values: 0, 1
 	NeedNewSID *int `json:"need_newsid" name:"need_newsid" default:"0" location:"params"`
+
+	// force.
+	Force *string `json:"force" name:"force" default:"0" location:"params"`
+	// image_id.
+	ImageID *string `json:"image_id" name:"image_id" location:"params"`
+	// os_disk_size.
+	OSDiskSize   *string `json:"os_disk_size" name:"os_disk_size" location:"params"`
+	Type         *string `json:"type" name:"type" location:"params"`
+	UserData     *string `json:"user_data" name:"user_data" location:"params"`
+	Value        *string `json:"value" name:"value" location:"params"`
+	VmDefinition *string `json:"vm_definition" name:"vm_definition" location:"params"`
+	Zone         *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *ResetInstancesInput) Validate() error {
@@ -382,7 +469,7 @@ func (v *ResetInstancesInput) Validate() error {
 }
 
 type ResetInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -425,6 +512,17 @@ type ResizeInstancesInput struct {
 	// Memory's available values: 1024, 2048, 4096, 6144, 8192, 12288, 16384, 24576, 32768
 	Memory     *int `json:"memory" name:"memory" location:"params"`
 	OSDiskSize *int `json:"os_disk_size" name:"os_disk_size" location:"params"`
+
+	// the boot device
+	BootDev *string `json:"boot_dev" name:"boot_dev" location:"params"`
+	// the CPU topology
+	CPUTopology   *string `json:"cpu_topology" name:"cpu_topology" location:"params"`
+	MemoryCurrent *string `json:"memory_current" name:"memory_current" location:"params"`
+	MemoryMax     *string `json:"memory_max" name:"memory_max" location:"params"`
+	VCPUsCurrent  *string `json:"vcpus_current" name:"vcpus_current" location:"params"`
+	VCPUsMax      *string `json:"vcpus_max" name:"vcpus_max" location:"params"`
+	VmDefinition  *string `json:"vm_definition" name:"vm_definition" location:"params"`
+	Zone          *string `json:"zone" name:"zone" location:"params"`
 }
 
 func (v *ResizeInstancesInput) Validate() error {
@@ -480,7 +578,7 @@ func (v *ResizeInstancesInput) Validate() error {
 }
 
 type ResizeInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -529,7 +627,7 @@ func (v *RestartInstancesInput) Validate() error {
 }
 
 type RestartInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -595,10 +693,91 @@ type RunInstancesInput struct {
 	UserdataFile  *string `json:"userdata_file" name:"userdata_file" default:"/etc/rc.local" location:"params"`
 	UserdataPath  *string `json:"userdata_path" name:"userdata_path" default:"/etc/qingcloud/userdata" location:"params"`
 	// UserdataType's available values: plain, exec, tar
-	UserdataType  *string   `json:"userdata_type" name:"userdata_type" location:"params"`
-	UserdataValue *string   `json:"userdata_value" name:"userdata_value" location:"params"`
-	Volumes       []*string `json:"volumes" name:"volumes" location:"params"`
-	VxNets        []*string `json:"vxnets" name:"vxnets" location:"params"`
+	UserdataType     *string   `json:"userdata_type" name:"userdata_type" location:"params"`
+	UserdataValue    *string   `json:"userdata_value" name:"userdata_value" location:"params"`
+	Volumes          []*string `json:"volumes" name:"volumes" location:"params"`
+	VxNets           []*string `json:"vxnets" name:"vxnets" location:"params"`
+	OsDiskEncryption *int      `json:"os_disk_encryption" name:"os_disk_encryption" location:"params"`
+	NicMqueue        *int      `json:"nic_mqueue" name:"nic_mqueue" location:"params"`
+	Platform         *string   `json:"platform" name:"platform" location:"params"`
+	FResetpwd        *int      `json:"f_resetpwd" name:"f_resetpwd" location:"params"`
+	ProcessorType    *string   `json:"processor_type" name:"processor_type" location:"params"`
+	DefaultUser      *string   `json:"default_user" name:"default_user" location:"params"`
+	DefaultPasswd    *string   `json:"default_passwd" name:"default_passwd" location:"params"`
+	Hypervisor       *string   `json:"hypervisor" name:"hypervisor" location:"params"`
+	GpuClass         *string   `json:"gpu_class" name:"gpu_class" location:"params"`
+	PlaceGroupID     *string   `json:"place_group_id" name:"place_group_id" location:"params"`
+
+	AutoRenew            *string `json:"auto_renew" name:"auto_renew" location:"params"`
+	AutoVolumes          *string `json:"auto_volumes" name:"auto_volumes" location:"params"`
+	Backups              *string `json:"backups" name:"backups" location:"params"`
+	ChargeMode           *string `json:"charge_mode" name:"charge_mode" location:"params"`
+	CipherAlg            *string `json:"cipher_alg" name:"cipher_alg" location:"params"`
+	ContractDescription  *string `json:"contract_description" name:"contract_description" location:"params"`
+	ContractEntries      *string `json:"contract_entries" name:"contract_entries" location:"params"`
+	ContractID           *string `json:"contract_id" name:"contract_id" location:"params"`
+	CouponID             *string `json:"coupon_id" name:"coupon_id" location:"params"`
+	CPUTopology          *int    `json:"cpu_topology" name:"cpu_topology" location:"params"`
+	DedicatedHostGroupID *string `json:"dedicated_host_group_id" name:"dedicated_host_group_id" location:"params"`
+	DedicatedHostID      *string `json:"dedicated_host_id" name:"dedicated_host_id" location:"params"`
+	DirectoryID          *string `json:"directory_id" name:"directory_id" location:"params"`
+	// dry_run
+	DryRun *string `json:"dry_run" name:"dry_run" default:"0" location:"params"`
+	// eip_bandwidth.
+	EIPBandwidth *string `json:"eip_bandwidth" name:"eip_bandwidth" location:"params"`
+	// eip_bandwidth.
+	EIPBillingMode *string `json:"eip_billing_mode" name:"eip_billing_mode" location:"params"`
+	// eip_group.
+	EIPGroup *string `json:"eip_group" name:"eip_group" location:"params"`
+	// eips.
+	EIPIDs *string `json:"eip_ids" name:"eip_ids" location:"params"`
+	// eip billing
+	EIPIgnoreContract *string `json:"eip_ignore_contract" name:"eip_ignore_contract" location:"params"`
+	EIPVirgin         *string `json:"eip_virgin" name:"eip_virgin" location:"params"`
+	Entries           *string `json:"entries" name:"entries" location:"params"`
+	ExpirationTime    *string `json:"expiration_time" name:"expiration_time" location:"params"`
+	// type of the physical GPU where the vGPU will be allocated
+	GpuType            *string `json:"gpu_type" name:"gpu_type" location:"params"`
+	InResourceGroupIDs *string `json:"in_resource_group_ids" name:"in_resource_group_ids" location:"params"`
+	// instance_ext_type
+	InstanceExtType *string `json:"instance_ext_type" name:"instance_ext_type" location:"params"`
+	// instance_ext_type
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// login_keypair
+	LoginKeyPairList *string `json:"login_keypair_list" name:"login_keypair_list" location:"params"`
+	MemoryCurrent    *string `json:"memory_current" name:"memory_current" location:"params"`
+	MemoryMax        *string `json:"memory_max" name:"memory_max" location:"params"`
+	Months           *string `json:"months" name:"months" location:"params"`
+	NextChargeMode   *string `json:"next_charge_mode" name:"next_charge_mode" location:"params"`
+	ProjectID        *string `json:"project_id" name:"project_id" location:"params"`
+	PromotionID      *string `json:"promotion_id" name:"promotion_id" location:"params"`
+	ReservedContract *string `json:"reserved_contract" name:"reserved_contract" location:"params"`
+	// Whether to stop on error
+	StopOnError *string `json:"stop_on_error" name:"stop_on_error" location:"params"`
+	Tags        *string `json:"tags" name:"tags" location:"params"`
+	// the user who will own this instance
+	TargetUser            *string `json:"target_user" name:"target_user" location:"params"`
+	Type                  *string `json:"type" name:"type" location:"params"`
+	UserData              *string `json:"user_data" name:"user_data" location:"params"`
+	Value                 *string `json:"value" name:"value" location:"params"`
+	VCPUsCurrent          *string `json:"vcpus_current" name:"vcpus_current" location:"params"`
+	VCPUsMax              *string `json:"vcpus_max" name:"vcpus_max" location:"params"`
+	VdcNodeID             *string `json:"vdc_node_id" name:"vdc_node_id" location:"params"`
+	VmDefinition          *string `json:"vm_definition" name:"vm_definition" location:"params"`
+	VolumeContractEntries *string `json:"volume_contract_entries" name:"volume_contract_entries" location:"params"`
+	// volume_encryption.
+	VolumeEncryption *string `json:"volume_encryption" name:"volume_encryption" location:"params"`
+	// volume_filesystem_type.
+	VolumeFilesystemType *string `json:"volume_filesystem_type" name:"volume_filesystem_type" location:"params"`
+	// volume_mount_point.
+	VolumeMountPoint *string `json:"volume_mount_point" name:"volume_mount_point" location:"params"`
+	VolumeRepl       *string `json:"volume_repl" name:"volume_repl" location:"params"`
+	// volume_size.
+	VolumeSize *string `json:"volume_size" name:"volume_size" location:"params"`
+	// volume_type.
+	VolumeType *string `json:"volume_type" name:"volume_type" location:"params"`
+	// zone id to run instance to
+	Zone *string `json:"zone" name:"zone" location:"params"`
 	RepCount      *int      `json:"rep_count" name:"rep_count" location:"params"`
 }
 
@@ -824,7 +1003,7 @@ func (v *RunInstancesInput) Validate() error {
 }
 
 type RunInstancesOutput struct {
-	Message   *string   `json:"message" name:"message"`
+	Message   *string   `json:"message" name:"message" location:"elements"`
 	Action    *string   `json:"action" name:"action" location:"elements"`
 	Instances []*string `json:"instances" name:"instances" location:"elements"`
 	JobID     *string   `json:"job_id" name:"job_id" location:"elements"`
@@ -859,6 +1038,7 @@ func (s *InstanceService) StartInstances(i *StartInstancesInput) (*StartInstance
 
 type StartInstancesInput struct {
 	Instances []*string `json:"instances" name:"instances" location:"params"` // Required
+	Volumes   *string   `json:"volumes" name:"volumes" location:"params"`
 }
 
 func (v *StartInstancesInput) Validate() error {
@@ -874,7 +1054,7 @@ func (v *StartInstancesInput) Validate() error {
 }
 
 type StartInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -946,7 +1126,7 @@ func (v *StopInstancesInput) Validate() error {
 }
 
 type StopInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
@@ -995,7 +1175,522 @@ func (v *TerminateInstancesInput) Validate() error {
 }
 
 type TerminateInstancesOutput struct {
-	Message *string `json:"message" name:"message"`
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// Documentation URL: https://docs.qingcloud.com/api/instance/clone_instances.html
+func (s *InstanceService) CloneInstances(i *CloneInstancesInput) (*CloneInstancesOutput, error) {
+	if i == nil {
+		i = &CloneInstancesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "CloneInstances",
+		RequestMethod: "GET",
+	}
+
+	x := &CloneInstancesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type CloneInstancesInput struct {
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+	VxNets    []*string `json:"vxnets" name:"vxnets" location:"params"`
+}
+
+func (v *CloneInstancesInput) Validate() error {
+
+	return nil
+}
+
+type CloneInstancesOutput struct {
+	Message      *string                    `json:"message" name:"message" location:"elements"`
+	Action       *string                    `json:"action" name:"action" location:"elements"`
+	JobID        *string                    `json:"job_id" name:"job_id" location:"elements"`
+	RetCode      *int                       `json:"ret_code" name:"ret_code" location:"elements"`
+	InstancesSet map[string]InstanceDetails `json:"instance_set"  name:"instance_set" location:"elements"`
+	Instances    []*string                  `json:"instances" name:"instances" location:"elements"`
+}
+
+type InstanceDetails struct {
+	InstanceMap map[string]string `json:"instance_map"`
+	VolumesMap  map[string]string `json:"volumes_map"`
+}
+
+// CreateBrokers: CreateBrokers
+
+func (s *InstanceService) CreateBrokers(i *CreateBrokersInput) (*CreateBrokersOutput, error) {
+	if i == nil {
+		i = &CreateBrokersInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "CreateBrokers",
+		RequestMethod: "GET",
+	}
+
+	x := &CreateBrokersOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type CreateBrokersInput struct {
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+}
+
+func (v *CreateBrokersInput) Validate() error {
+
+	return nil
+}
+
+type CreateBrokersOutput struct {
+	Message *string  `json:"message" name:"message" location:"elements"`
+	Action  *string  `json:"action" name:"action" location:"elements"`
+	JobID   *string  `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Brokers []Broker `json:"brokers"`
+}
+type Broker struct {
+	InstanceID string `json:"instance_id"`
+	BrokerPort int    `json:"broker_port"`
+	BrokerHost string `json:"broker_host"`
+}
+
+// DeleteBrokers: DeleteBrokers
+
+func (s *InstanceService) DeleteBrokers(i *DeleteBrokersInput) (*DeleteBrokersOutput, error) {
+	if i == nil {
+		i = &DeleteBrokersInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "DeleteBrokers",
+		RequestMethod: "GET",
+	}
+
+	x := &DeleteBrokersOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type DeleteBrokersInput struct {
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+}
+
+func (v *DeleteBrokersInput) Validate() error {
+
+	return nil
+}
+
+type DeleteBrokersOutput struct {
+	Message *string  `json:"message" name:"message" location:"elements"`
+	Action  *string  `json:"action" name:"action" location:"elements"`
+	JobID   *string  `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int     `json:"ret_code" name:"ret_code" location:"elements"`
+	Brokers []Broker `json:"brokers"  name:"brokers" location:"elements"`
+}
+
+// ApplyInstanceGroup: ApplyInstanceGroup
+func (s *InstanceService) ApplyInstanceGroup(i *ApplyInstanceGroupInput) (*ApplyInstanceGroupOutput, error) {
+	if i == nil {
+		i = &ApplyInstanceGroupInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ApplyInstanceGroup",
+		RequestMethod: "GET",
+	}
+
+	x := &ApplyInstanceGroupOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ApplyInstanceGroupInput struct {
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	Zone          *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *ApplyInstanceGroupInput) Validate() error {
+
+	return nil
+}
+
+type ApplyInstanceGroupOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// CreateInstanceGroups: CreateInstanceGroups
+
+func (s *InstanceService) CreateInstanceGroups(i *CreateInstanceGroupsInput) (*CreateInstanceGroupsOutput, error) {
+	if i == nil {
+		i = &CreateInstanceGroupsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "CreateInstanceGroups",
+		RequestMethod: "GET",
+	}
+
+	x := &CreateInstanceGroupsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type CreateInstanceGroupsInput struct {
+
+	// The number of instance group to create.
+	Count *int `json:"count" name:"count" default:"1" location:"params"`
+	// The description of the instance group
+	Description *string `json:"description" name:"description" location:"params"`
+	// the short name of instance_group you want to create.
+	InstanceGroupName *string `json:"instance_group_name" name:"instance_group_name" location:"params"`
+	ProjectID         *string `json:"project_id" name:"project_id" location:"params"`
+	// The instance group relation. Supported relations are `repel` or `attract`
+	Relation *string `json:"relation" name:"relation" location:"params"`
+	Zone     *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *CreateInstanceGroupsInput) Validate() error {
+
+	return nil
+}
+
+type CreateInstanceGroupsOutput struct {
+	InstanceGroups []string `json:"instance_groups"  name:"instance_groups"  location:"elements"`
+	Message        *string  `json:"message" name:"message"`
+	Action         *string  `json:"action" name:"action" location:"elements"`
+	JobID          *string  `json:"job_id" name:"job_id" location:"elements"`
+	RetCode        *int     `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// DeleteInstanceGroups: DeleteInstanceGroups
+
+func (s *InstanceService) DeleteInstanceGroups(i *DeleteInstanceGroupsInput) (*DeleteInstanceGroupsOutput, error) {
+	if i == nil {
+		i = &DeleteInstanceGroupsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "DeleteInstanceGroups",
+		RequestMethod: "GET",
+	}
+
+	x := &DeleteInstanceGroupsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type DeleteInstanceGroupsInput struct {
+
+	// the IDs of instance groups you want to delete.
+	InstanceGroups []*string `json:"instance_groups" name:"instance_groups" location:"params"`
+	Zone           *string   `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *DeleteInstanceGroupsInput) Validate() error {
+
+	return nil
+}
+
+type DeleteInstanceGroupsOutput struct {
+	Message        *string  `json:"message" name:"message" location:"elements"`
+	Action         *string  `json:"action" name:"action" location:"elements"`
+	JobID          *string  `json:"job_id" name:"job_id" location:"elements"`
+	InstanceGroups []string `json:"instance_groups"  name:"instance_groups"  location:"elements"`
+	RetCode        *int     `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// DescribeInstanceGroups: DescribeInstanceGroups
+
+func (s *InstanceService) DescribeInstanceGroups(i *DescribeInstanceGroupsInput) (*DescribeInstanceGroupsOutput, error) {
+	if i == nil {
+		i = &DescribeInstanceGroupsInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "DescribeInstanceGroups",
+		RequestMethod: "GET",
+	}
+
+	x := &DescribeInstanceGroupsOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type DescribeInstanceGroupsInput struct {
+	ConsoleID *string `json:"console_id" name:"console_id" location:"params"`
+	// the name of the instance group. Support partial match.
+	InstanceGroupName *string `json:"instance_group_name" name:"instance_group_name" location:"params"`
+	// the comma separated IDs of instance_groups you want to list.
+	InstanceGroups []*string `json:"instance_groups" name:"instance_groups" location:"params"`
+	// specify the number of the returning results.
+	Limit *int `json:"limit" name:"limit" default:"20" location:"params"`
+	// the starting offset of the returning results.
+	Offset *int `json:"offset" name:"offset" location:"params"`
+	// the owner id of instance_groups
+	Owner []*string `json:"owner" name:"owner" location:"params"`
+	// project id
+	ProjectID *string `json:"project_id" name:"project_id" location:"params"`
+	// filter by instance_group relation
+	Relation []*string `json:"relation" name:"relation" location:"params"`
+	// for reverse sorting. 1: reverse
+	Reverse    *int    `json:"reverse" name:"reverse" location:"params"`
+	RootUserID *string `json:"root_user_id" name:"root_user_id" location:"params"`
+	SearchWord *string `json:"search_word" name:"search_word" location:"params"`
+	// sort key
+	SortKey *string `json:"sort_key" name:"sort_key" location:"params"`
+	// filter by tags
+	Tags []*string `json:"tags" name:"tags" location:"params"`
+	// the number to specify the verbose level
+	Verbose *int    `json:"verbose" name:"verbose" default:"0" location:"params"`
+	Zone    *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *DescribeInstanceGroupsInput) Validate() error {
+
+	return nil
+}
+
+type DescribeInstanceGroupsOutput struct {
+	Message        *string          `json:"message" name:"message" location:"elements"`
+	Action         *string          `json:"action" name:"action" location:"elements"`
+	JobID          *string          `json:"job_id" name:"job_id" location:"elements"`
+	InstanceGroups []*InstanceGroup `json:"instance_group_set"  name:"instance_group_set"  location:"elements"`
+	RetCode        *int             `json:"ret_code" name:"ret_code" location:"elements"`
+}
+type InstanceGroup struct {
+	InstanceGroupName *string   `json:"instance_group_name"`
+	Description       *string   `json:"description"`
+	Tags              []*string `json:"tags"`
+	Controller        *string   `json:"controller"`
+	ConsoleID         *string   `json:"console_id"`
+	RootUserID        *string   `json:"root_user_id"`
+	CreateTime        *string   `json:"create_time"`
+	Relation          *string   `json:"relation"`
+	Owner             *string   `json:"owner"`
+	InstanceGroupID   *string   `json:"instance_group_id"`
+}
+
+// ModifyInstanceGroupAttributes: ModifyInstanceGroupAttributes
+
+func (s *InstanceService) ModifyInstanceGroupAttributes(i *ModifyInstanceGroupAttributesInput) (*ModifyInstanceGroupAttributesOutput, error) {
+	if i == nil {
+		i = &ModifyInstanceGroupAttributesInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "ModifyInstanceGroupAttributes",
+		RequestMethod: "GET",
+	}
+
+	x := &ModifyInstanceGroupAttributesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type ModifyInstanceGroupAttributesInput struct {
+
+	// The detailed description of the resource
+	Description   *string `json:"description" name:"description" location:"params"`
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// specify the new instance_group name.
+	InstanceGroupName *string `json:"instance_group_name" name:"instance_group_name" location:"params"`
+	// The instance group relation. Supported relations are `repel` or `attract`
+	Relation *string `json:"relation" name:"relation" location:"params"`
+	Zone     *string `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *ModifyInstanceGroupAttributesInput) Validate() error {
+
+	return nil
+}
+
+type ModifyInstanceGroupAttributesOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// JoinInstanceGroup: JoinInstanceGroup
+
+func (s *InstanceService) JoinInstanceGroup(i *JoinInstanceGroupInput) (*JoinInstanceGroupOutput, error) {
+	if i == nil {
+		i = &JoinInstanceGroupInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "JoinInstanceGroup",
+		RequestMethod: "GET",
+	}
+
+	x := &JoinInstanceGroupOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type JoinInstanceGroupInput struct {
+
+	// the id of instance_group the instances will join.
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// the IDs of instances that will join a instance_group.
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+	Zone      *string   `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *JoinInstanceGroupInput) Validate() error {
+
+	return nil
+}
+
+type JoinInstanceGroupOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
+	Action  *string `json:"action" name:"action" location:"elements"`
+	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
+	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+// LeaveInstanceGroup: LeaveInstanceGroup
+
+func (s *InstanceService) LeaveInstanceGroup(i *LeaveInstanceGroupInput) (*LeaveInstanceGroupOutput, error) {
+	if i == nil {
+		i = &LeaveInstanceGroupInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "LeaveInstanceGroup",
+		RequestMethod: "GET",
+	}
+
+	x := &LeaveInstanceGroupOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
+
+type LeaveInstanceGroupInput struct {
+
+	// the id of the instance_group the instances will leave.
+	InstanceGroup *string `json:"instance_group" name:"instance_group" location:"params"`
+	// the IDs of instances that will leave a instance_group.
+	Instances []*string `json:"instances" name:"instances" location:"params"`
+	Zone      *string   `json:"zone" name:"zone" location:"params"`
+}
+
+func (v *LeaveInstanceGroupInput) Validate() error {
+
+	return nil
+}
+
+type LeaveInstanceGroupOutput struct {
+	Message *string `json:"message" name:"message" location:"elements"`
 	Action  *string `json:"action" name:"action" location:"elements"`
 	JobID   *string `json:"job_id" name:"job_id" location:"elements"`
 	RetCode *int    `json:"ret_code" name:"ret_code" location:"elements"`
