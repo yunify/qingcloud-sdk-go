@@ -100,7 +100,7 @@ type CaptureInstanceOutput struct {
 
 // Documentation URL: https://docs.qingcloud.com/api/image/delete_images.html
 func (s *ImageService) DeleteImages(i *DeleteImagesInput) (*DeleteImagesOutput, error) {
-	time.RFC822
+	// time.RFC822
 	if i == nil {
 		i = &DeleteImagesInput{}
 	}
