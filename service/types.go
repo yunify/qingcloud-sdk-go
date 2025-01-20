@@ -1463,6 +1463,7 @@ type LoadBalancerListener struct {
 	ServerCertificateID      []*string  `json:"server_certificate_id" name:"server_certificate_id"`
 	SessionSticky            *string    `json:"session_sticky" name:"session_sticky"`
 	Timeout                  *int       `json:"timeout" name:"timeout"`
+	Scene                    *int       `json:"scene" name:"scene"`
 }
 
 func (v *LoadBalancerListener) Validate() error {
