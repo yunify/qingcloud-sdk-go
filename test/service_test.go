@@ -32,6 +32,9 @@ func QingCloudServiceFeatureContext(s *godog.Suite) {
 	s.Step(`^describe zones$`, describeZones)
 	s.Step(`^describe zones should get (\d+) zone at least$`, describeZonesShouldGetZoneAtLeast)
 	s.Step(`^describe zones should have the zone I\'m using$`, describeZonesShouldHaveTheZoneIamUsing)
+
+	s.Step(`^get balance$`, getBalance())
+	s.Step(`^get balance should not error$`, getBalanceShouldNotError)
 }
 
 // --------------------------------------------------------------------------
@@ -70,5 +73,19 @@ func describeZonesShouldHaveTheZoneIamUsing() error {
 		}
 	}
 
+	return fmt.Errorf("DescribeZones dosen't have zone \"%s\"", tc.Zone)
+}
+
+// --------------------------------------------------------------------------
+var getBalanceOutput *qc.GetBalanceOutput
+
+func getBalance() error {
+	describeZonesOutput, err = qcService.GetBalance(nil)
+	return err
+}
+func getBalanceShouldNotError() error {
+	if *getBalanceOutput.RetCode == 0 {
+		return nil
+	}
 	return fmt.Errorf("DescribeZones dosen't have zone \"%s\"", tc.Zone)
 }

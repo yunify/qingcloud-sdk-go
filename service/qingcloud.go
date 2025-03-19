@@ -82,3 +82,48 @@ type DescribeZonesOutput struct {
 	TotalCount *int    `json:"total_count" name:"total_count" location:"elements"`
 	ZoneSet    []*Zone `json:"zone_set" name:"zone_set" location:"elements"`
 }
+type GetBalanceInput struct {
+
+}
+
+func (v *GetBalanceInput) Validate() error {
+
+	return nil
+}
+
+type GetBalanceOutput struct {
+	Action string `json:"action" name:"action" location:"elements"`
+	UserID string `json:"user_id" name:"user_id" location:"elements"`
+	Balance string `json:"balance" name:"balance" location:"elements"`
+	Bonus string `json:"bonus" name:"onus" location:"elements"`
+	Coupons []*string `json:"coupons" name:"coupons" location:"elements"`
+	RetCode    *int    `json:"ret_code" name:"ret_code" location:"elements"`
+}
+
+
+
+// Documentation URL: https://docsv4.qingcloud.com/user_guide/development_docs/api/api_list/billing/get_balance/
+func (s *QingCloudService) GetBalance(i *GetBalanceInput) (*DescribeZonesOutput, error) {
+	if i == nil {
+		i = &GetBalanceInput{}
+	}
+	o := &data.Operation{
+		Config:        s.Config,
+		Properties:    s.Properties,
+		APIName:       "GetBalance",
+		RequestMethod: "GET",
+	}
+
+	x := &DescribeZonesOutput{}
+	r, err := request.New(o, i, x)
+	if err != nil {
+		return nil, err
+	}
+
+	err = r.Send()
+	if err != nil {
+		return nil, err
+	}
+
+	return x, err
+}
