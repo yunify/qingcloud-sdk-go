@@ -362,6 +362,7 @@ type CreateLoadBalancerInput struct {
 	ProjectID     *string `json:"project_id" name:"project_id" location:"params"`
 	SecurityGroup *string `json:"security_group" name:"security_group" location:"params"`
 	VxNet         *string `json:"vxnet" name:"vxnet" location:"params"`
+	PlaceGroupID  *string `json:"place_group_id" name:"place_group_id" location:"params"`
 }
 
 func (v *CreateLoadBalancerInput) Validate() error {
